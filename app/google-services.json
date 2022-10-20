@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "556285392569",
+    "project_id": "snipme-19906",
+    "storage_bucket": "snipme-19906.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:556285392569:android:16830cff6f8e77a2c98d68",
+        "android_client_info": {
+          "package_name": "pl.tkadziolka.snipmeandroid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "556285392569-n0m94vrthamlji0tjt08frdrc5aln43t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPlKkKC9iOYPHVV4kcJpr3gIGRnLpu0O4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "556285392569-n0m94vrthamlji0tjt08frdrc5aln43t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,147 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'kotlin-android-extensions'
+    id 'androidx.navigation.safeargs.kotlin'
+    id 'com.google.gms.google-services'
+}
+
+def STRING = "String"
+
+android {
+    signingConfigs {
+        release {
+            // NOTE: Create your own keystore.properties file
+            def propsFile = rootProject.file('keystore.properties')
+            if (propsFile.exists()) {
+                def props = new Properties()
+                props.load(new FileInputStream(propsFile))
+                storeFile = file('../snipplog_keystore.jks')
+                storePassword = props['storePassword']
+                keyAlias = props['keyAlias']
+                keyPassword = props['keyPassword']
+            }
+        }
+    }
+
+    compileSdk 33
+
+    defaultConfig {
+        applicationId "pl.tkadziolka.snipmeandroid"
+        minSdk 21
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        def BASE_URL = "BASE_URL"
+        def CONTACT_US_PAGE = "CONTACT_US_PAGE"
+        def FACEBOOK_PAGE = "FACEBOOK_PAGE"
+        def INSTAGRAM_PAGE = "INSTAGRAM_PAGE"
+        def GITHUB_PAGE = "GITHUB_PAGE"
+        def TWITTER_PAGE = "TWITTER_PAGE"
+
+        def PAYPAL_PAGE = "PAYPAL_PAGE"
+        def CARD_PAGE = "CARD_PAGE"
+
+        def API_BASE_URL = "\"http://91.195.93.3:8000/snip-api/\"" // Must end with '/'
+        def FACEBOOK_URL = "\"https://www.facebook.com/SnippLog-100576858857140\""
+        def INSTAGRAM_URL = "\"https://www.instagram.com/snipp.log\""
+        def GITHUB_URL = "\"https://github.com/SnippLog\""
+        def TWITTER_URL = "\"https://twitter.com/SnippLog\""
+
+        def PAYPAL_PAY_URL = "\"https://www.paypal.com/donate?hosted_button_id=WZQNYKQFAHAJG\""
+        def CARD_PAY_URL = "\"https://www.paypal.com/biz/fund?id=ACCDJCH2JAHDG\""
+
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            buildConfigField STRING, BASE_URL, API_BASE_URL
+            buildConfigField STRING, CONTACT_US_PAGE, FACEBOOK_URL
+            buildConfigField STRING, FACEBOOK_PAGE, FACEBOOK_URL
+            buildConfigField STRING, INSTAGRAM_PAGE, INSTAGRAM_URL
+            buildConfigField STRING, GITHUB_PAGE, GITHUB_URL
+            buildConfigField STRING, TWITTER_PAGE, TWITTER_URL
+            buildConfigField STRING, PAYPAL_PAGE, PAYPAL_PAY_URL
+            buildConfigField STRING, CARD_PAGE, CARD_PAY_URL
+        }
+
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            buildConfigField STRING, BASE_URL, API_BASE_URL
+            buildConfigField STRING, CONTACT_US_PAGE, FACEBOOK_URL
+            buildConfigField STRING, FACEBOOK_PAGE, FACEBOOK_URL
+            buildConfigField STRING, INSTAGRAM_PAGE, INSTAGRAM_URL
+            buildConfigField STRING, GITHUB_PAGE, GITHUB_URL
+            buildConfigField STRING, TWITTER_PAGE, TWITTER_URL
+            buildConfigField STRING, PAYPAL_PAGE, PAYPAL_PAY_URL
+            buildConfigField STRING, CARD_PAGE, CARD_PAY_URL
+            signingConfig signingConfigs.release
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = "11"
+    }
+    lintOptions {
+        abortOnError false
+    }
+}
+
+dependencies {
+    implementation project(':flutter')
+    // Kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.6.10"
+    // KTX
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation "androidx.fragment:fragment-ktx:1.4.1"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-reactivestreams-ktx:$lifecycle_version"
+    implementation "androidx.navigation:navigation-runtime-ktx:$navigation_version"
+    implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    // Firebase
+    implementation platform('com.google.firebase:firebase-bom:28.2.0')
+    // RX
+    implementation "io.reactivex.rxjava2:rxkotlin:2.4.0"
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    // DI
+    implementation "io.insert-koin:koin-android:$koin_version"
+    // Network
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
+    kapt("com.squareup.moshi:moshi-kotlin-codegen:$moshi_version")
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"
+    implementation "com.squareup.okhttp3:logging-interceptor:4.9.0"
+    // Design
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
+    implementation "androidx.recyclerview:recyclerview:1.2.1"
+    implementation 'androidx.annotation:annotation:1.3.0'
+    // Utils
+    implementation 'com.jakewharton.timber:timber:4.7.1'
+    implementation 'com.github.pwittchen:reactivenetwork-rx2:3.0.8'
+    implementation "com.github.bumptech.glide:glide:$glide_version"
+    kapt "com.github.bumptech.glide:compiler:$glide_version"
+    // View
+    implementation 'com.github.SnippLog:CodeView-Android:1.3.4'
+    // Test
+    testImplementation 'junit:junit:4.13.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    testImplementation "io.mockk:mockk:1.10.6"
+}

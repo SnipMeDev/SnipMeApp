@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+
+    <HorizontalScrollView
+        android:id="@+id/filterViewScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:id="@+id/filterViewContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:clipToPadding="false">
+
+            <TextView
+                android:id="@+id/viewAllAction"
+                style="@style/FilterChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/all"
+                tools:background="@drawable/filter_background_selected"
+                tools:textAppearance="@style/TextAppearance.Filter.Selected" />
+
+            <TextView
+                android:id="@+id/viewMineAction"
+                style="@style/FilterChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/spacing_regular"
+                android:text="@string/mine"
+                tools:background="@drawable/filter_background" />
+
+            <TextView
+                android:id="@+id/viewSharedAction"
+                style="@style/FilterChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/shared"
+                tools:background="@drawable/filter_background" />
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
+</merge>

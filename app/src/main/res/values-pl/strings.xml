@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--  Common  -->
+    <string name="snippet">Snippet</string>
+    <string name="okay">OK</string>
+    <string name="cancel">Wróć</string>
+    <string name="loading">Ładowanie</string>
+    <string name="all">Wszystkie</string>
+    <string name="mine">Moje</string>
+    <string name="shared">Udostępnione</string>
+    <string name="logout">Wyloguj się</string>
+    <string name="share">Udostępnij</string>
+    <string name="details">Detale</string>
+    <string name="save">Zapisz</string>
+    <string name="edit">Edytuj</string>
+    <string name="create">Utwórz</string>
+    <string name="copy">Kopiuj</string>
+    <string name="oops">Uups!</string>
+    <string name="contact_us">Powiadom nas</string>
+    <string name="try_again">Spróbuj ponownie</string>
+    <string name="close">Zamknij</string>
+    <string name="contact">Kontakt</string>
+    <string name="register_account"><u>Zarejestruj konto</u></string>
+    <string name="donate">Wspomóż</string>
+    <string name="donate_us">Wspomóż nas</string>
+    <string name="payment">Płatność</string>
+
+    <!-- Messages -->
+    <string name="message_shared">Snippet został pomyślnie udostępniony dla %s!</string>
+    <string name="message_copied">Skopiowano %s do schowka.</string>
+    <string name="message_about">SnipMe to więcej niż aplikacja. Tworzymy przestrzeń dla fascynatów technologii połączonych przez kod.</string>
+    <string name="message_where_find">Zobacz, gdzie możesz nas znaleźć:</string>
+    <string name="message_donate_us_title">Dlaczego powinieneś nas wspomóc?</string>
+    <string name="message_donate_us_content">Rozwój platformy, gdzie łatwo możesz dzielić się i odkrywać najlepszy kod nie jest ani łatwy ani szybki, mimo to nie chcemy, żeby dostęp kiedykolwiek był płatny. Niestety nasz czas to nie jedyny zasób a tworzenie trwałej infrastruktury kosztuje, dlatego wsparcie choćby najmniejszą kwotą pozwoli nam na opłacenie domeny, hostingów oraz miejsca na dane. Może nawet zostanie nam na kawę :)</string>
+
+    <!--  Hints  -->
+    <string name="prompt_name">Wprowadź nazwę</string>
+    <string name="prompt_code">Tutaj umieść swój kod…</string>
+    <string name="prompt_login">Wprowadź login</string>
+    <string name="prompt_password">Wprowadź hasło</string>
+    <string name="prompt_password_repeat">Powtórz hasło</string>
+    <string name="prompt_email">Wprowadź email</string>
+    <string name="prompt_language">Wprowadź język</string>
+    <string name="prompt_user_login">Wprowadź nazwę użytkownika, któremu chcesz udostępnić swojego snipa.</string>
+
+    <!--  Texts  -->
+    <string name="call_hello">Cześć</string>
+    <string name="call_login">Zaloguj się</string>
+    <string name="call_register">Zarejestruj się</string>
+    <string name="call_paste_from_clipboard">Wklej ze schowka</string>
+
+    <!--  Dialogs  -->
+    <string name="no_account_title">Witaj z powrotem!</string>
+    <string name="no_account_message">Użytkownik o takiej nazwie posiada już konto. Chcesz się zalogować?</string>
+    <string name="quit_title">Odrzuć zmiany</string>
+    <string name="quit_message">Czy na pewno chcesz wyjść bez zapisania zmian?</string>
+
+    <!--  Validation  -->
+    <string name="validation_password_wrong">Twoje hasło powinno mieć co najmniej 8 znaków, zawierać małe i duże litery oraz składać się z co najmniej jednej cyfry.</string>
+    <string name="validation_password_too_short">Minimalna długość hasła powinna składać się z 8 znaków.</string>
+    <string name="validation_password_special_char">Hasło powinno zawierać co najmniej jeden znak specjalny np. !@#$%.</string>
+    <string name="validation_password_lower_upper">Hasło powinno zawierać co najmniej jedną małą i dużą literę.</string>
+    <string name="validation_password_digit">Hasło powinno zawierać co najmniej jedną cyfrę.</string>
+    <string name="validation_password_not_equal">Wpisane hasła różnią się od siebie.</string>
+
+    <string name="validation_email_too_short">Minimalna długość maila powinna składać się z 5 znaków.</string>
+    <string name="validation_email_wrong_structure">Odpowiedni email powinien zawierać przykładową strukturę: abd@def.xyz</string>
+
+    <string name="validation_phrase_too_short">Wpisana fraza jest zbyt krótka.</string>
+    <string name="validation_phrase_too_long">Wpisana fraza jest zbyt długa.</string>
+    <string name="validation_phrase_lower_upper">Fraza powinna zawierać przynajmniej jedną małą i dużą literę.</string>
+    <string name="validation_phrase_no_ascii">Fraza nie może zawierać liter takich jak: ąćĻłćńļĶł†ęŌ.</string>
+
+    <string name="validation_phrases_not_equal">Wpisane frazy różnią się od siebie.</string>
+    <string name="validation_phrases_blank">Proszę wypełnić wszystkie pola formularza.</string>
+
+    <!-- Error -->
+    <string name="error_message_generic">Coś poszło nie tak. Spróbuj jeszcze raz!</string>
+    <string name="error_message_no_connection">Sprawdź swoje połączenie z internetem i spróbuj ponownie.</string>
+    <string name="error_message_unknown_language">Nieznany język programowania. Proszę wybrać język z listy.</string>
+    <string name="error_message_session_expired">Twoja sesja wygasła! Zaloguj się ponownie.</string>
+    <string name="error_message_no_access">Nie masz dostępu do tego zasobu!</string>
+    <string name="error_message_remote_error">Mamy problemy po naszej stronie. Powiadom nas o problemie.</string>
+    <string name="error_message_user_already_registered">Użytkownik z tym adresem email jest już zarejestrowany. Użyj innego adresu.</string>
+</resources>

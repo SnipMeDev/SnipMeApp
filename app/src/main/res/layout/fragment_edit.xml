@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorBackgroundFloating">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/editToolbar"
+        android:layout_width="0dp"
+        android:layout_height="?android:attr/actionBarSize"
+        android:theme="@style/ColoredToolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:menu="@menu/edit_menu" />
+
+    <View
+        android:id="@+id/editNameBackground"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/height_edit_field"
+        android:background="@color/accentSecondary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editToolbar" />
+
+    <EditText
+        android:id="@+id/editName"
+        style="@style/SnippetEditField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/spacing_regular"
+        android:hint="@string/prompt_name"
+        tools:text="New snippet name"
+        android:backgroundTint="@color/white"
+        app:layout_constraintBottom_toBottomOf="@id/editNameBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/editNameBackground" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/editLanguageLayout"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/height_edit_field"
+        style="@style/DropdownInputField"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editNameBackground">
+
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/editLanguage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/accent"
+            style="@style/SnippetEditField"
+            android:hint="@string/prompt_language"
+            android:padding="@dimen/spacing" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/editError"
+        style="@style/WarningField"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/spacing_regular"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editLanguageLayout"
+        tools:alpha="0.5"
+        tools:text="@string/validation_password_wrong"
+        tools:visibility="visible" />
+
+    <pl.tkadziolka.snipmeandroid.util.view.CodeEditText
+        android:id="@+id/editCode"
+        style="@style/CodeEditField"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:hint="@string/prompt_code"
+        android:padding="@dimen/spacing"
+        android:gravity="top|start"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editError"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:text="@string/mock_code" />
+
+    <Button
+        style="@style/MainButton"
+        android:id="@+id/editPasteFromClipboard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing_regular"
+        android:textColor="@color/white"
+        android:text="@string/call_paste_from_clipboard"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/editCode"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

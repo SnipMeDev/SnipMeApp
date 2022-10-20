@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/accent">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/contactToolbar"
+        android:layout_width="0dp"
+        android:layout_height="?android:attr/actionBarSize"
+        android:theme="@style/ColoredToolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/contactDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/spacing_big"
+        android:text="@string/message_about"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_medium"
+        app:layout_constraintBottom_toTopOf="@id/contactSubDescription"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/contactToolbar" />
+
+    <TextView
+        android:id="@+id/contactSubDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/spacing_big"
+        android:text="@string/message_where_find"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_medium"
+        app:layout_constraintBottom_toTopOf="@id/contactFacebookAction"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/contactFacebookAction"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/spacing_big"
+        android:layout_marginTop="@dimen/spacing_regular"
+        android:layout_marginBottom="@dimen/spacing_regular"
+        android:background="@drawable/link_button_selector"
+        android:gravity="start"
+        android:text="@string/facebook"
+        android:textColor="@color/white"
+        app:backgroundTint="@color/white"
+        app:layout_constraintBottom_toTopOf="@id/contactInstagramAction"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/contactInstagramAction"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/spacing_big"
+        android:layout_marginTop="@dimen/spacing_regular"
+        android:layout_marginBottom="@dimen/spacing_regular"
+        android:background="@drawable/link_button_selector"
+        android:gravity="start"
+        android:text="@string/instagram"
+        android:textColor="@color/white"
+        app:backgroundTint="@color/white"
+        app:layout_constraintBottom_toTopOf="@id/contactGithubAction"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/contactGithubAction"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/spacing_big"
+        android:layout_marginTop="@dimen/spacing_regular"
+        android:layout_marginBottom="@dimen/spacing_regular"
+        android:background="@drawable/link_button_selector"
+        android:gravity="start"
+        android:text="@string/github"
+        android:textColor="@color/white"
+        app:backgroundTint="@color/white"
+        app:layout_constraintBottom_toTopOf="@id/contactTwitterAction"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/contactTwitterAction"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/spacing_big"
+        android:layout_marginTop="@dimen/spacing_regular"
+        android:layout_marginBottom="@dimen/spacing_big"
+        android:background="@drawable/link_button_selector"
+        android:gravity="start"
+        android:text="@string/twitter"
+        android:textColor="@color/white"
+        app:backgroundTint="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

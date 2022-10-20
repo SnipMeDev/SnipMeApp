@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="OutlinedTextInput">
+        <attr name="android:text" format="string" />
+        <attr name="android:hint" format="string" />
+        <attr name="android:inputType" format="integer" />
+        <attr name="android:imeOptions" format="integer" />
+        <attr name="android:singleLine" format="boolean" />
+        <attr name="android:password" format="boolean" />
+    </declare-styleable>
+</resources>

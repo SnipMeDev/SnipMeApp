@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/splash">
+
+    <fragment
+        android:id="@+id/splash"
+        android:name="pl.tkadziolka.snipmeandroid.ui.splash.SplashFragment"
+        tools:layout="@layout/fragment_splash">
+        <action
+            android:id="@+id/go_to_login"
+            app:destination="@id/login"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/go_to_main"
+            app:destination="@id/main"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/login"
+        android:name="pl.tkadziolka.snipmeandroid.ui.login.LoginFragment"
+        tools:layout="@layout/fragment_login">
+        <argument
+            android:name="login"
+            android:defaultValue=""
+            app:argType="string" />
+        <action
+            android:id="@+id/go_to_main"
+            app:destination="@id/main"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/go_to_edit"
+            app:destination="@id/edit" />
+        <action
+            android:id="@+id/go_to_error"
+            app:destination="@id/error" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/main"
+        android:name="pl.tkadziolka.snipmeandroid.ui.main.MainFragment"
+        tools:layout="@layout/fragment_main">
+        <action
+            android:id="@+id/go_to_detail"
+            app:destination="@id/detail" />
+        <action
+            android:id="@+id/go_to_preview"
+            app:destination="@id/preview" />
+        <action
+            android:id="@+id/go_to_edit"
+            app:destination="@id/edit" />
+        <action
+            android:id="@+id/go_to_login"
+            app:destination="@+id/login"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/go_to_error"
+            app:destination="@id/error" />
+        <action
+            android:id="@+id/go_to_contact"
+            app:destination="@id/contact" />
+        <action
+            android:id="@+id/go_to_donate"
+            app:destination="@id/donate" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/detail"
+        android:name="pl.tkadziolka.snipmeandroid.ui.detail.DetailFragment"
+        android:label="@string/details"
+        tools:layout="@layout/fragment_detail">
+        <argument
+            android:name="uuid"
+            app:argType="string"
+            app:nullable="false" />
+        <action
+            android:id="@+id/go_to_edit"
+            app:destination="@id/edit" />
+        <action
+            android:id="@+id/go_to_share"
+            app:destination="@id/share" />
+        <action
+            android:id="@+id/go_to_login"
+            app:destination="@+id/login"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/go_to_error"
+            app:destination="@id/error" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/edit"
+        android:name="pl.tkadziolka.snipmeandroid.ui.edit.EditFragment"
+        android:label="@string/edit"
+        tools:layout="@layout/fragment_edit">
+        <argument
+            android:name="id"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <action
+            android:id="@+id/go_to_detail"
+            app:destination="@id/detail"
+            app:popUpTo="@id/main" />
+        <action
+            android:id="@+id/go_to_login"
+            app:destination="@+id/login"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/go_to_error"
+            app:destination="@id/error" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/error"
+        android:name="pl.tkadziolka.snipmeandroid.ui.error.ErrorFragment"
+        tools:layout="@layout/fragment_error">
+        <argument
+            android:name="message"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/contact"
+        android:name="pl.tkadziolka.snipmeandroid.ui.contact.ContactFragment"
+        tools:layout="@layout/fragment_contact"
+        android:label="@string/contact"/>
+
+    <fragment
+        android:id="@+id/donate"
+        android:name="pl.tkadziolka.snipmeandroid.ui.donate.DonateFragment"
+        tools:layout="@layout/fragment_donate"
+        android:label="@string/donate"/>
+
+    <dialog
+        android:id="@+id/preview"
+        android:name="pl.tkadziolka.snipmeandroid.ui.preview.PreviewFragment"
+        tools:layout="@layout/fragment_preview">
+        <argument
+            android:name="title"
+            app:argType="string"
+            app:nullable="false" />
+        <argument
+            android:name="uuid"
+            app:argType="string"
+            app:nullable="false" />
+        <argument
+            android:name="code"
+            app:argType="string"
+            app:nullable="false" />
+        <argument
+            android:name="language"
+            app:argType="string"
+            app:nullable="false" />
+        <action
+            android:id="@id/go_to_detail"
+            app:destination="@id/detail" />
+    </dialog>
+
+    <dialog
+        android:id="@+id/share"
+        android:name="pl.tkadziolka.snipmeandroid.ui.share.ShareFragment"
+        tools:layout="@layout/fragment_share">
+        <argument
+            android:name="uuid"
+            app:argType="string"
+            app:nullable="false" />
+        <action
+            android:id="@+id/go_to_login"
+            app:destination="@+id/login"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+    </dialog>
+
+</navigation>

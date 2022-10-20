@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/shareContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/dialog_background_inset">
+
+    <AutoCompleteTextView
+        android:id="@+id/shareName"
+        style="@style/SearchInputField"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/spacing_medium"
+        app:layout_constraintEnd_toStartOf="@id/shareCloseAction"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:inputType="text"
+        android:imeOptions="actionDone"
+        android:singleLine="true"
+        tools:text="This is a long phrase that can be input in the field" />
+
+    <ImageView
+        android:id="@+id/shareCloseAction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/spacing_medium"
+        android:src="@drawable/close"
+        app:layout_constraintBottom_toTopOf="@id/shareList"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/shareList"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/spacing"
+        android:background="@drawable/dialog_background_code"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:padding="@dimen/spacing_regular"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/shareName"
+        tools:listitem="@layout/view_item_user_share" />
+
+    <ImageView
+        android:id="@+id/shareHelperImage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:elevation="1dp"
+        android:src="@drawable/share_placeholder"
+        app:layout_constraintBottom_toTopOf="@id/shareHelper"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.25"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/shareList"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:alpha="0.5" />
+
+    <TextView
+        android:id="@+id/shareHelper"
+        style="@style/ShareHelperTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_big"
+        android:text="@string/prompt_user_login"
+        app:layout_constraintBottom_toBottomOf="@id/shareList"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/shareHelperImage"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintWidth_percent="0.8"
+        tools:alpha="0.5" />
+
+    <ProgressBar
+        android:id="@+id/shareLoading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/shareName"
+        tools:alpha="0.5"
+        tools:visibility="visible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

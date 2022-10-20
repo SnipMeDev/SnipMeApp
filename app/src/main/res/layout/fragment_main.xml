@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/mainAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorSurface"
+        app:elevation="0dp">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorSurface"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/mainToolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.constraintlayout.utils.widget.ImageFilterView
+                        android:id="@+id/mainImage"
+                        android:layout_width="@dimen/size_main_image"
+                        android:layout_height="@dimen/size_main_image"
+                        android:layout_marginStart="@dimen/spacing_medium"
+                        android:src="@drawable/placeholder"
+                        app:layout_constraintEnd_toStartOf="@+id/mainLoginLabel"
+                        app:layout_constraintHorizontal_bias="0.1"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintStart_toEndOf="@+id/mainLogin"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:roundPercent="@dimen/round_percent_circle" />
+
+                    <TextView
+                        android:id="@+id/mainLoginLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_regular"
+                        android:text="@string/call_hello"
+                        android:textAppearance="@style/TextAppearance.Headline5"
+                        app:layout_constraintBottom_toTopOf="@+id/mainLogin"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        android:lineSpacingExtra="0sp"
+                        app:layout_constraintStart_toEndOf="@+id/mainImage"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_chainStyle="packed" />
+
+                    <TextView
+                        android:id="@+id/mainLogin"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_regular"
+                        android:layout_marginEnd="@dimen/spacing_medium"
+                        style="@style/MainTitle"
+                        android:includeFontPadding="false"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/mainImage"
+                        app:layout_constraintTop_toBottomOf="@+id/mainLoginLabel"
+                        tools:text="Very long user name that is mostly to happen" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+        <pl.tkadziolka.snipmeandroid.util.view.SnippetsFilterView
+            android:id="@+id/mainFilters"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorSurface"
+            android:paddingVertical="@dimen/spacing_regular"
+            app:layout_anchor="@id/mainAppBar"
+            android:clipToPadding="false"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/mainList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/accent"
+        android:overScrollMode="never"
+        android:paddingTop="@dimen/spacing_regular"
+        android:clipToPadding="false"
+        android:visibility="invisible"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_anchorGravity="bottom"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:itemCount="10"
+        tools:listitem="@layout/view_item_snippet"
+        tools:visibility="visible" />
+
+    <ProgressBar
+        android:id="@+id/mainLoading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="invisible"
+        tools:visibility="visible" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/mainAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="@dimen/spacing_regular"
+        android:src="@drawable/add"
+        app:backgroundTint="@color/warning"
+        app:layout_anchorGravity="bottom|right|end"
+        app:tint="@color/white" />
+
+    <TextView
+        android:id="@+id/mainVersion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.VersionLabel"
+        tools:text="v1.0.0" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

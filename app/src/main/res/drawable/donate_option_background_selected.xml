@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <solid android:color="@color/highlightBackground" />
+
+    <corners android:radius="@dimen/corner_radius_big" />
+
+    <stroke
+        android:width="@dimen/width_default_border"
+        android:color="@color/highlight" />
+
+</shape>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<inset
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/dialog_background"
+    android:insetRight="@dimen/spacing_medium"
+    android:insetLeft="@dimen/spacing_medium"
+    android:insetTop="@dimen/spacing_medium"
+    android:insetBottom="@dimen/spacing_medium">
+</inset>
