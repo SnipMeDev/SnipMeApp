@@ -77,7 +77,9 @@ class _MainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: snippets.length,
-      itemBuilder: (_, index) => SnippetListItem(snippet: snippets[index]),
+      itemBuilder: (_, index) => SnippetListItem(
+        snippet: snippets[index],
+      ),
     );
   }
 }
