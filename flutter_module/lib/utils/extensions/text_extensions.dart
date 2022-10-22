@@ -47,6 +47,6 @@ extension TextExtensions on String {
       return split.first;
     }
 
-    return  split.join('\n');
+    return split.join('\n');
   }
 }

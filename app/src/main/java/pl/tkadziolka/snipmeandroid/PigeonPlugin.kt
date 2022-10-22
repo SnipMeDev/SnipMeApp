@@ -17,11 +17,13 @@ import pl.tkadziolka.snipmeandroid.ui.main.*
 import pl.tkadziolka.snipmeandroid.util.view.SnippetFilter
 import timber.log.Timber
 
-// flutter pub run pigeon \
-//  --input pigeons/messages.dart \
-//  --dart_out lib/messages.dart \
-//  --java_out ../app/src/main/java/pl/tkadziolka/snipmeandroid/Messages.java \
-//  --java_package "pl.tkadziolka.snipmeandroid"
+/*
+ flutter pub run pigeon \
+  --input pigeons/messages.dart \
+  --dart_out lib/messages.dart \
+  --java_out ../app/src/main/java/pl/tkadziolka/snipmeandroid/Messages.java \
+  --java_package "pl.tkadziolka.snipmeandroid"
+ */
 
 @ExperimentalCoroutinesApi
 class PigeonPlugin : FlutterPlugin, Messages.MainModelApi, KoinComponent {

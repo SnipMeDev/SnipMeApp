@@ -79,12 +79,20 @@ class Snippet {
     this.title,
     this.code,
     this.language,
+    this.owner,
+    this.modifiedAt,
+    this.numberOfLikes,
+    this.numberOfDislikes,
   });
 
   String? uuid;
   String? title;
   SnippetCode? code;
   SnippetLanguage? language;
+  Owner? owner;
+  String? modifiedAt;
+  int? numberOfLikes;
+  int? numberOfDislikes;
 
   Object encode() {
     final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
@@ -92,6 +100,10 @@ class Snippet {
     pigeonMap['title'] = title;
     pigeonMap['code'] = code?.encode();
     pigeonMap['language'] = language?.encode();
+    pigeonMap['owner'] = owner?.encode();
+    pigeonMap['modifiedAt'] = modifiedAt;
+    pigeonMap['numberOfLikes'] = numberOfLikes;
+    pigeonMap['numberOfDislikes'] = numberOfDislikes;
     return pigeonMap;
   }
 
@@ -106,6 +118,12 @@ class Snippet {
       language: pigeonMap['language'] != null
           ? SnippetLanguage.decode(pigeonMap['language']!)
           : null,
+      owner: pigeonMap['owner'] != null
+          ? Owner.decode(pigeonMap['owner']!)
+          : null,
+      modifiedAt: pigeonMap['modifiedAt'] as String?,
+      numberOfLikes: pigeonMap['numberOfLikes'] as int?,
+      numberOfDislikes: pigeonMap['numberOfDislikes'] as int?,
     );
   }
 }
@@ -187,6 +205,31 @@ class SnippetLanguage {
       type: pigeonMap['type'] != null
           ? SnippetLanguageType.values[pigeonMap['type']! as int]
           : null,
+    );
+  }
+}
+
+class Owner {
+  Owner({
+    this.id,
+    this.login,
+  });
+
+  int? id;
+  String? login;
+
+  Object encode() {
+    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
+    pigeonMap['id'] = id;
+    pigeonMap['login'] = login;
+    return pigeonMap;
+  }
+
+  static Owner decode(Object message) {
+    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+    return Owner(
+      id: pigeonMap['id'] as int?,
+      login: pigeonMap['login'] as String?,
     );
   }
 }
@@ -288,24 +331,28 @@ class _MainModelApiCodec extends StandardMessageCodec{
       buffer.putUint8(129);
       writeValue(buffer, value.encode());
     } else 
-    if (value is Snippet) {
+    if (value is Owner) {
       buffer.putUint8(130);
       writeValue(buffer, value.encode());
     } else 
-    if (value is SnippetCode) {
+    if (value is Snippet) {
       buffer.putUint8(131);
       writeValue(buffer, value.encode());
     } else 
-    if (value is SnippetFilter) {
+    if (value is SnippetCode) {
       buffer.putUint8(132);
       writeValue(buffer, value.encode());
     } else 
-    if (value is SnippetLanguage) {
+    if (value is SnippetFilter) {
       buffer.putUint8(133);
       writeValue(buffer, value.encode());
     } else 
-    if (value is SyntaxToken) {
+    if (value is SnippetLanguage) {
       buffer.putUint8(134);
+      writeValue(buffer, value.encode());
+    } else 
+    if (value is SyntaxToken) {
+      buffer.putUint8(135);
       writeValue(buffer, value.encode());
     } else 
 {
@@ -322,18 +369,21 @@ class _MainModelApiCodec extends StandardMessageCodec{
         return MainModelStateData.decode(readValue(buffer)!);
       
       case 130:       
-        return Snippet.decode(readValue(buffer)!);
+        return Owner.decode(readValue(buffer)!);
       
       case 131:       
-        return SnippetCode.decode(readValue(buffer)!);
+        return Snippet.decode(readValue(buffer)!);
       
       case 132:       
-        return SnippetFilter.decode(readValue(buffer)!);
+        return SnippetCode.decode(readValue(buffer)!);
       
       case 133:       
-        return SnippetLanguage.decode(readValue(buffer)!);
+        return SnippetFilter.decode(readValue(buffer)!);
       
       case 134:       
+        return SnippetLanguage.decode(readValue(buffer)!);
+      
+      case 135:       
         return SyntaxToken.decode(readValue(buffer)!);
       
       default:      

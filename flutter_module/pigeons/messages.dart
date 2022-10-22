@@ -7,6 +7,10 @@ class Snippet {
   String? title;
   SnippetCode? code;
   SnippetLanguage? language;
+  Owner? owner;
+  String? modifiedAt;
+  int? numberOfLikes;
+  int? numberOfDislikes;
 }
 
 class SnippetCode {
@@ -23,6 +27,11 @@ class SyntaxToken {
 class SnippetLanguage {
   String? raw;
   SnippetLanguageType? type;
+}
+
+class Owner {
+  int? id;
+  String? login;
 }
 
 enum SnippetLanguageType {
@@ -85,7 +94,7 @@ enum ModelState { loading, loaded, error }
 
 enum MainModelEvent { none, alert, logout }
 
-class MainModelStateData{
+class MainModelStateData {
   ModelState? state;
   bool? is_loading;
   List<Snippet?>? data;

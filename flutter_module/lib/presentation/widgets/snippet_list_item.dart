@@ -6,6 +6,7 @@ import 'package:flutter_module/presentation/styles/dimens.dart';
 import 'package:flutter_module/presentation/styles/padding_styles.dart';
 import 'package:flutter_module/presentation/styles/text_styles.dart';
 import 'package:flutter_module/presentation/widgets/code_text_view.dart';
+import 'package:time_elapsed/time_elapsed.dart';
 
 class SnippetListTile extends HookWidget {
   const SnippetListTile({
@@ -13,6 +14,7 @@ class SnippetListTile extends HookWidget {
     required this.snippet,
   }) : super(key: key);
 
+  final bool isExpanded = true;
   final Snippet snippet;
 
   @override
@@ -41,12 +43,37 @@ class SnippetListTile extends HookWidget {
             ),
           ),
           const SizedBox(height: Dimens.m),
-          Row(children: [
-            Column(),
-
-          ],)
+          if (isExpanded) ...[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: Dimens.l),
+              child: SnippetDetailsBar(snippet: snippet),
+            ),
+            const SizedBox(height: Dimens.m),
+          ],
         ],
       ),
+    );
+  }
+}
+
+class SnippetDetailsBar extends StatelessWidget {
+  SnippetDetailsBar({Key? key, required this.snippet}) : super(key: key);
+
+  Snippet snippet;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Column(
+          children: [
+            TextStyles.regular(snippet.language?.raw ?? ""),
+            const SizedBox(height: Dimens.m),
+            TextStyles.regular(snippet.owner?.login ?? ""),
+            TextStyles.helper(TimeElapsed.fromDateStr(snippet.modifiedAt ?? ""))
+          ],
+        ),
+      ],
     );
   }
 }

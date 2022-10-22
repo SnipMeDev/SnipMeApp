@@ -134,6 +134,30 @@ public class Messages {
       this.language = setterArg;
     }
 
+    private @Nullable Owner owner;
+    public @Nullable Owner getOwner() { return owner; }
+    public void setOwner(@Nullable Owner setterArg) {
+      this.owner = setterArg;
+    }
+
+    private @Nullable String modifiedAt;
+    public @Nullable String getModifiedAt() { return modifiedAt; }
+    public void setModifiedAt(@Nullable String setterArg) {
+      this.modifiedAt = setterArg;
+    }
+
+    private @Nullable Long numberOfLikes;
+    public @Nullable Long getNumberOfLikes() { return numberOfLikes; }
+    public void setNumberOfLikes(@Nullable Long setterArg) {
+      this.numberOfLikes = setterArg;
+    }
+
+    private @Nullable Long numberOfDislikes;
+    public @Nullable Long getNumberOfDislikes() { return numberOfDislikes; }
+    public void setNumberOfDislikes(@Nullable Long setterArg) {
+      this.numberOfDislikes = setterArg;
+    }
+
     public static final class Builder {
       private @Nullable String uuid;
       public @NonNull Builder setUuid(@Nullable String setterArg) {
@@ -155,12 +179,36 @@ public class Messages {
         this.language = setterArg;
         return this;
       }
+      private @Nullable Owner owner;
+      public @NonNull Builder setOwner(@Nullable Owner setterArg) {
+        this.owner = setterArg;
+        return this;
+      }
+      private @Nullable String modifiedAt;
+      public @NonNull Builder setModifiedAt(@Nullable String setterArg) {
+        this.modifiedAt = setterArg;
+        return this;
+      }
+      private @Nullable Long numberOfLikes;
+      public @NonNull Builder setNumberOfLikes(@Nullable Long setterArg) {
+        this.numberOfLikes = setterArg;
+        return this;
+      }
+      private @Nullable Long numberOfDislikes;
+      public @NonNull Builder setNumberOfDislikes(@Nullable Long setterArg) {
+        this.numberOfDislikes = setterArg;
+        return this;
+      }
       public @NonNull Snippet build() {
         Snippet pigeonReturn = new Snippet();
         pigeonReturn.setUuid(uuid);
         pigeonReturn.setTitle(title);
         pigeonReturn.setCode(code);
         pigeonReturn.setLanguage(language);
+        pigeonReturn.setOwner(owner);
+        pigeonReturn.setModifiedAt(modifiedAt);
+        pigeonReturn.setNumberOfLikes(numberOfLikes);
+        pigeonReturn.setNumberOfDislikes(numberOfDislikes);
         return pigeonReturn;
       }
     }
@@ -170,6 +218,10 @@ public class Messages {
       toMapResult.put("title", title);
       toMapResult.put("code", (code == null) ? null : code.toMap());
       toMapResult.put("language", (language == null) ? null : language.toMap());
+      toMapResult.put("owner", (owner == null) ? null : owner.toMap());
+      toMapResult.put("modifiedAt", modifiedAt);
+      toMapResult.put("numberOfLikes", numberOfLikes);
+      toMapResult.put("numberOfDislikes", numberOfDislikes);
       return toMapResult;
     }
     static @NonNull Snippet fromMap(@NonNull Map<String, Object> map) {
@@ -182,6 +234,14 @@ public class Messages {
       pigeonResult.setCode((code == null) ? null : SnippetCode.fromMap((Map)code));
       Object language = map.get("language");
       pigeonResult.setLanguage((language == null) ? null : SnippetLanguage.fromMap((Map)language));
+      Object owner = map.get("owner");
+      pigeonResult.setOwner((owner == null) ? null : Owner.fromMap((Map)owner));
+      Object modifiedAt = map.get("modifiedAt");
+      pigeonResult.setModifiedAt((String)modifiedAt);
+      Object numberOfLikes = map.get("numberOfLikes");
+      pigeonResult.setNumberOfLikes((numberOfLikes == null) ? null : ((numberOfLikes instanceof Integer) ? (Integer)numberOfLikes : (Long)numberOfLikes));
+      Object numberOfDislikes = map.get("numberOfDislikes");
+      pigeonResult.setNumberOfDislikes((numberOfDislikes == null) ? null : ((numberOfDislikes instanceof Integer) ? (Integer)numberOfDislikes : (Long)numberOfDislikes));
       return pigeonResult;
     }
   }
@@ -341,6 +401,54 @@ public class Messages {
       pigeonResult.setRaw((String)raw);
       Object type = map.get("type");
       pigeonResult.setType(type == null ? null : SnippetLanguageType.values()[(int)type]);
+      return pigeonResult;
+    }
+  }
+
+  /** Generated class from Pigeon that represents data sent in messages. */
+  public static class Owner {
+    private @Nullable Long id;
+    public @Nullable Long getId() { return id; }
+    public void setId(@Nullable Long setterArg) {
+      this.id = setterArg;
+    }
+
+    private @Nullable String login;
+    public @Nullable String getLogin() { return login; }
+    public void setLogin(@Nullable String setterArg) {
+      this.login = setterArg;
+    }
+
+    public static final class Builder {
+      private @Nullable Long id;
+      public @NonNull Builder setId(@Nullable Long setterArg) {
+        this.id = setterArg;
+        return this;
+      }
+      private @Nullable String login;
+      public @NonNull Builder setLogin(@Nullable String setterArg) {
+        this.login = setterArg;
+        return this;
+      }
+      public @NonNull Owner build() {
+        Owner pigeonReturn = new Owner();
+        pigeonReturn.setId(id);
+        pigeonReturn.setLogin(login);
+        return pigeonReturn;
+      }
+    }
+    @NonNull Map<String, Object> toMap() {
+      Map<String, Object> toMapResult = new HashMap<>();
+      toMapResult.put("id", id);
+      toMapResult.put("login", login);
+      return toMapResult;
+    }
+    static @NonNull Owner fromMap(@NonNull Map<String, Object> map) {
+      Owner pigeonResult = new Owner();
+      Object id = map.get("id");
+      pigeonResult.setId((id == null) ? null : ((id instanceof Integer) ? (Integer)id : (Long)id));
+      Object login = map.get("login");
+      pigeonResult.setLogin((String)login);
       return pigeonResult;
     }
   }
@@ -516,18 +624,21 @@ public class Messages {
           return MainModelStateData.fromMap((Map<String, Object>) readValue(buffer));
         
         case (byte)130:         
-          return Snippet.fromMap((Map<String, Object>) readValue(buffer));
+          return Owner.fromMap((Map<String, Object>) readValue(buffer));
         
         case (byte)131:         
-          return SnippetCode.fromMap((Map<String, Object>) readValue(buffer));
+          return Snippet.fromMap((Map<String, Object>) readValue(buffer));
         
         case (byte)132:         
-          return SnippetFilter.fromMap((Map<String, Object>) readValue(buffer));
+          return SnippetCode.fromMap((Map<String, Object>) readValue(buffer));
         
         case (byte)133:         
-          return SnippetLanguage.fromMap((Map<String, Object>) readValue(buffer));
+          return SnippetFilter.fromMap((Map<String, Object>) readValue(buffer));
         
         case (byte)134:         
+          return SnippetLanguage.fromMap((Map<String, Object>) readValue(buffer));
+        
+        case (byte)135:         
           return SyntaxToken.fromMap((Map<String, Object>) readValue(buffer));
         
         default:        
@@ -545,24 +656,28 @@ public class Messages {
         stream.write(129);
         writeValue(stream, ((MainModelStateData) value).toMap());
       } else 
-      if (value instanceof Snippet) {
+      if (value instanceof Owner) {
         stream.write(130);
+        writeValue(stream, ((Owner) value).toMap());
+      } else 
+      if (value instanceof Snippet) {
+        stream.write(131);
         writeValue(stream, ((Snippet) value).toMap());
       } else 
       if (value instanceof SnippetCode) {
-        stream.write(131);
+        stream.write(132);
         writeValue(stream, ((SnippetCode) value).toMap());
       } else 
       if (value instanceof SnippetFilter) {
-        stream.write(132);
+        stream.write(133);
         writeValue(stream, ((SnippetFilter) value).toMap());
       } else 
       if (value instanceof SnippetLanguage) {
-        stream.write(133);
+        stream.write(134);
         writeValue(stream, ((SnippetLanguage) value).toMap());
       } else 
       if (value instanceof SyntaxToken) {
-        stream.write(134);
+        stream.write(135);
         writeValue(stream, ((SyntaxToken) value).toMap());
       } else 
 {
