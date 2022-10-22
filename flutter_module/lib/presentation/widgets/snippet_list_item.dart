@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_module/messages.dart';
-import 'package:flutter_module/utils/extensions/collection_extensions.dart';
-import 'package:flutter_module/utils/extensions/text_extensions.dart';
+import 'package:flutter_module/presentation/styles/color_styles.dart';
+import 'package:flutter_module/presentation/styles/dimens.dart';
+import 'package:flutter_module/presentation/styles/padding_styles.dart';
+import 'package:flutter_module/presentation/styles/text_styles.dart';
+import 'package:flutter_module/presentation/widgets/code_text_view.dart';
 
-class SnippetListItem extends HookWidget {
-  const SnippetListItem({
+class SnippetListTile extends HookWidget {
+  const SnippetListTile({
     Key? key,
     required this.snippet,
   }) : super(key: key);
@@ -14,40 +17,35 @@ class SnippetListItem extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    useEffect(() {
-      print("Title = ${snippet.title}");
-      print(
-          "Tokens = ${snippet.code?.tokens?.map((e) => "Token = ${e?.start} : ${e?.end} -> ${e?.color}").join("\n")}");
-    }, [snippet]);
-
-    return ListTile(
-      title: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(snippet.title ?? "Snippet"),
+    return Card(
+      color: ColorStyles.surfacePrimary(),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(Dimens.m),
       ),
-      subtitle: Container(
-        padding: const EdgeInsets.all(8.0),
-        color: Colors.white70,
-        child: SelectableText.rich(
-          TextSpan(
-            style: const TextStyle(color: Colors.black),
-            children: snippet.code?.tokens?.toSpans(
-              snippet.code?.raw?.lines(5) ?? "",
-              const TextStyle(color: Colors.black),
+      child: Column(
+        children: [
+          PaddingStyles.regular(
+            TextStyles.title(snippet.title ?? ""),
+          ),
+          ColoredBox(
+            color: ColorStyles.codeBackground(),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: Dimens.m,
+                horizontal: Dimens.l,
+              ),
+              child: CodeTextView.preview(
+                code: snippet.code?.raw ?? "",
+                tokens: snippet.code?.tokens,
+              ),
             ),
           ),
-          minLines: 1,
-          maxLines: 5,
-          onTap: () => print('To copy text go to details'),
-          toolbarOptions: ToolbarOptions(
-            copy: true,
-            selectAll: true,
-          ),
-          showCursor: true,
-          cursorWidth: 2,
-          cursorColor: Colors.red,
-          cursorRadius: Radius.circular(5),
-        ),
+          const SizedBox(height: Dimens.m),
+          Row(children: [
+            Column(),
+
+          ],)
+        ],
       ),
     );
   }
