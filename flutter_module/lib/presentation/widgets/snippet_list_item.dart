@@ -57,9 +57,9 @@ class SnippetListTile extends HookWidget {
 }
 
 class SnippetDetailsBar extends StatelessWidget {
-  SnippetDetailsBar({Key? key, required this.snippet}) : super(key: key);
+  const SnippetDetailsBar({Key? key, required this.snippet}) : super(key: key);
 
-  Snippet snippet;
+  final Snippet snippet;
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +70,7 @@ class SnippetDetailsBar extends StatelessWidget {
             TextStyles.regular(snippet.language?.raw ?? ""),
             const SizedBox(height: Dimens.m),
             TextStyles.regular(snippet.owner?.login ?? ""),
-            TextStyles.helper(snippet.modifiedAt?.elapsedDateTime() ?? "")
+            TextStyles.helper(snippet.modifiedAt?.toElapsedTime() ?? "")
           ],
         ),
       ],

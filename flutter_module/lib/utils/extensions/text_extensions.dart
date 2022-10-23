@@ -43,7 +43,7 @@ extension TextExtensions on String {
   }
 
   String lines(int count) {
-    final split = const LineSplitter().convert(this ?? "");
+    final split = const LineSplitter().convert(this);
 
     if (split.length == 1) {
       return split.first;
@@ -52,7 +52,7 @@ extension TextExtensions on String {
     return split.join('\n');
   }
 
-  String elapsedDateTime() {
+  String toElapsedTime() {
     final customDate = CustomTimeElapsed(
       minutes: 'minutes',
       hours: 'hours',

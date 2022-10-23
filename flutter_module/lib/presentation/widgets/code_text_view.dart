@@ -55,10 +55,10 @@ class CodeTextView extends StatelessWidget {
 
     return SelectableText.rich(
       TextSpan(
-        style: const TextStyle(color: Colors.black),
+        style: TextStyle(color: Colors.black),
         children: tokens.toSpans(
           code.lines(maxLinesOrAll),
-          const TextStyle(color: Colors.black),
+          TextStyle(color: Colors.black),
         ),
       ),
       minLines: 1,
