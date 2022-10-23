@@ -40,7 +40,7 @@ class CodeTextView extends StatelessWidget {
   final TextSelectionOptions? options;
   final GestureTapCallback? onTap;
 
-  CodeTextView.preview({
+  const CodeTextView.preview({
     Key? key,
     required this.code,
     this.tokens,

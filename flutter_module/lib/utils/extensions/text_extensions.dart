@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:time_elapsed/time_elapsed.dart';
+
 extension TextExtensions on String {
   List<String> splitByIndices(List<int> splitters) {
     List<String> result = [];
@@ -48,5 +50,18 @@ extension TextExtensions on String {
     }
 
     return split.join('\n');
+  }
+
+  String elapsedDateTime() {
+    final customDate = CustomTimeElapsed(
+      minutes: 'minutes',
+      hours: 'hours',
+      days: 'days',
+      now: 'now',
+      seconds: 'seconds',
+      weeks: 'weeks',
+    );
+
+    return TimeElapsed.fromDateStr(this).toCustomTimeElapsed(customDate);
   }
 }

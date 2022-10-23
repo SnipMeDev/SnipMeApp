@@ -6,7 +6,7 @@ import 'package:flutter_module/presentation/styles/dimens.dart';
 import 'package:flutter_module/presentation/styles/padding_styles.dart';
 import 'package:flutter_module/presentation/styles/text_styles.dart';
 import 'package:flutter_module/presentation/widgets/code_text_view.dart';
-import 'package:time_elapsed/time_elapsed.dart';
+import 'package:flutter_module/utils/extensions/text_extensions.dart';
 
 class SnippetListTile extends HookWidget {
   const SnippetListTile({
@@ -70,7 +70,7 @@ class SnippetDetailsBar extends StatelessWidget {
             TextStyles.regular(snippet.language?.raw ?? ""),
             const SizedBox(height: Dimens.m),
             TextStyles.regular(snippet.owner?.login ?? ""),
-            TextStyles.helper(TimeElapsed.fromDateStr(snippet.modifiedAt ?? ""))
+            TextStyles.helper(snippet.modifiedAt?.elapsedDateTime() ?? "")
           ],
         ),
       ],
