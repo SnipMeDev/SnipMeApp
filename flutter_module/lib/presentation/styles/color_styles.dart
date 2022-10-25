@@ -6,6 +6,6 @@ class ColorStyles extends Color {
 
   ColorStyles.pageBackground(): super(0xFFF5F5F5);
 
-  ColorStyles.codeBackground(): super(0xFFF0F0F0);
+  ColorStyles.codeBackground(): super(0xFFF8F8F8);
 
 }
