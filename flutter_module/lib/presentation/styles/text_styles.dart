@@ -10,7 +10,8 @@ class TextStyles extends Text {
           style: const TextStyle(fontSize: 16),
         );
 
-  const TextStyles.code(this.text, {Key? key}) : super(
+  const TextStyles.code(this.text, {Key? key})
+      : super(
           text,
           key: key,
           style: const TextStyle(
@@ -26,30 +27,24 @@ class TextStyles extends Text {
           style: const TextStyle(),
         );
 
-  TextStyles.secondary(this.text, {Key? key})
+  const TextStyles.secondary(this.text, {Key? key})
       : super(
           text,
           key: key,
-          style: TextStyle(color: Colors.black.withOpacity(0.5)),
+          style: const TextStyle(color: Colors.grey),
         );
 
-  TextStyles.label(this.text, {Key? key})
+  const TextStyles.label(this.text, {Key? key})
       : super(
           text,
           key: key,
-          style: TextStyle(
-            fontSize: 12,
-            color: Colors.black.withOpacity(0.5),
-          ),
+          style: const TextStyle(fontSize: 12, color: Colors.grey),
         );
 
-  TextStyles.helper(this.text, {Key? key})
+  const TextStyles.helper(this.text, {Key? key})
       : super(
           text,
           key: key,
-          style: TextStyle(
-            fontSize: 12,
-            color: Colors.black.withOpacity(0.5),
-          ),
+          style: const TextStyle(fontSize: 10, color: Colors.grey),
         );
 }

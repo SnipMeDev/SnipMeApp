@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_module/messages.dart';
+import 'package:flutter_module/presentation/styles/text_styles.dart';
 import 'package:flutter_module/utils/extensions/collection_extensions.dart';
 import 'package:flutter_module/utils/extensions/text_extensions.dart';
 
@@ -55,10 +56,9 @@ class CodeTextView extends StatelessWidget {
 
     return SelectableText.rich(
       TextSpan(
-        style: TextStyle(color: Colors.black),
         children: tokens.toSpans(
           code.lines(maxLinesOrAll),
-          TextStyle(color: Colors.black),
+          TextStyles.code(code).style!,
         ),
       ),
       minLines: 1,
@@ -66,6 +66,8 @@ class CodeTextView extends StatelessWidget {
       onTap: onTap,
       toolbarOptions: options?.toolbarOptions,
       showCursor: options?.showCursor ?? false,
+      enableInteractiveSelection: false,
+      scrollPhysics: const NeverScrollableScrollPhysics(),
     );
   }
 }

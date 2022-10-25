@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_module/messages.dart';
+import 'package:flutter_module/presentation/styles/color_styles.dart';
+import 'package:flutter_module/presentation/styles/dimens.dart';
+import 'package:flutter_module/presentation/styles/padding_styles.dart';
 import 'package:flutter_module/presentation/widgets/snippet_list_item.dart';
 import 'package:flutter_module/presentation/widgets/view_state_wrapper.dart';
 import 'package:flutter_module/utils/extensions/build_context_extensions.dart';
@@ -39,6 +42,7 @@ class MainPage extends HookWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text("SnipMe")),
+      backgroundColor: ColorStyles.pageBackground(),
       body: ViewStateWrapper<List<Snippet>>(
         isLoading: data.state == ModelState.loading || data.is_loading == true,
         error: data.error,
@@ -77,8 +81,14 @@ class _MainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: snippets.length,
-      itemBuilder: (_, index) => SnippetListTile(
-        snippet: snippets[index],
+      itemBuilder: (_, index) => Padding(
+        padding: const EdgeInsets.symmetric(
+          vertical: Dimens.s,
+          horizontal: Dimens.m,
+        ),
+        child: SnippetListTile(
+          snippet: snippets[index],
+        ),
       ),
     );
   }

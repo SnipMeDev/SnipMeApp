@@ -4,6 +4,8 @@ class ColorStyles extends Color {
 
   ColorStyles.surfacePrimary(): super(Colors.white.value);
 
-  ColorStyles.codeBackground(): super(Colors.black.withOpacity(0.5).value);
+  ColorStyles.pageBackground(): super(0xFFF5F5F5);
+
+  ColorStyles.codeBackground(): super(0xFFF0F0F0);
 
 }
