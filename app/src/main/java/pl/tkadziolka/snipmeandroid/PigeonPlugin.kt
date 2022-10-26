@@ -1,21 +1,21 @@
 package pl.tkadziolka.snipmeandroid
 
-import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import androidx.core.text.getSpans
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.map
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import pl.tkadziolka.snipmeandroid.bridge.MainModel
+import pl.tkadziolka.snipmeandroid.domain.snippets.Owner
 import pl.tkadziolka.snipmeandroid.domain.snippets.Snippet
 import pl.tkadziolka.snipmeandroid.domain.snippets.SnippetCode
 import pl.tkadziolka.snipmeandroid.domain.snippets.SnippetLanguage
 import pl.tkadziolka.snipmeandroid.ui.main.*
+import pl.tkadziolka.snipmeandroid.util.extension.fromDate
 import pl.tkadziolka.snipmeandroid.util.view.SnippetFilter
-import timber.log.Timber
+import java.text.SimpleDateFormat
 
 /*
  flutter pub run pigeon \
@@ -27,7 +27,6 @@ import timber.log.Timber
 
 @ExperimentalCoroutinesApi
 class PigeonPlugin : FlutterPlugin, Messages.MainModelApi, KoinComponent {
-
     private val mainModel: MainModel by inject()
 
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
@@ -95,13 +94,21 @@ class PigeonPlugin : FlutterPlugin, Messages.MainModelApi, KoinComponent {
             title = it.title
             code = it.code.toModelSnippetCode()
             language = it.language.toModelSnippetLanguage()
+            owner = it.owner.toModelOwner()
+            modifiedAt = it.modifiedAt.fromDate()
         }
     }
+
+    private fun Owner.toModelOwner() =
+        Messages.Owner().let {
+            it.id = id.toLong()
+            it.login = login
+            it
+        }
 
     private fun SnippetCode.toModelSnippetCode() =
         Messages.SnippetCode().let {
             it.raw = raw
-            // TODO Debug resolving spans (lines = 5)???
             it.tokens = highlighted.getSpans<ForegroundColorSpan>().map { span ->
                 span.toSyntaxToken(highlighted)
             }
