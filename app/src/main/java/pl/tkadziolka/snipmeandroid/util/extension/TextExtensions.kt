@@ -35,9 +35,3 @@ fun String.toDate(): Date {
     val sdf = SimpleDateFormat(iso8061Pattern, Locale.getDefault())
     return sdf.parse(this)
 }
-
-fun Date.fromDate(): String {
-    val iso8061Pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-    val sdf = SimpleDateFormat(iso8061Pattern, Locale.getDefault())
-    return sdf.format(this)
-}

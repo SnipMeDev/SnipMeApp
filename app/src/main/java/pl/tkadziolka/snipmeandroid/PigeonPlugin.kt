@@ -1,6 +1,7 @@
 package pl.tkadziolka.snipmeandroid
 
 import android.text.Spanned
+import android.text.format.DateUtils
 import android.text.style.ForegroundColorSpan
 import androidx.core.text.getSpans
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -13,9 +14,8 @@ import pl.tkadziolka.snipmeandroid.domain.snippets.Snippet
 import pl.tkadziolka.snipmeandroid.domain.snippets.SnippetCode
 import pl.tkadziolka.snipmeandroid.domain.snippets.SnippetLanguage
 import pl.tkadziolka.snipmeandroid.ui.main.*
-import pl.tkadziolka.snipmeandroid.util.extension.fromDate
 import pl.tkadziolka.snipmeandroid.util.view.SnippetFilter
-import java.text.SimpleDateFormat
+import java.util.*
 
 /*
  flutter pub run pigeon \
@@ -95,7 +95,12 @@ class PigeonPlugin : FlutterPlugin, Messages.MainModelApi, KoinComponent {
             code = it.code.toModelSnippetCode()
             language = it.language.toModelSnippetLanguage()
             owner = it.owner.toModelOwner()
-            modifiedAt = it.modifiedAt.fromDate()
+            voteResult = (it.numberOfLikes - it.numberOfDislikes).toLong()
+            timeAgo = DateUtils.getRelativeTimeSpanString(
+                it.modifiedAt.time,
+                Date().time,
+                DateUtils.SECOND_IN_MILLIS
+            ).toString()
         }
     }
 

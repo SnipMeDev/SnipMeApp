@@ -6,7 +6,6 @@ import 'package:flutter_module/presentation/styles/dimens.dart';
 import 'package:flutter_module/presentation/styles/surface_styles.dart';
 import 'package:flutter_module/presentation/styles/text_styles.dart';
 import 'package:flutter_module/presentation/widgets/code_text_view.dart';
-import 'package:flutter_module/utils/extensions/text_extensions.dart';
 
 class SnippetListTile extends HookWidget {
   const SnippetListTile({
@@ -65,7 +64,10 @@ class SnippetListTile extends HookWidget {
 }
 
 class SnippetDetailsBar extends StatelessWidget {
-  const SnippetDetailsBar({Key? key, required this.snippet}) : super(key: key);
+  const SnippetDetailsBar({
+    Key? key,
+    required this.snippet,
+  }) : super(key: key);
 
   final Snippet snippet;
 
@@ -73,15 +75,30 @@ class SnippetDetailsBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Column(
-          children: [
-            TextStyles.regular(snippet.language?.raw ?? ""),
-            const SizedBox(height: Dimens.m),
-            TextStyles.regular(snippet.owner?.login ?? ""),
-            TextStyles.helper(snippet.modifiedAt?.toElapsedTime() ?? "")
-          ],
+        Expanded(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              TextStyles.regular(snippet.language?.raw ?? ""),
+              const SizedBox(height: Dimens.m),
+              TextStyles.secondary(snippet.owner?.login ?? ""),
+              const SizedBox(height: Dimens.s),
+              TextStyles.helper(snippet.timeAgo ?? "")
+            ],
+          ),
         ),
+        SurfaceStyles.rateBox(
+          TextStyles.title(_getVoteCountText(snippet.voteResult)),
+        )
       ],
     );
+  }
+
+  String _getVoteCountText(int? voteResult) {
+    if (voteResult == null) return '-';
+    if (voteResult == 0) return '-';
+    if (voteResult > 0) return '+$voteResult';
+    return '-$voteResult';
   }
 }

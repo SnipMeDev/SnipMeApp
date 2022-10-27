@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_module/messages.dart';
 import 'package:flutter_module/presentation/pages/main_page.dart';
+import 'package:flutter_module/presentation/widgets/snippet_list_item.dart';
+import 'package:flutter_module/utils/mock/mock_page.dart';
+import 'package:flutter_module/utils/mock/mocks.dart';
 
 void main() => runApp(MyApp());
 
@@ -15,7 +18,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'SnipMe',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: MainPage(model: mainModel),
+      home: MockPage(children: [
+        SnippetListTile(snippet: Mocks.snippet),
+      ]),
     );
   }
 }
