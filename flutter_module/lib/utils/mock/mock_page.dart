@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_module/presentation/styles/padding_styles.dart';
 
 class MockPage extends StatelessWidget {

@@ -148,13 +148,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.2"
-  cupertino_icons:
-    dependency: "direct main"
-    description:
-      name: cupertino_icons
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.5"
   dart_style:
     dependency: transitive
     description:
@@ -214,20 +207,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  freezed:
-    dependency: "direct dev"
-    description:
-      name: freezed
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.2.0"
-  freezed_annotation:
-    dependency: "direct main"
-    description:
-      name: freezed_annotation
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.2.0"
   frontend_server_client:
     dependency: transitive
     description:
@@ -278,19 +257,12 @@ packages:
     source: hosted
     version: "0.6.5"
   json_annotation:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: json_annotation
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.7.0"
-  json_serializable:
-    dependency: "direct dev"
-    description:
-      name: json_serializable
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "6.5.3"
   lints:
     dependency: transitive
     description:
@@ -382,13 +354,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.1"
-  reflectable:
-    dependency: "direct main"
-    description:
-      name: reflectable
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.0.10"
   shelf:
     dependency: transitive
     description:
@@ -422,20 +387,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
-  source_gen:
-    dependency: transitive
-    description:
-      name: source_gen
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.2.6"
-  source_helper:
-    dependency: transitive
-    description:
-      name: source_helper
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.3.3"
   source_map_stack_trace:
     dependency: transitive
     description:
@@ -513,13 +464,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.4.16"
-  time_elapsed:
-    dependency: "direct main"
-    description:
-      name: time_elapsed
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.2.6"
   timing:
     dependency: transitive
     description:
