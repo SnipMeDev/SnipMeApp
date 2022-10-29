@@ -89,7 +89,9 @@ class SnippetDetailsBar extends StatelessWidget {
           ),
         ),
         SurfaceStyles.rateBox(
-          TextStyles.title(_getVoteCountText(snippet.voteResult)),
+          TextStyles.title(
+            _getVoteCountText(snippet.voteResult),
+          ),
         )
       ],
     );
