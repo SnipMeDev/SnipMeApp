@@ -41,12 +41,7 @@ extension TextExtensions on String {
   }
 
   String lines(int count) {
-    final split = const LineSplitter().convert(this);
-
-    if (split.length == 1) {
-      return split.first;
-    }
-
+    final split = const LineSplitter().convert(this).take(count);
     return split.join('\n');
   }
 }
