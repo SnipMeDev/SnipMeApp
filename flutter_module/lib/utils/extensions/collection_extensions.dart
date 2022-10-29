@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_module/messages.dart';
+import 'package:flutter_module/presentation/styles/text_styles.dart';
 import 'package:flutter_module/utils/extensions/text_extensions.dart';
 import 'package:collection/collection.dart';
 
@@ -63,7 +64,7 @@ extension SyntaxSpanExtension on List<SyntaxToken?>? {
       );
 
       if (foundToken != null) {
-        style = TextStyle(color: foundToken.color);
+        style = TextStyles.code(text).style!.copyWith(color: foundToken.color);
       }
 
       return TextSpan(text: phrase, style: style);

@@ -4,7 +4,7 @@ import 'package:flutter_module/utils/extensions/collection_extensions.dart';
 import 'package:test/test.dart';
 
 void main() {
-  final style = TextStyle(color: Colors.black);
+  const style = TextStyle(color: Colors.black);
 
   group('toSpans', () {
     test('Returns list with single span for null or empty collection', () {
@@ -49,7 +49,7 @@ void main() {
     });
 
     test('Larger syntax span overlaps smaller', () {
-      final code = "Code = 'class Abcd { }'";
+      const code = "Code = 'class Abcd { }'";
 
       List<SyntaxToken?>? tokens = [
         SyntaxToken(start: 8, end: 13, color: Colors.red.value),

@@ -44,34 +44,34 @@ void main() {
         ["This", "x", "is", "x", "simple", "x", "phrase", "xend"],
       );
     });
+  });
 
-    group('lines', () {
-      test('Returns string of split lines', () {
-        // Given
-        const toSplit = 'There\nare\rfour\r\nlines';
-        // When
-        final result = toSplit.lines(4);
-        // Then
-        expect(result, 'There\nare\nfour\nlines');
-      });
+  group('lines', () {
+    test('Returns string of split lines', () {
+      // Given
+      const toSplit = 'There\nare\rfour\r\nlines';
+      // When
+      final result = toSplit.lines(4);
+      // Then
+      expect(result, 'There\nare\nfour\nlines');
+    });
 
-      test('Returns n or less split lines', () {
-        // Given
-        const toSplit = 'There\nare\rfour\r\nlines';
-        // When
-        final result = toSplit.lines(3);
-        // Then
-        expect(result, 'There\nare\nfour');
-      });
+    test('Returns n or less split lines', () {
+      // Given
+      const toSplit = 'There\nare\rfour\r\nlines';
+      // When
+      final result = toSplit.lines(3);
+      // Then
+      expect(result, 'There\nare\nfour');
+    });
 
-      test('Returns line without terminator for oneliner', () {
-        // Given
-        const toSplit = 'Oneliner';
-        // When
-        final result = toSplit.lines(3);
-        // Then
-        expect(result, 'Oneliner');
-      });
+    test('Returns line without terminator for oneliner', () {
+      // Given
+      const toSplit = 'Oneliner';
+      // When
+      final result = toSplit.lines(3);
+      // Then
+      expect(result, 'Oneliner');
     });
   });
 }

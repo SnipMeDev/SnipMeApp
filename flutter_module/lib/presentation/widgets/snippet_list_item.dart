@@ -1,11 +1,70 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_module/messages.dart';
-import 'package:flutter_module/utils/extensions/collection_extensions.dart';
-import 'package:flutter_module/utils/extensions/text_extensions.dart';
+import 'package:flutter_module/presentation/styles/color_styles.dart';
+import 'package:flutter_module/presentation/styles/dimens.dart';
+import 'package:flutter_module/presentation/styles/surface_styles.dart';
+import 'package:flutter_module/presentation/styles/text_styles.dart';
+import 'package:flutter_module/presentation/widgets/code_text_view.dart';
 
-class SnippetListItem extends HookWidget {
-  const SnippetListItem({
+class SnippetListTile extends HookWidget {
+  const SnippetListTile({
+    Key? key,
+    required this.snippet,
+  }) : super(key: key);
+
+  final bool isExpanded = true;
+  final Snippet snippet;
+
+  @override
+  Widget build(BuildContext context) {
+    return SurfaceStyles.snippetCard(
+      onTap: () {},
+      child: Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(
+                top: Dimens.l,
+                left: Dimens.l,
+                right: Dimens.l,
+                bottom: Dimens.m,
+              ),
+              child: TextStyles.title(snippet.title ?? ""),
+            ),
+            Ink(
+              color: ColorStyles.codeBackground(),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: Dimens.m,
+                  horizontal: Dimens.l,
+                ),
+                child: Expanded(
+                  child: CodeTextView.preview(
+                    code: snippet.code?.raw ?? "",
+                    tokens: snippet.code?.tokens,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: Dimens.m),
+            if (isExpanded) ...[
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: Dimens.l),
+                child: SnippetDetailsBar(snippet: snippet),
+              ),
+              const SizedBox(height: Dimens.m),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class SnippetDetailsBar extends StatelessWidget {
+  const SnippetDetailsBar({
     Key? key,
     required this.snippet,
   }) : super(key: key);
@@ -14,41 +73,34 @@ class SnippetListItem extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    useEffect(() {
-      print("Title = ${snippet.title}");
-      print(
-          "Tokens = ${snippet.code?.tokens?.map((e) => "Token = ${e?.start} : ${e?.end} -> ${e?.color}").join("\n")}");
-    }, [snippet]);
-
-    return ListTile(
-      title: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(snippet.title ?? "Snippet"),
-      ),
-      subtitle: Container(
-        padding: const EdgeInsets.all(8.0),
-        color: Colors.white70,
-        child: SelectableText.rich(
-          TextSpan(
-            style: const TextStyle(color: Colors.black),
-            children: snippet.code?.tokens?.toSpans(
-              snippet.code?.raw?.lines(5) ?? "",
-              const TextStyle(color: Colors.black),
-            ),
+    return Row(
+      children: [
+        Expanded(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              TextStyles.regular(snippet.language?.raw ?? ""),
+              const SizedBox(height: Dimens.m),
+              TextStyles.secondary(snippet.owner?.login ?? ""),
+              const SizedBox(height: Dimens.s),
+              TextStyles.helper(snippet.timeAgo ?? "")
+            ],
           ),
-          minLines: 1,
-          maxLines: 5,
-          onTap: () => print('To copy text go to details'),
-          toolbarOptions: ToolbarOptions(
-            copy: true,
-            selectAll: true,
-          ),
-          showCursor: true,
-          cursorWidth: 2,
-          cursorColor: Colors.red,
-          cursorRadius: Radius.circular(5),
         ),
-      ),
+        SurfaceStyles.rateBox(
+          TextStyles.title(
+            _getVoteCountText(snippet.voteResult),
+          ),
+        )
+      ],
     );
+  }
+
+  String _getVoteCountText(int? voteResult) {
+    if (voteResult == null) return '-';
+    if (voteResult == 0) return '-';
+    if (voteResult > 0) return '+$voteResult';
+    return '-$voteResult';
   }
 }
