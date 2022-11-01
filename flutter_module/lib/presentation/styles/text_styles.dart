@@ -34,6 +34,16 @@ class TextStyles extends Text {
           style: const TextStyle(color: Colors.grey),
         );
 
+  const TextStyles.secondaryBold(this.text, {Key? key})
+      : super(
+          text,
+          key: key,
+          style: const TextStyle(
+            color: Colors.grey,
+            fontWeight: FontWeight.bold,
+          ),
+        );
+
   const TextStyles.label(this.text, {Key? key})
       : super(
           text,

@@ -61,6 +61,12 @@ enum SnippetFilterType {
   shared,
 }
 
+enum UserReaction {
+  none,
+  like,
+  dislike,
+}
+
 enum ModelState {
   loading,
   loaded,
@@ -80,8 +86,10 @@ class Snippet {
     this.code,
     this.language,
     this.owner,
+    this.isOwner,
     this.timeAgo,
     this.voteResult,
+    this.userReaction,
   });
 
   String? uuid;
@@ -89,8 +97,10 @@ class Snippet {
   SnippetCode? code;
   SnippetLanguage? language;
   Owner? owner;
+  bool? isOwner;
   String? timeAgo;
   int? voteResult;
+  UserReaction? userReaction;
 
   Object encode() {
     final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
@@ -99,8 +109,10 @@ class Snippet {
     pigeonMap['code'] = code?.encode();
     pigeonMap['language'] = language?.encode();
     pigeonMap['owner'] = owner?.encode();
+    pigeonMap['isOwner'] = isOwner;
     pigeonMap['timeAgo'] = timeAgo;
     pigeonMap['voteResult'] = voteResult;
+    pigeonMap['userReaction'] = userReaction?.index;
     return pigeonMap;
   }
 
@@ -118,8 +130,12 @@ class Snippet {
       owner: pigeonMap['owner'] != null
           ? Owner.decode(pigeonMap['owner']!)
           : null,
+      isOwner: pigeonMap['isOwner'] as bool?,
       timeAgo: pigeonMap['timeAgo'] as String?,
       voteResult: pigeonMap['voteResult'] as int?,
+      userReaction: pigeonMap['userReaction'] != null
+          ? UserReaction.values[pigeonMap['userReaction']! as int]
+          : null,
     );
   }
 }

@@ -87,6 +87,17 @@ public class Bridge {
     }
   }
 
+  public enum UserReaction {
+    NONE(0),
+    LIKE(1),
+    DISLIKE(2);
+
+    private int index;
+    private UserReaction(final int index) {
+      this.index = index;
+    }
+  }
+
   public enum ModelState {
     LOADING(0),
     LOADED(1),
@@ -141,6 +152,12 @@ public class Bridge {
       this.owner = setterArg;
     }
 
+    private @Nullable Boolean isOwner;
+    public @Nullable Boolean getIsOwner() { return isOwner; }
+    public void setIsOwner(@Nullable Boolean setterArg) {
+      this.isOwner = setterArg;
+    }
+
     private @Nullable String timeAgo;
     public @Nullable String getTimeAgo() { return timeAgo; }
     public void setTimeAgo(@Nullable String setterArg) {
@@ -151,6 +168,12 @@ public class Bridge {
     public @Nullable Long getVoteResult() { return voteResult; }
     public void setVoteResult(@Nullable Long setterArg) {
       this.voteResult = setterArg;
+    }
+
+    private @Nullable UserReaction userReaction;
+    public @Nullable UserReaction getUserReaction() { return userReaction; }
+    public void setUserReaction(@Nullable UserReaction setterArg) {
+      this.userReaction = setterArg;
     }
 
     public static final class Builder {
@@ -179,6 +202,11 @@ public class Bridge {
         this.owner = setterArg;
         return this;
       }
+      private @Nullable Boolean isOwner;
+      public @NonNull Builder setIsOwner(@Nullable Boolean setterArg) {
+        this.isOwner = setterArg;
+        return this;
+      }
       private @Nullable String timeAgo;
       public @NonNull Builder setTimeAgo(@Nullable String setterArg) {
         this.timeAgo = setterArg;
@@ -189,6 +217,11 @@ public class Bridge {
         this.voteResult = setterArg;
         return this;
       }
+      private @Nullable UserReaction userReaction;
+      public @NonNull Builder setUserReaction(@Nullable UserReaction setterArg) {
+        this.userReaction = setterArg;
+        return this;
+      }
       public @NonNull Snippet build() {
         Snippet pigeonReturn = new Snippet();
         pigeonReturn.setUuid(uuid);
@@ -196,8 +229,10 @@ public class Bridge {
         pigeonReturn.setCode(code);
         pigeonReturn.setLanguage(language);
         pigeonReturn.setOwner(owner);
+        pigeonReturn.setIsOwner(isOwner);
         pigeonReturn.setTimeAgo(timeAgo);
         pigeonReturn.setVoteResult(voteResult);
+        pigeonReturn.setUserReaction(userReaction);
         return pigeonReturn;
       }
     }
@@ -208,8 +243,10 @@ public class Bridge {
       toMapResult.put("code", (code == null) ? null : code.toMap());
       toMapResult.put("language", (language == null) ? null : language.toMap());
       toMapResult.put("owner", (owner == null) ? null : owner.toMap());
+      toMapResult.put("isOwner", isOwner);
       toMapResult.put("timeAgo", timeAgo);
       toMapResult.put("voteResult", voteResult);
+      toMapResult.put("userReaction", userReaction == null ? null : userReaction.index);
       return toMapResult;
     }
     static @NonNull Snippet fromMap(@NonNull Map<String, Object> map) {
@@ -224,10 +261,14 @@ public class Bridge {
       pigeonResult.setLanguage((language == null) ? null : SnippetLanguage.fromMap((Map)language));
       Object owner = map.get("owner");
       pigeonResult.setOwner((owner == null) ? null : Owner.fromMap((Map)owner));
+      Object isOwner = map.get("isOwner");
+      pigeonResult.setIsOwner((Boolean)isOwner);
       Object timeAgo = map.get("timeAgo");
       pigeonResult.setTimeAgo((String)timeAgo);
       Object voteResult = map.get("voteResult");
       pigeonResult.setVoteResult((voteResult == null) ? null : ((voteResult instanceof Integer) ? (Integer)voteResult : (Long)voteResult));
+      Object userReaction = map.get("userReaction");
+      pigeonResult.setUserReaction(userReaction == null ? null : UserReaction.values()[(int)userReaction]);
       return pigeonResult;
     }
   }
