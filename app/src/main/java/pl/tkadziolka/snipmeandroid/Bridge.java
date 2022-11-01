@@ -21,7 +21,7 @@ import java.util.HashMap;
 
 /**Generated class from Pigeon. */
 @SuppressWarnings({"unused", "unchecked", "CodeBlock2Expr", "RedundantSuppression"})
-public class Messages {
+public class Bridge {
 
   public enum SnippetLanguageType {
     C(0),
@@ -597,9 +597,9 @@ public class Messages {
       return pigeonResult;
     }
   }
-  private static class MainModelApiCodec extends StandardMessageCodec {
-    public static final MainModelApiCodec INSTANCE = new MainModelApiCodec();
-    private MainModelApiCodec() {}
+  private static class MainModelBridgeCodec extends StandardMessageCodec {
+    public static final MainModelBridgeCodec INSTANCE = new MainModelBridgeCodec();
+    private MainModelBridgeCodec() {}
     @Override
     protected Object readValueOfType(byte type, @NonNull ByteBuffer buffer) {
       switch (type) {
@@ -673,7 +673,7 @@ public class Messages {
   }
 
   /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
-  public interface MainModelApi {
+  public interface MainModelBridge {
     @NonNull MainModelStateData getState();
     @NonNull MainModelEventData getEvent();
     void initState();
@@ -682,14 +682,14 @@ public class Messages {
     void logOut();
     void refreshSnippetUpdates();
 
-    /** The codec used by MainModelApi. */
+    /** The codec used by MainModelBridge. */
     static MessageCodec<Object> getCodec() {
-      return       MainModelApiCodec.INSTANCE;    }
-    /**Sets up an instance of `MainModelApi` to handle messages through the `binaryMessenger`. */
-    static void setup(BinaryMessenger binaryMessenger, MainModelApi api) {
+      return       MainModelBridgeCodec.INSTANCE;    }
+    /**Sets up an instance of `MainModelBridge` to handle messages through the `binaryMessenger`. */
+    static void setup(BinaryMessenger binaryMessenger, MainModelBridge api) {
       {
         BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.MainModelApi.getState", getCodec());
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.MainModelBridge.getState", getCodec());
         if (api != null) {
           channel.setMessageHandler((message, reply) -> {
             Map<String, Object> wrapped = new HashMap<>();
@@ -708,7 +708,7 @@ public class Messages {
       }
       {
         BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.MainModelApi.getEvent", getCodec());
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.MainModelBridge.getEvent", getCodec());
         if (api != null) {
           channel.setMessageHandler((message, reply) -> {
             Map<String, Object> wrapped = new HashMap<>();
@@ -728,7 +728,7 @@ public class Messages {
       {
         BinaryMessenger.TaskQueue taskQueue = binaryMessenger.makeBackgroundTaskQueue();
         BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.MainModelApi.initState", getCodec(), taskQueue);
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.MainModelBridge.initState", getCodec(), taskQueue);
         if (api != null) {
           channel.setMessageHandler((message, reply) -> {
             Map<String, Object> wrapped = new HashMap<>();
@@ -748,7 +748,7 @@ public class Messages {
       {
         BinaryMessenger.TaskQueue taskQueue = binaryMessenger.makeBackgroundTaskQueue();
         BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.MainModelApi.loadNextPage", getCodec(), taskQueue);
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.MainModelBridge.loadNextPage", getCodec(), taskQueue);
         if (api != null) {
           channel.setMessageHandler((message, reply) -> {
             Map<String, Object> wrapped = new HashMap<>();
@@ -768,7 +768,7 @@ public class Messages {
       {
         BinaryMessenger.TaskQueue taskQueue = binaryMessenger.makeBackgroundTaskQueue();
         BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.MainModelApi.filter", getCodec(), taskQueue);
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.MainModelBridge.filter", getCodec(), taskQueue);
         if (api != null) {
           channel.setMessageHandler((message, reply) -> {
             Map<String, Object> wrapped = new HashMap<>();
@@ -794,7 +794,7 @@ public class Messages {
       {
         BinaryMessenger.TaskQueue taskQueue = binaryMessenger.makeBackgroundTaskQueue();
         BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.MainModelApi.logOut", getCodec(), taskQueue);
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.MainModelBridge.logOut", getCodec(), taskQueue);
         if (api != null) {
           channel.setMessageHandler((message, reply) -> {
             Map<String, Object> wrapped = new HashMap<>();
@@ -814,7 +814,7 @@ public class Messages {
       {
         BinaryMessenger.TaskQueue taskQueue = binaryMessenger.makeBackgroundTaskQueue();
         BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.MainModelApi.refreshSnippetUpdates", getCodec(), taskQueue);
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.MainModelBridge.refreshSnippetUpdates", getCodec(), taskQueue);
         if (api != null) {
           channel.setMessageHandler((message, reply) -> {
             Map<String, Object> wrapped = new HashMap<>();

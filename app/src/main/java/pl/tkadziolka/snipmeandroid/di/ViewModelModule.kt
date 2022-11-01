@@ -2,8 +2,8 @@ package pl.tkadziolka.snipmeandroid.di
 
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
-import pl.tkadziolka.snipmeandroid.bridge.MainModel
-import pl.tkadziolka.snipmeandroid.bridge.SessionModel
+import pl.tkadziolka.snipmeandroid.bridge.main.MainModel
+import pl.tkadziolka.snipmeandroid.bridge.session.SessionModel
 import pl.tkadziolka.snipmeandroid.ui.detail.DetailViewModel
 import pl.tkadziolka.snipmeandroid.ui.donate.DonateViewModel
 import pl.tkadziolka.snipmeandroid.ui.edit.EditViewModel
