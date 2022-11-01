@@ -1,14 +1,14 @@
-package pl.tkadziolka.snipmeandroid
+package pl.tkadziolka.snipmeandroid.bridge.main
 
 import android.text.Spanned
 import android.text.format.DateUtils
 import android.text.style.ForegroundColorSpan
 import androidx.core.text.getSpans
 import io.flutter.embedding.engine.plugins.FlutterPlugin
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.koin.core.component.KoinComponent
+import io.flutter.plugin.common.BinaryMessenger
 import org.koin.core.component.inject
-import pl.tkadziolka.snipmeandroid.bridge.MainModel
+import pl.tkadziolka.snipmeandroid.Bridge
+import pl.tkadziolka.snipmeandroid.bridge.ModelPlugin
 import pl.tkadziolka.snipmeandroid.domain.snippets.Owner
 import pl.tkadziolka.snipmeandroid.domain.snippets.Snippet
 import pl.tkadziolka.snipmeandroid.domain.snippets.SnippetCode
@@ -17,79 +17,70 @@ import pl.tkadziolka.snipmeandroid.ui.main.*
 import pl.tkadziolka.snipmeandroid.util.view.SnippetFilter
 import java.util.*
 
-/*
- flutter pub run pigeon \
-  --input pigeons/messages.dart \
-  --dart_out lib/messages.dart \
-  --java_out ../app/src/main/java/pl/tkadziolka/snipmeandroid/Messages.java \
-  --java_package "pl.tkadziolka.snipmeandroid"
- */
+class MainModelPlugin : ModelPlugin<Bridge.MainModelBridge>(), Bridge.MainModelBridge {
 
-@ExperimentalCoroutinesApi
-class PigeonPlugin : FlutterPlugin, Messages.MainModelApi, KoinComponent {
-    private val mainModel: MainModel by inject()
+    private val model: MainModel by inject()
 
-    override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-        Messages.MainModelApi.setup(binding.binaryMessenger, this)
+    override fun onSetup(
+        messenger: BinaryMessenger,
+        bridge: Bridge.MainModelBridge?
+    ) {
+        Bridge.MainModelBridge.setup(messenger, bridge)
     }
 
-    override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-        Messages.MainModelApi.setup(binding.binaryMessenger, null)
-    }
+    override fun getState(): Bridge.MainModelStateData = getData(model.state.value)
 
-    override fun getState(): Messages.MainModelStateData = getData(mainModel.state.value)
-
-    override fun getEvent(): Messages.MainModelEventData = getEvent(mainModel.event.value)
+    override fun getEvent(): Bridge.MainModelEventData = getEvent(model.event.value)
 
     override fun initState() {
-        mainModel.initState()
+        model.initState()
     }
 
     override fun loadNextPage() {
-        mainModel.loadNextPage()
+        model.loadNextPage()
     }
 
-    override fun filter(filter: Messages.SnippetFilter) {
-        val type = (filter.type?.name ?: Messages.SnippetFilterType.ALL.name).uppercase()
+    override fun filter(filter: Bridge.SnippetFilter) {
+        val type = (filter.type?.name ?: Bridge.SnippetFilterType.ALL.name).uppercase()
         val snippetFilter = SnippetFilter.valueOf(type)
-        mainModel.filter(snippetFilter)
+        model.filter(snippetFilter)
     }
 
     override fun logOut() {
-        mainModel.logOut()
+        model.logOut()
     }
 
     override fun refreshSnippetUpdates() {
-        mainModel.refreshSnippetUpdates()
+        model.refreshSnippetUpdates()
     }
 
-    private fun getData(viewState: MainViewState) = Messages.MainModelStateData().apply {
+    private fun getData(viewState: MainViewState) = Bridge.MainModelStateData().apply {
         state = viewState.toModelState()
         is_loading = viewState is Loading
         data = (viewState as? Loaded)?.snippets?.toModelData()
     }
 
-    private fun getEvent(viewEvent: MainEvent) = Messages.MainModelEventData().apply {
+    private fun getEvent(viewEvent: MainEvent) = Bridge.MainModelEventData().apply {
         event = viewEvent.toModelEvent()
         message = (viewEvent as? Alert)?.message
     }
 
     private fun MainEvent.toModelEvent() =
         when (this) {
-            is Alert -> Messages.MainModelEvent.ALERT
-            is Logout -> Messages.MainModelEvent.LOGOUT
-            else -> Messages.MainModelEvent.NONE
+            is Alert -> Bridge.MainModelEvent.ALERT
+            is Logout -> Bridge.MainModelEvent.LOGOUT
+            else -> Bridge.MainModelEvent.NONE
         }
 
     private fun MainViewState.toModelState() =
         when (this) {
-            Loading -> Messages.ModelState.LOADING
-            is Loaded -> Messages.ModelState.LOADED
-            is Error -> Messages.ModelState.ERROR
+            Loading -> Bridge.ModelState.LOADING
+            is Loaded -> Bridge.ModelState.LOADED
+            is Error -> Bridge.ModelState.ERROR
         }
 
     private fun List<Snippet>.toModelData() = map {
-        Messages.Snippet().apply {
+        Bridge.Snippet().apply {
             uuid = it.uuid
             title = it.title
             code = it.code.toModelSnippetCode()
@@ -105,14 +96,14 @@ class PigeonPlugin : FlutterPlugin, Messages.MainModelApi, KoinComponent {
     }
 
     private fun Owner.toModelOwner() =
-        Messages.Owner().let {
+        Bridge.Owner().let {
             it.id = id.toLong()
             it.login = login
             it
         }
 
     private fun SnippetCode.toModelSnippetCode() =
-        Messages.SnippetCode().let {
+        Bridge.SnippetCode().let {
             it.raw = raw
             it.tokens = highlighted.getSpans<ForegroundColorSpan>().map { span ->
                 span.toSyntaxToken(highlighted)
@@ -121,14 +112,14 @@ class PigeonPlugin : FlutterPlugin, Messages.MainModelApi, KoinComponent {
         }
 
     private fun SnippetLanguage.toModelSnippetLanguage() =
-        Messages.SnippetLanguage().let {
+        Bridge.SnippetLanguage().let {
             it.raw = raw
-            it.type = Messages.SnippetLanguageType.valueOf(type.name)
+            it.type = Bridge.SnippetLanguageType.valueOf(type.name)
             it
         }
 
     private fun ForegroundColorSpan.toSyntaxToken(spannable: Spanned) =
-        Messages.SyntaxToken().let {
+        Bridge.SyntaxToken().let {
             it.start = spannable.getSpanStart(this).toLong()
             it.end = spannable.getSpanEnd(this).toLong()
             it.color = foregroundColor.toLong()

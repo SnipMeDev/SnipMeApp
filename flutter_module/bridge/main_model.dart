@@ -108,7 +108,7 @@ class MainModelEventData {
 // Api
 
 @HostApi()
-abstract class MainModelApi {
+abstract class MainModelBridge {
   MainModelStateData getState();
 
   MainModelEventData getEvent();

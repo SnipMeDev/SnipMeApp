@@ -315,8 +315,8 @@ class MainModelEventData {
   }
 }
 
-class _MainModelApiCodec extends StandardMessageCodec{
-  const _MainModelApiCodec();
+class _MainModelBridgeCodec extends StandardMessageCodec{
+  const _MainModelBridgeCodec();
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
     if (value is MainModelEventData) {
@@ -389,18 +389,18 @@ class _MainModelApiCodec extends StandardMessageCodec{
   }
 }
 
-class MainModelApi {
-  /// Constructor for [MainModelApi].  The [binaryMessenger] named argument is
+class MainModelBridge {
+  /// Constructor for [MainModelBridge].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  MainModelApi({BinaryMessenger? binaryMessenger}) : _binaryMessenger = binaryMessenger;
+  MainModelBridge({BinaryMessenger? binaryMessenger}) : _binaryMessenger = binaryMessenger;
   final BinaryMessenger? _binaryMessenger;
 
-  static const MessageCodec<Object?> codec = _MainModelApiCodec();
+  static const MessageCodec<Object?> codec = _MainModelBridgeCodec();
 
   Future<MainModelStateData> getState() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.MainModelApi.getState', codec, binaryMessenger: _binaryMessenger);
+        'dev.flutter.pigeon.MainModelBridge.getState', codec, binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
         await channel.send(null) as Map<Object?, Object?>?;
     if (replyMap == null) {
@@ -427,7 +427,7 @@ class MainModelApi {
 
   Future<MainModelEventData> getEvent() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.MainModelApi.getEvent', codec, binaryMessenger: _binaryMessenger);
+        'dev.flutter.pigeon.MainModelBridge.getEvent', codec, binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
         await channel.send(null) as Map<Object?, Object?>?;
     if (replyMap == null) {
@@ -454,7 +454,7 @@ class MainModelApi {
 
   Future<void> initState() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.MainModelApi.initState', codec, binaryMessenger: _binaryMessenger);
+        'dev.flutter.pigeon.MainModelBridge.initState', codec, binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
         await channel.send(null) as Map<Object?, Object?>?;
     if (replyMap == null) {
@@ -476,7 +476,7 @@ class MainModelApi {
 
   Future<void> loadNextPage() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.MainModelApi.loadNextPage', codec, binaryMessenger: _binaryMessenger);
+        'dev.flutter.pigeon.MainModelBridge.loadNextPage', codec, binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
         await channel.send(null) as Map<Object?, Object?>?;
     if (replyMap == null) {
@@ -498,7 +498,7 @@ class MainModelApi {
 
   Future<void> filter(SnippetFilter arg_filter) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.MainModelApi.filter', codec, binaryMessenger: _binaryMessenger);
+        'dev.flutter.pigeon.MainModelBridge.filter', codec, binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
         await channel.send(<Object?>[arg_filter]) as Map<Object?, Object?>?;
     if (replyMap == null) {
@@ -520,7 +520,7 @@ class MainModelApi {
 
   Future<void> logOut() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.MainModelApi.logOut', codec, binaryMessenger: _binaryMessenger);
+        'dev.flutter.pigeon.MainModelBridge.logOut', codec, binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
         await channel.send(null) as Map<Object?, Object?>?;
     if (replyMap == null) {
@@ -542,7 +542,7 @@ class MainModelApi {
 
   Future<void> refreshSnippetUpdates() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.MainModelApi.refreshSnippetUpdates', codec, binaryMessenger: _binaryMessenger);
+        'dev.flutter.pigeon.MainModelBridge.refreshSnippetUpdates', codec, binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
         await channel.send(null) as Map<Object?, Object?>?;
     if (replyMap == null) {

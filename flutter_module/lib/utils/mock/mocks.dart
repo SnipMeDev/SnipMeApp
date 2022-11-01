@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_module/messages.dart';
+import 'package:flutter_module/model/main_model.dart';
 
 class Mocks {
   static final snippet = Snippet(

@@ -1,6 +1,5 @@
-package pl.tkadziolka.snipmeandroid.bridge
+package pl.tkadziolka.snipmeandroid.bridge.session
 
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.plusAssign
@@ -19,7 +18,6 @@ class SessionModel(
 
         logoutDisposable = logout()
             .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
             .subscribe { onComplete() }
             .also { disposables += it }
     }
