@@ -3,16 +3,13 @@ package pl.tkadziolka.snipmeandroid.bridge
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.BinaryMessenger
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
-import pl.tkadziolka.snipmeandroid.bridge.main.BaseModel
-import pl.tkadziolka.snipmeandroid.bridge.main.MainModel
 
 /*
  flutter pub run pigeon \
   --input bridge/main_model.dart \
-  --dart_out lib/main_model.dart \
-  --java_out ../app/src/main/java/pl/tkadziolka/snipmeandroid/Bridge.java \
-  --java_package "pl.tkadziolka.snipmeandroid"
+  --dart_out lib/model/main_model.dart \
+  --java_out ../app/src/main/java/pl/tkadziolka/snipmeandroid/bridge/Bridge.java \
+  --java_package "pl.tkadziolka.snipmeandroid.bridge"
  */
 
 abstract class ModelPlugin<T>: FlutterPlugin, KoinComponent {

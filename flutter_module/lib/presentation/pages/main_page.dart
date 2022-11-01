@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_module/messages.dart';
+import 'package:flutter_module/model/main_model.dart';
 import 'package:flutter_module/presentation/styles/color_styles.dart';
 import 'package:flutter_module/presentation/styles/dimens.dart';
 import 'package:flutter_module/presentation/widgets/snippet_list_item.dart';
@@ -14,7 +14,7 @@ class MainPage extends HookWidget {
     required this.model,
   }) : super(key: key);
 
-  final MainModelApi model;
+  final MainModelBridge model;
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:flutter_module/messages.dart';
+import 'package:flutter_module/model/main_model.dart';
 import 'package:flutter_module/presentation/styles/text_styles.dart';
 import 'package:flutter_module/utils/extensions/text_extensions.dart';
 import 'package:collection/collection.dart';
