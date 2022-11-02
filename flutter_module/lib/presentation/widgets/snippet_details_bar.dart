@@ -22,7 +22,7 @@ class SnippetDetailsBar extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              TextStyles.regular(snippet.language?.raw ?? ""),
+              TextStyles.regular(snippet.language?.raw ?? "Unknown language"),
               const SizedBox(height: Dimens.m),
               snippet.isOwner == true
                   ? TextStyles.secondaryBold(snippet.owner?.login ?? "")
