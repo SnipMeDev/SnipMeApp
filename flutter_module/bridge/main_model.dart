@@ -8,8 +8,10 @@ class Snippet {
   SnippetCode? code;
   SnippetLanguage? language;
   Owner? owner;
+  bool? isOwner;
   String? timeAgo;
   int? voteResult;
+  UserReaction? userReaction;
 }
 
 class SnippetCode {
@@ -85,6 +87,12 @@ enum SnippetFilterType { all, mine, shared }
 
 class SnippetFilter {
   SnippetFilterType? type;
+}
+
+enum UserReaction {
+  none,
+  like,
+  dislike
 }
 
 // State
