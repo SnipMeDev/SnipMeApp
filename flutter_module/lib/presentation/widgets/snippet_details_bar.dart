@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_module/generated/assets.dart';
 import 'package:flutter_module/model/main_model.dart';
 import 'package:flutter_module/presentation/styles/dimens.dart';
 import 'package:flutter_module/presentation/styles/surface_styles.dart';
@@ -31,8 +32,8 @@ class SnippetDetailsBar extends StatelessWidget {
             ],
           ),
         ),
-        _VoteIndicator(reaction: snippet.userReaction),
-        const SizedBox(width: Dimens.m),
+        _UserReactionIndicator(reaction: snippet.userReaction),
+        const SizedBox(width: Dimens.l),
         SurfaceStyles.rateBox(
           TextStyles.title(
             _getVoteCountText(snippet.voteResult),
@@ -43,15 +44,16 @@ class SnippetDetailsBar extends StatelessWidget {
   }
 
   String _getVoteCountText(int? voteResult) {
-    if (voteResult == null) return '--';
-    if (voteResult == 0) return '--';
+    const defaultValue = '+0';
+    if (voteResult == null) return defaultValue;
+    if (voteResult == 0) return defaultValue;
     if (voteResult > 0) return '+$voteResult';
     return '-$voteResult';
   }
 }
 
-class _VoteIndicator extends StatelessWidget {
-  const _VoteIndicator({
+class _UserReactionIndicator extends StatelessWidget {
+  const _UserReactionIndicator({
     Key? key,
     this.reaction,
   }) : super(key: key);
@@ -59,6 +61,15 @@ class _VoteIndicator extends StatelessWidget {
   final UserReaction? reaction;
 
   @override
-  Widget build(BuildContext context) => Image.asset('');
-  // TODO Correct generating asset paths from plugin
+  Widget build(BuildContext context) {
+    if (reaction == UserReaction.like) {
+      return Image.asset(Assets.reactionLike);
+    }
+
+    if (reaction == UserReaction.dislike) {
+      return Image.asset(Assets.reactionDislike);
+    }
+
+    return Image.asset(Assets.reactionUndefined);
+  }
 }

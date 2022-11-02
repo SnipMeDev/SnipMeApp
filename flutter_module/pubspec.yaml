@@ -37,6 +37,9 @@ dev_dependencies:
 # For information on the generic Dart part of this file, see the
 # following pages: https://dart.dev/tools/pub/pubspec
 
+flutter_assets_generator:
+  named_with_parent: false # Don't add folder to icon's name
+
 flutter:
   plugin:
     platforms:

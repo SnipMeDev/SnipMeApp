@@ -4,11 +4,11 @@ import android.text.Spanned
 import android.text.format.DateUtils
 import android.text.style.ForegroundColorSpan
 import androidx.core.text.getSpans
-import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.BinaryMessenger
 import org.koin.core.component.inject
-import pl.tkadziolka.snipmeandroid.Bridge
+import pl.tkadziolka.snipmeandroid.bridge.Bridge
 import pl.tkadziolka.snipmeandroid.bridge.ModelPlugin
+import pl.tkadziolka.snipmeandroid.domain.reaction.UserReaction
 import pl.tkadziolka.snipmeandroid.domain.snippets.Owner
 import pl.tkadziolka.snipmeandroid.domain.snippets.Snippet
 import pl.tkadziolka.snipmeandroid.domain.snippets.SnippetCode
@@ -86,7 +86,9 @@ class MainModelPlugin : ModelPlugin<Bridge.MainModelBridge>(), Bridge.MainModelB
             code = it.code.toModelSnippetCode()
             language = it.language.toModelSnippetLanguage()
             owner = it.owner.toModelOwner()
+            isOwner = it.isOwner
             voteResult = (it.numberOfLikes - it.numberOfDislikes).toLong()
+            userReaction = it.userReaction.toModelUserReaction()
             timeAgo = DateUtils.getRelativeTimeSpanString(
                 it.modifiedAt.time,
                 Date().time,
@@ -124,5 +126,12 @@ class MainModelPlugin : ModelPlugin<Bridge.MainModelBridge>(), Bridge.MainModelB
             it.end = spannable.getSpanEnd(this).toLong()
             it.color = foregroundColor.toLong()
             it
+        }
+
+    private fun UserReaction.toModelUserReaction(): Bridge.UserReaction =
+        when(this) {
+            UserReaction.LIKE -> Bridge.UserReaction.LIKE
+            UserReaction.DISLIKE -> Bridge.UserReaction.DISLIKE
+            else -> Bridge.UserReaction.NONE
         }
 }
