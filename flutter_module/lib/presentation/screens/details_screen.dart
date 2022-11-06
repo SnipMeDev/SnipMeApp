@@ -12,9 +12,16 @@ class DetailsScreen extends NamedScreen {
 
   @override
   Widget builder(BuildContext context, GoRouterState state) {
-    return const Scaffold(
-      body: Center(
-        child: Text("Details"),
+    return WillPopScope(
+      onWillPop: () async {
+        // TODO Fix back action
+        GoRouter.of(context).pop();
+        return Future.value(false);
+      },
+      child: const Scaffold(
+        body: Center(
+          child: Text("Details"),
+        ),
       ),
     );
   }

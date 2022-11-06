@@ -47,6 +47,7 @@ class MyApp extends StatelessWidget {
       routeInformationProvider: router.routeInformationProvider,
       routeInformationParser: router.routeInformationParser,
       routerDelegate: router.routerDelegate,
+      backButtonDispatcher: router.backButtonDispatcher,
     );
   }
 }
