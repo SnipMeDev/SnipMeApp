@@ -12,15 +12,17 @@ class SnippetListTile extends HookWidget {
   const SnippetListTile({
     Key? key,
     required this.snippet,
+    required this.onTap,
   }) : super(key: key);
 
   final bool isExpanded = true;
   final Snippet snippet;
+  final GestureTapCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return SurfaceStyles.snippetCard(
-      onTap: () {},
+      onTap: onTap,
       child: Expanded(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -1,19 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_module/model/main_model.dart';
+import 'package:flutter_module/presentation/navigation/details/details_navigator.dart';
+import 'package:flutter_module/presentation/screens/named_screen.dart';
 import 'package:flutter_module/presentation/styles/color_styles.dart';
 import 'package:flutter_module/presentation/styles/dimens.dart';
 import 'package:flutter_module/presentation/widgets/snippet_list_item.dart';
 import 'package:flutter_module/presentation/widgets/view_state_wrapper.dart';
 import 'package:flutter_module/utils/extensions/build_context_extensions.dart';
 import 'package:flutter_module/utils/hooks/use_observable_state_hook.dart';
+import 'package:go_router/src/state.dart';
+import 'package:go_router_plus/go_router_plus.dart';
 
-class MainPage extends HookWidget {
-  const MainPage({
+class MainScreen extends NamedScreen implements UserScreen {
+  MainScreen({
+    required this.navigator,
+    required this.model,
+  }) : super(name);
+
+  static String name = 'main';
+  final DetailsNavigator navigator;
+  final MainModelBridge model;
+
+  @override
+  Widget builder(BuildContext context, GoRouterState state) {
+    return _MainPage(
+      navigator: navigator,
+      model: model,
+    );
+  }
+}
+
+class _MainPage extends HookWidget {
+  const _MainPage({
     Key? key,
+    required this.navigator,
     required this.model,
   }) : super(key: key);
 
+  final DetailsNavigator navigator;
   final MainModelBridge model;
 
   @override
@@ -47,14 +72,17 @@ class MainPage extends HookWidget {
         error: data.error,
         data: data.data?.cast(),
         builder: (_, snippets) {
-          return _MainPage(snippets: snippets ?? List.empty());
+          return _MainPageData(
+            navigator: navigator,
+            snippets: snippets ?? List.empty(),
+          );
         },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => model.loadNextPage(),
         tooltip: 'Increment',
         child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
     );
   }
 
@@ -68,27 +96,35 @@ class MainPage extends HookWidget {
   }
 }
 
-class _MainPage extends StatelessWidget {
-  const _MainPage({
+class _MainPageData extends StatelessWidget {
+  const _MainPageData({
     Key? key,
+    required this.navigator,
     required this.snippets,
   }) : super(key: key);
 
+  final DetailsNavigator navigator;
   final List<Snippet> snippets;
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: snippets.length,
-      itemBuilder: (_, index) => Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: Dimens.s,
-          horizontal: Dimens.m,
-        ),
-        child: SnippetListTile(
-          snippet: snippets[index],
-        ),
-      ),
+      itemBuilder: (_, index) {
+        final snippet = snippets[index];
+        return Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: Dimens.s,
+            horizontal: Dimens.m,
+          ),
+          child: SnippetListTile(
+            snippet: snippet,
+            onTap: () {
+              navigator.goToDetails(snippet.uuid!);
+            },
+          ),
+        );
+      },
     );
   }
 }
