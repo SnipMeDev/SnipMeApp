@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_module/model/main_model.dart';
-import 'package:flutter_module/presentation/pages/main_page.dart';
-import 'package:flutter_module/presentation/widgets/snippet_list_item.dart';
-import 'package:flutter_module/utils/mock/mock_page.dart';
-import 'package:flutter_module/utils/mock/mocks.dart';
+import 'package:flutter_module/presentation/navigation/details/details_navigator.dart';
+import 'package:flutter_module/presentation/navigation/login/login_navigator.dart';
+import 'package:flutter_module/presentation/screens//main_screen.dart';
+import 'package:flutter_module/presentation/screens/details_screen.dart';
+import 'package:flutter_module/presentation/screens/login_screen.dart';
+import 'package:flutter_module/utils/extensions/text_extensions.dart';
+import 'package:go_router_plus/go_router_plus.dart';
 
 void main() => runApp(MyApp());
 
@@ -12,13 +15,38 @@ class MyApp extends StatelessWidget {
 
   final mainModel = MainModelBridge();
 
-  // This widgets is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    final loginNavigator = LoginNavigator();
+    final detailsNavigator = DetailsNavigator();
+    final router = createGoRouter(
+      screens: [
+        LoginScreen(loginNavigator),
+        MainScreen(
+          loginNavigator: loginNavigator,
+          detailsNavigator: detailsNavigator,
+          model: mainModel,
+        ),
+        DetailsScreen(detailsNavigator)
+      ],
+      redirectors: [
+        ScreenRedirector(),
+        AuthRedirector(
+          state: loginNavigator,
+          guestRedirectPath: LoginScreen.name.route,
+          userRedirectPath: MainScreen.name.route,
+        )
+      ],
+      refreshNotifiers: [loginNavigator],
+    );
+
+    return MaterialApp.router(
       title: 'SnipMe',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: MainPage(model: mainModel),
+      // TODO Use theme tailor
+      routeInformationProvider: router.routeInformationProvider,
+      routeInformationParser: router.routeInformationParser,
+      routerDelegate: router.routerDelegate,
     );
   }
 }

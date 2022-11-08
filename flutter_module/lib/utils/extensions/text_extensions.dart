@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 extension TextExtensions on String {
+  String get route => '/$this';
+
   List<String> splitByIndices(List<int> splitters) {
     List<String> result = [];
 
