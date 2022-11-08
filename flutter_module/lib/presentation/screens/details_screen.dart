@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_module/presentation/navigation/details/details_navigator.dart';
 import 'package:flutter_module/presentation/screens/named_screen.dart';
+import 'package:flutter_module/utils/hooks/use_navigator.dart';
 import 'package:go_router/go_router.dart';
 
 class DetailsScreen extends NamedScreen {
@@ -17,7 +18,7 @@ class DetailsScreen extends NamedScreen {
   }
 }
 
-class _DetailsPage extends StatelessWidget {
+class _DetailsPage extends HookWidget {
   const _DetailsPage({
     Key? key,
     required this.navigator,
@@ -27,10 +28,7 @@ class _DetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    useEffect(() {
-      navigator.setRouter(GoRouter.of(context));
-    }, []);
+    useNavigator([navigator]);
 
     return Scaffold(
       appBar: AppBar(

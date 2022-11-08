@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_module/model/main_model.dart';
 import 'package:flutter_module/presentation/navigation/details/details_navigator.dart';
-import 'package:flutter_module/presentation/navigation/details/details_redirector.dart';
 import 'package:flutter_module/presentation/navigation/login/login_navigator.dart';
 import 'package:flutter_module/presentation/screens//main_screen.dart';
 import 'package:flutter_module/presentation/screens/details_screen.dart';
 import 'package:flutter_module/presentation/screens/login_screen.dart';
+import 'package:flutter_module/utils/extensions/text_extensions.dart';
 import 'package:go_router_plus/go_router_plus.dart';
 
 void main() => runApp(MyApp());
@@ -31,17 +31,13 @@ class MyApp extends StatelessWidget {
       ],
       redirectors: [
         ScreenRedirector(),
-        DetailsRedirector(detailsNavigator),
         AuthRedirector(
           state: loginNavigator,
-          guestRedirectPath: '/${LoginScreen.name}',
-          userRedirectPath: '/${MainScreen.name}',
+          guestRedirectPath: LoginScreen.name.route,
+          userRedirectPath: MainScreen.name.route,
         )
       ],
-      refreshNotifiers: [
-        loginNavigator,
-        detailsNavigator,
-      ],
+      refreshNotifiers: [loginNavigator],
     );
 
     return MaterialApp.router(

@@ -8,7 +8,7 @@ import 'package:flutter_module/presentation/styles/color_styles.dart';
 import 'package:flutter_module/presentation/styles/dimens.dart';
 import 'package:flutter_module/presentation/widgets/snippet_list_item.dart';
 import 'package:flutter_module/presentation/widgets/view_state_wrapper.dart';
-import 'package:flutter_module/utils/extensions/build_context_extensions.dart';
+import 'package:flutter_module/utils/hooks/use_navigator.dart';
 import 'package:flutter_module/utils/hooks/use_observable_state_hook.dart';
 import 'package:go_router/go_router.dart';
 import 'package:go_router/src/state.dart';
@@ -61,12 +61,9 @@ class _MainPage extends HookWidget {
     // Event
     final event = useState(MainModelEventData());
 
-    print("Loading = ${data.is_loading}");
-
+    useNavigator([loginNavigator, detailsNavigator]);
     useEffect(() {
       model.initState();
-      loginNavigator.setRouter(GoRouter.of(useContext()));
-      detailsNavigator.setRouter(GoRouter.of(useContext()));
     }, []);
 
     if (event.value.event == MainModelEvent.logout) {
@@ -75,7 +72,10 @@ class _MainPage extends HookWidget {
 
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(Icons.logout),
+        leading: IconButton(
+          icon: const Icon(Icons.logout),
+          onPressed: loginNavigator.logout,
+        ),
         title: const Text("SnipMe"),
       ),
       backgroundColor: ColorStyles.pageBackground(),

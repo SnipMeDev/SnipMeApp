@@ -1,3 +1,4 @@
+import 'package:flutter_module/utils/extensions/text_extensions.dart';
 import 'package:go_router_plus/go_router_plus.dart';
 
 abstract class NamedScreen extends Screen {
@@ -9,5 +10,5 @@ abstract class NamedScreen extends Screen {
   String get routeName => _name;
 
   @override
-  String get routePath => '/$_name';
+  String get routePath => _name.route;
 }
