@@ -89,6 +89,8 @@ class MainModelPlugin : ModelPlugin<Bridge.MainModelBridge>(), Bridge.MainModelB
             isOwner = it.isOwner
             voteResult = (it.numberOfLikes - it.numberOfDislikes).toLong()
             userReaction = it.userReaction.toModelUserReaction()
+            isLiked = it.userReaction.toModelReactionState(UserReaction.LIKE)
+            isDisliked = it.userReaction.toModelReactionState(UserReaction.DISLIKE)
             timeAgo = DateUtils.getRelativeTimeSpanString(
                 it.modifiedAt.time,
                 Date().time,
@@ -134,4 +136,7 @@ class MainModelPlugin : ModelPlugin<Bridge.MainModelBridge>(), Bridge.MainModelB
             UserReaction.DISLIKE -> Bridge.UserReaction.DISLIKE
             else -> Bridge.UserReaction.NONE
         }
+
+    private fun UserReaction.toModelReactionState(reaction: UserReaction) =
+        if (this == UserReaction.NONE) null else this == reaction
 }
