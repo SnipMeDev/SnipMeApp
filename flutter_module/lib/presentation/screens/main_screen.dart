@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_module/model/main_model.dart';
 import 'package:flutter_module/presentation/navigation/details/details_navigator.dart';
+import 'package:flutter_module/presentation/navigation/login/login_navigator.dart';
 import 'package:flutter_module/presentation/screens/named_screen.dart';
 import 'package:flutter_module/presentation/styles/color_styles.dart';
 import 'package:flutter_module/presentation/styles/dimens.dart';
@@ -9,23 +10,27 @@ import 'package:flutter_module/presentation/widgets/snippet_list_item.dart';
 import 'package:flutter_module/presentation/widgets/view_state_wrapper.dart';
 import 'package:flutter_module/utils/extensions/build_context_extensions.dart';
 import 'package:flutter_module/utils/hooks/use_observable_state_hook.dart';
+import 'package:go_router/go_router.dart';
 import 'package:go_router/src/state.dart';
 import 'package:go_router_plus/go_router_plus.dart';
 
 class MainScreen extends NamedScreen implements UserScreen {
   MainScreen({
-    required this.navigator,
+    required this.loginNavigator,
+    required this.detailsNavigator,
     required this.model,
   }) : super(name);
 
   static String name = 'main';
-  final DetailsNavigator navigator;
+  final LoginNavigator loginNavigator;
+  final DetailsNavigator detailsNavigator;
   final MainModelBridge model;
 
   @override
   Widget builder(BuildContext context, GoRouterState state) {
     return _MainPage(
-      navigator: navigator,
+      loginNavigator: loginNavigator,
+      detailsNavigator: detailsNavigator,
       model: model,
     );
   }
@@ -34,11 +39,13 @@ class MainScreen extends NamedScreen implements UserScreen {
 class _MainPage extends HookWidget {
   const _MainPage({
     Key? key,
-    required this.navigator,
+    required this.loginNavigator,
+    required this.detailsNavigator,
     required this.model,
   }) : super(key: key);
 
-  final DetailsNavigator navigator;
+  final LoginNavigator loginNavigator;
+  final DetailsNavigator detailsNavigator;
   final MainModelBridge model;
 
   @override
@@ -58,14 +65,19 @@ class _MainPage extends HookWidget {
 
     useEffect(() {
       model.initState();
+      loginNavigator.setRouter(GoRouter.of(useContext()));
+      detailsNavigator.setRouter(GoRouter.of(useContext()));
     }, []);
 
     if (event.value.event == MainModelEvent.logout) {
-      context.popOrExit();
+      loginNavigator.logout();
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text("SnipMe")),
+      appBar: AppBar(
+        leading: Icon(Icons.logout),
+        title: const Text("SnipMe"),
+      ),
       backgroundColor: ColorStyles.pageBackground(),
       body: ViewStateWrapper<List<Snippet>>(
         isLoading: data.state == ModelState.loading || data.is_loading == true,
@@ -73,7 +85,7 @@ class _MainPage extends HookWidget {
         data: data.data?.cast(),
         builder: (_, snippets) {
           return _MainPageData(
-            navigator: navigator,
+            navigator: detailsNavigator,
             snippets: snippets ?? List.empty(),
           );
         },
@@ -120,7 +132,7 @@ class _MainPageData extends StatelessWidget {
           child: SnippetListTile(
             snippet: snippet,
             onTap: () {
-              navigator.goToDetails(snippet.uuid!);
+              navigator.goToDetails(context, snippet.uuid!);
             },
           ),
         );

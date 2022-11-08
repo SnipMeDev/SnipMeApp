@@ -23,7 +23,8 @@ class MyApp extends StatelessWidget {
       screens: [
         LoginScreen(loginNavigator),
         MainScreen(
-          navigator: detailsNavigator,
+          loginNavigator: loginNavigator,
+          detailsNavigator: detailsNavigator,
           model: mainModel,
         ),
         DetailsScreen(detailsNavigator)
@@ -37,7 +38,10 @@ class MyApp extends StatelessWidget {
           userRedirectPath: '/${MainScreen.name}',
         )
       ],
-      refreshNotifiers: [loginNavigator, detailsNavigator],
+      refreshNotifiers: [
+        loginNavigator,
+        detailsNavigator,
+      ],
     );
 
     return MaterialApp.router(
@@ -47,7 +51,6 @@ class MyApp extends StatelessWidget {
       routeInformationProvider: router.routeInformationProvider,
       routeInformationParser: router.routeInformationParser,
       routerDelegate: router.routerDelegate,
-      backButtonDispatcher: router.backButtonDispatcher,
     );
   }
 }
