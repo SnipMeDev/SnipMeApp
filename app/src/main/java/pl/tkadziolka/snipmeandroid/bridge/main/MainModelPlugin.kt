@@ -9,10 +9,7 @@ import org.koin.core.component.inject
 import pl.tkadziolka.snipmeandroid.bridge.Bridge
 import pl.tkadziolka.snipmeandroid.bridge.ModelPlugin
 import pl.tkadziolka.snipmeandroid.domain.reaction.UserReaction
-import pl.tkadziolka.snipmeandroid.domain.snippets.Owner
-import pl.tkadziolka.snipmeandroid.domain.snippets.Snippet
-import pl.tkadziolka.snipmeandroid.domain.snippets.SnippetCode
-import pl.tkadziolka.snipmeandroid.domain.snippets.SnippetLanguage
+import pl.tkadziolka.snipmeandroid.domain.snippets.*
 import pl.tkadziolka.snipmeandroid.ui.main.*
 import pl.tkadziolka.snipmeandroid.util.view.SnippetFilter
 import java.util.*
@@ -89,6 +86,9 @@ class MainModelPlugin : ModelPlugin<Bridge.MainModelBridge>(), Bridge.MainModelB
             isOwner = it.isOwner
             voteResult = (it.numberOfLikes - it.numberOfDislikes).toLong()
             userReaction = it.userReaction.toModelUserReaction()
+            isLiked = it.userReaction.toModelReactionState(UserReaction.LIKE)
+            isDisliked = it.userReaction.toModelReactionState(UserReaction.DISLIKE)
+            isSaved = calculateSavedState(it.isOwner, it.visibility)
             timeAgo = DateUtils.getRelativeTimeSpanString(
                 it.modifiedAt.time,
                 Date().time,
@@ -129,9 +129,21 @@ class MainModelPlugin : ModelPlugin<Bridge.MainModelBridge>(), Bridge.MainModelB
         }
 
     private fun UserReaction.toModelUserReaction(): Bridge.UserReaction =
-        when(this) {
+        when (this) {
             UserReaction.LIKE -> Bridge.UserReaction.LIKE
             UserReaction.DISLIKE -> Bridge.UserReaction.DISLIKE
             else -> Bridge.UserReaction.NONE
         }
+
+    private fun UserReaction.toModelReactionState(reaction: UserReaction) =
+        if (this == UserReaction.NONE) null else this == reaction
+
+    private fun calculateSavedState(
+        isOwner: Boolean,
+        visibility: SnippetVisibility
+    ): Boolean? = when {
+        isOwner && visibility == SnippetVisibility.PUBLIC -> false
+        isOwner && visibility == SnippetVisibility.PRIVATE -> true
+        else -> null
+    }
 }

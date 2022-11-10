@@ -90,6 +90,9 @@ class Snippet {
     this.timeAgo,
     this.voteResult,
     this.userReaction,
+    this.isLiked,
+    this.isDisliked,
+    this.isSaved,
   });
 
   String? uuid;
@@ -101,6 +104,9 @@ class Snippet {
   String? timeAgo;
   int? voteResult;
   UserReaction? userReaction;
+  bool? isLiked;
+  bool? isDisliked;
+  bool? isSaved;
 
   Object encode() {
     final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
@@ -113,6 +119,9 @@ class Snippet {
     pigeonMap['timeAgo'] = timeAgo;
     pigeonMap['voteResult'] = voteResult;
     pigeonMap['userReaction'] = userReaction?.index;
+    pigeonMap['isLiked'] = isLiked;
+    pigeonMap['isDisliked'] = isDisliked;
+    pigeonMap['isSaved'] = isSaved;
     return pigeonMap;
   }
 
@@ -136,6 +145,9 @@ class Snippet {
       userReaction: pigeonMap['userReaction'] != null
           ? UserReaction.values[pigeonMap['userReaction']! as int]
           : null,
+      isLiked: pigeonMap['isLiked'] as bool?,
+      isDisliked: pigeonMap['isDisliked'] as bool?,
+      isSaved: pigeonMap['isSaved'] as bool?,
     );
   }
 }

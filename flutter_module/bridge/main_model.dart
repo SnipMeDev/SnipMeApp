@@ -12,6 +12,9 @@ class Snippet {
   String? timeAgo;
   int? voteResult;
   UserReaction? userReaction;
+  bool? isLiked;
+  bool? isDisliked;
+  bool? isSaved;
 }
 
 class SnippetCode {

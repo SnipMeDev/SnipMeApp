@@ -176,6 +176,24 @@ public class Bridge {
       this.userReaction = setterArg;
     }
 
+    private @Nullable Boolean isLiked;
+    public @Nullable Boolean getIsLiked() { return isLiked; }
+    public void setIsLiked(@Nullable Boolean setterArg) {
+      this.isLiked = setterArg;
+    }
+
+    private @Nullable Boolean isDisliked;
+    public @Nullable Boolean getIsDisliked() { return isDisliked; }
+    public void setIsDisliked(@Nullable Boolean setterArg) {
+      this.isDisliked = setterArg;
+    }
+
+    private @Nullable Boolean isSaved;
+    public @Nullable Boolean getIsSaved() { return isSaved; }
+    public void setIsSaved(@Nullable Boolean setterArg) {
+      this.isSaved = setterArg;
+    }
+
     public static final class Builder {
       private @Nullable String uuid;
       public @NonNull Builder setUuid(@Nullable String setterArg) {
@@ -222,6 +240,21 @@ public class Bridge {
         this.userReaction = setterArg;
         return this;
       }
+      private @Nullable Boolean isLiked;
+      public @NonNull Builder setIsLiked(@Nullable Boolean setterArg) {
+        this.isLiked = setterArg;
+        return this;
+      }
+      private @Nullable Boolean isDisliked;
+      public @NonNull Builder setIsDisliked(@Nullable Boolean setterArg) {
+        this.isDisliked = setterArg;
+        return this;
+      }
+      private @Nullable Boolean isSaved;
+      public @NonNull Builder setIsSaved(@Nullable Boolean setterArg) {
+        this.isSaved = setterArg;
+        return this;
+      }
       public @NonNull Snippet build() {
         Snippet pigeonReturn = new Snippet();
         pigeonReturn.setUuid(uuid);
@@ -233,6 +266,9 @@ public class Bridge {
         pigeonReturn.setTimeAgo(timeAgo);
         pigeonReturn.setVoteResult(voteResult);
         pigeonReturn.setUserReaction(userReaction);
+        pigeonReturn.setIsLiked(isLiked);
+        pigeonReturn.setIsDisliked(isDisliked);
+        pigeonReturn.setIsSaved(isSaved);
         return pigeonReturn;
       }
     }
@@ -247,6 +283,9 @@ public class Bridge {
       toMapResult.put("timeAgo", timeAgo);
       toMapResult.put("voteResult", voteResult);
       toMapResult.put("userReaction", userReaction == null ? null : userReaction.index);
+      toMapResult.put("isLiked", isLiked);
+      toMapResult.put("isDisliked", isDisliked);
+      toMapResult.put("isSaved", isSaved);
       return toMapResult;
     }
     static @NonNull Snippet fromMap(@NonNull Map<String, Object> map) {
@@ -269,6 +308,12 @@ public class Bridge {
       pigeonResult.setVoteResult((voteResult == null) ? null : ((voteResult instanceof Integer) ? (Integer)voteResult : (Long)voteResult));
       Object userReaction = map.get("userReaction");
       pigeonResult.setUserReaction(userReaction == null ? null : UserReaction.values()[(int)userReaction]);
+      Object isLiked = map.get("isLiked");
+      pigeonResult.setIsLiked((Boolean)isLiked);
+      Object isDisliked = map.get("isDisliked");
+      pigeonResult.setIsDisliked((Boolean)isDisliked);
+      Object isSaved = map.get("isSaved");
+      pigeonResult.setIsSaved((Boolean)isSaved);
       return pigeonResult;
     }
   }

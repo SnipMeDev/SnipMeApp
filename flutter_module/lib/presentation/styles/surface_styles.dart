@@ -4,6 +4,18 @@ import 'package:flutter_module/presentation/styles/dimens.dart';
 import 'package:flutter_module/presentation/styles/padding_styles.dart';
 
 class SurfaceStyles {
+  static actionCard({required Widget child}) {
+    return Card(
+      color: ColorStyles.surfacePrimary(),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(
+          Dimens.xxl * 2,
+        ),
+      ),
+      child: PaddingStyles.regular(child),
+    );
+  }
+
   static snippetCard({required Widget child, GestureTapCallback? onTap}) {
     return Card(
       color: ColorStyles.surfacePrimary(),
