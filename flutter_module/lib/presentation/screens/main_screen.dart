@@ -10,6 +10,7 @@ import 'package:flutter_module/presentation/widgets/snippet_list_item.dart';
 import 'package:flutter_module/presentation/widgets/view_state_wrapper.dart';
 import 'package:flutter_module/utils/hooks/use_navigator.dart';
 import 'package:flutter_module/utils/hooks/use_observable_state_hook.dart';
+import 'package:flutter_module/utils/mock/mocks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:go_router/src/state.dart';
 import 'package:go_router_plus/go_router_plus.dart';
@@ -91,7 +92,7 @@ class _MainPage extends HookWidget {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => model.loadNextPage(),
+        onPressed: () => detailsNavigator.goToDetails(context, Mocks.snippet),
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ),
@@ -132,7 +133,7 @@ class _MainPageData extends StatelessWidget {
           child: SnippetListTile(
             snippet: snippet,
             onTap: () {
-              navigator.goToDetails(context, snippet.uuid!);
+              navigator.goToDetails(context, snippet);
             },
           ),
         );
