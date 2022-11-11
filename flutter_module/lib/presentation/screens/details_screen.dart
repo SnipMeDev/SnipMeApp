@@ -18,6 +18,7 @@ class DetailsScreen extends NamedScreen {
   static String name = 'details';
 
   final DetailsNavigator navigator;
+  final DetailsModel
 
   @override
   Widget builder(BuildContext context, GoRouterState state) {
@@ -60,9 +61,7 @@ class _DetailsPage extends HookWidget {
             child: ColoredBox(
               color: ColorStyles.codeBackground(),
               child: PaddingStyles.regular(
-                CodeTextView(
-                  code: snippet!.code!.raw!,
-                ),
+                CodeTextView(code: snippet!.code!.raw!),
               ),
             ),
           ),

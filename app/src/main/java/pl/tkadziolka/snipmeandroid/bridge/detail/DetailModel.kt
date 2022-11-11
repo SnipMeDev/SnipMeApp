@@ -1,10 +1,11 @@
-package pl.tkadziolka.snipmeandroid.ui.detail
+package pl.tkadziolka.snipmeandroid.bridge.detail
 
-import androidx.navigation.NavController
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.flow.MutableStateFlow
 import pl.tkadziolka.snipmeandroid.domain.clipboard.AddToClipboardUseCase
 import pl.tkadziolka.snipmeandroid.domain.error.exception.*
 import pl.tkadziolka.snipmeandroid.domain.message.ErrorMessages
@@ -13,23 +14,25 @@ import pl.tkadziolka.snipmeandroid.domain.reaction.SetUserReactionUseCase
 import pl.tkadziolka.snipmeandroid.domain.reaction.UserReaction
 import pl.tkadziolka.snipmeandroid.domain.snippet.GetSingleSnippetUseCase
 import pl.tkadziolka.snipmeandroid.domain.snippets.Snippet
+import pl.tkadziolka.snipmeandroid.ui.detail.*
 import pl.tkadziolka.snipmeandroid.ui.error.ErrorParsable
 import pl.tkadziolka.snipmeandroid.ui.session.SessionViewModel
-import pl.tkadziolka.snipmeandroid.ui.viewmodel.SingleLiveEvent
-import pl.tkadziolka.snipmeandroid.ui.viewmodel.StateViewModel
 import timber.log.Timber
 
-class DetailViewModel(
+class DetailModel(
     private val errorMessages: ErrorMessages,
-    private val navigator: DetailNavigator,
     private val getSnippet: GetSingleSnippetUseCase,
     private val clipboard: AddToClipboardUseCase,
     private val getTargetReaction: GetTargetUserReactionUseCase,
     private val setUserReaction: SetUserReactionUseCase,
     private val session: SessionViewModel
-) : StateViewModel<DetailViewState>(), ErrorParsable {
+) : ErrorParsable {
+    private val disposables = CompositeDisposable()
 
-    private val mutableEvent = SingleLiveEvent<DetailEvent>()
+    private val mutableState = MutableStateFlow<DetailViewState>(Loading)
+    val state = mutableState
+
+    private val mutableEvent = MutableStateFlow<DetailEvent>(Idle)
     val event = mutableEvent
 
     override fun parseError(throwable: Throwable) {
@@ -43,14 +46,6 @@ class DetailViewModel(
             is SessionExpiredException -> session.logOut { mutableEvent.value = Logout }
             else -> setState(Error(errorMessages.parse(throwable)))
         }
-    }
-
-    fun goToLogin(nav: NavController) {
-        navigator.goToLogin(nav)
-    }
-
-    fun goToError(nav: NavController, message: String?) {
-        navigator.goToError(nav, message)
     }
 
     fun load(uuid: String) {
@@ -81,14 +76,6 @@ class DetailViewModel(
         }
     }
 
-    fun goToEdit(nav: NavController, snippetUUID: String) {
-        navigator.goToEdit(nav, snippetUUID)
-    }
-
-    fun goToShare(nav: NavController, snippetUUID: String) {
-        navigator.goToShare(nav, snippetUUID)
-    }
-
     private fun changeReaction(newReaction: UserReaction) {
         // Immediately show change to user
         val previousState = getLoaded() ?: return
@@ -117,14 +104,8 @@ class DetailViewModel(
         } else {
             null
         }
+
+    private fun setState(newState: DetailViewState?) {
+        newState?.let { mutableState.value = it }
+    }
 }
-
-sealed class DetailViewState
-object Loading : DetailViewState()
-data class Loaded(val snippet: Snippet) : DetailViewState()
-data class Error(val error: String?) : DetailViewState()
-
-sealed class DetailEvent
-object Idle: DetailEvent()
-data class Alert(val message: String) : DetailEvent()
-object Logout : DetailEvent()
