@@ -1,19 +1,13 @@
 package pl.tkadziolka.snipmeandroid.bridge.main
 
-import android.text.Spanned
-import android.text.format.DateUtils
-import android.text.style.ForegroundColorSpan
-import androidx.core.text.getSpans
 import io.flutter.plugin.common.BinaryMessenger
 import org.koin.core.component.inject
 import pl.tkadziolka.snipmeandroid.bridge.Bridge
 import pl.tkadziolka.snipmeandroid.bridge.ModelPlugin
 import pl.tkadziolka.snipmeandroid.bridge.toModelData
-import pl.tkadziolka.snipmeandroid.domain.reaction.UserReaction
-import pl.tkadziolka.snipmeandroid.domain.snippets.*
+import pl.tkadziolka.snipmeandroid.domain.snippets.Snippet
 import pl.tkadziolka.snipmeandroid.ui.main.*
 import pl.tkadziolka.snipmeandroid.util.view.SnippetFilter
-import java.util.*
 
 class MainModelPlugin : ModelPlugin<Bridge.MainModelBridge>(), Bridge.MainModelBridge {
 

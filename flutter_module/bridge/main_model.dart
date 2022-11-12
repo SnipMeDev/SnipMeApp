@@ -151,4 +151,22 @@ abstract class MainModelBridge {
 @HostApi()
 abstract class DetailModelBridge {
   DetailModelStateData getState();
+
+  @TaskQueue(type: TaskQueueType.serialBackgroundThread)
+  void load(String uuid);
+
+  @TaskQueue(type: TaskQueueType.serialBackgroundThread)
+  void like();
+
+  @TaskQueue(type: TaskQueueType.serialBackgroundThread)
+  void dislike();
+
+  @TaskQueue(type: TaskQueueType.serialBackgroundThread)
+  void save();
+
+  @TaskQueue(type: TaskQueueType.serialBackgroundThread)
+  void copyToClipboard();
+
+  @TaskQueue(type: TaskQueueType.serialBackgroundThread)
+  void share();
 }

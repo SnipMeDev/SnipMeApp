@@ -8,6 +8,7 @@ import 'package:flutter_module/presentation/styles/color_styles.dart';
 import 'package:flutter_module/presentation/styles/dimens.dart';
 import 'package:flutter_module/presentation/widgets/snippet_list_item.dart';
 import 'package:flutter_module/presentation/widgets/view_state_wrapper.dart';
+import 'package:flutter_module/utils/extensions/state_extensions.dart';
 import 'package:flutter_module/utils/hooks/use_navigator.dart';
 import 'package:flutter_module/utils/hooks/use_observable_state_hook.dart';
 import 'package:flutter_module/utils/mock/mocks.dart';
@@ -54,7 +55,7 @@ class _MainPage extends HookWidget {
     final state = useObservableState(
       MainModelStateData(),
       () => model.getState(),
-      (oldState, newState) => _equalState(oldState, newState),
+      (current, newState) => (current as MainModelStateData).equals(newState),
     );
 
     final data = state.value;
@@ -92,20 +93,11 @@ class _MainPage extends HookWidget {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => detailsNavigator.goToDetails(context, Mocks.snippet),
+        onPressed: () => detailsNavigator.goToDetails(context, Mocks.snippet.uuid!),
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ),
     );
-  }
-
-  bool _equalState(Object oldState, Object newState) {
-    final oldData = (oldState as MainModelStateData);
-    final newData = (newState as MainModelStateData);
-
-    return oldData.state == newState.state &&
-        oldData.is_loading == newData.is_loading &&
-        oldData.error == newData.error;
   }
 }
 
@@ -133,7 +125,7 @@ class _MainPageData extends StatelessWidget {
           child: SnippetListTile(
             snippet: snippet,
             onTap: () {
-              navigator.goToDetails(context, snippet);
+              navigator.goToDetails(context, snippet.uuid!);
             },
           ),
         );

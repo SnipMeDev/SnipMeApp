@@ -19,6 +19,30 @@ class DetailModelPlugin: ModelPlugin<Bridge.DetailModelBridge>(), Bridge.DetailM
         Bridge.DetailModelBridge.setup(messenger, bridge)
     }
 
+    override fun load(uuid: String) {
+        model.load(uuid)
+    }
+
+    override fun like() {
+        model.like()
+    }
+
+    override fun dislike() {
+        model.dislike()
+    }
+
+    override fun save() {
+        TODO("Not yet implemented")
+    }
+
+    override fun copyToClipboard() {
+        model.copyToClipboard()
+    }
+
+    override fun share() {
+        TODO("Not yet implemented")
+    }
+
     private fun getData(viewState: DetailViewState) = Bridge.DetailModelStateData().apply {
         state = viewState.toModelState()
         is_loading = viewState is Loading
