@@ -117,6 +117,13 @@ class MainModelEventData {
   String? message;
 }
 
+class DetailModelStateData {
+  ModelState? state;
+  bool? is_loading;
+  Snippet? data;
+  String? error;
+}
+
 // Api
 
 @HostApi()
@@ -139,4 +146,9 @@ abstract class MainModelBridge {
 
   @TaskQueue(type: TaskQueueType.serialBackgroundThread)
   void refreshSnippetUpdates();
+}
+
+@HostApi()
+abstract class DetailModelBridge {
+  DetailModelStateData getState();
 }

@@ -347,6 +347,43 @@ class MainModelEventData {
   }
 }
 
+class DetailModelStateData {
+  DetailModelStateData({
+    this.state,
+    this.is_loading,
+    this.data,
+    this.error,
+  });
+
+  ModelState? state;
+  bool? is_loading;
+  Snippet? data;
+  String? error;
+
+  Object encode() {
+    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
+    pigeonMap['state'] = state?.index;
+    pigeonMap['is_loading'] = is_loading;
+    pigeonMap['data'] = data?.encode();
+    pigeonMap['error'] = error;
+    return pigeonMap;
+  }
+
+  static DetailModelStateData decode(Object message) {
+    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+    return DetailModelStateData(
+      state: pigeonMap['state'] != null
+          ? ModelState.values[pigeonMap['state']! as int]
+          : null,
+      is_loading: pigeonMap['is_loading'] as bool?,
+      data: pigeonMap['data'] != null
+          ? Snippet.decode(pigeonMap['data']!)
+          : null,
+      error: pigeonMap['error'] as String?,
+    );
+  }
+}
+
 class _MainModelBridgeCodec extends StandardMessageCodec{
   const _MainModelBridgeCodec();
   @override
@@ -591,6 +628,103 @@ class MainModelBridge {
       );
     } else {
       return;
+    }
+  }
+}
+
+class _DetailModelBridgeCodec extends StandardMessageCodec{
+  const _DetailModelBridgeCodec();
+  @override
+  void writeValue(WriteBuffer buffer, Object? value) {
+    if (value is DetailModelStateData) {
+      buffer.putUint8(128);
+      writeValue(buffer, value.encode());
+    } else 
+    if (value is Owner) {
+      buffer.putUint8(129);
+      writeValue(buffer, value.encode());
+    } else 
+    if (value is Snippet) {
+      buffer.putUint8(130);
+      writeValue(buffer, value.encode());
+    } else 
+    if (value is SnippetCode) {
+      buffer.putUint8(131);
+      writeValue(buffer, value.encode());
+    } else 
+    if (value is SnippetLanguage) {
+      buffer.putUint8(132);
+      writeValue(buffer, value.encode());
+    } else 
+    if (value is SyntaxToken) {
+      buffer.putUint8(133);
+      writeValue(buffer, value.encode());
+    } else 
+{
+      super.writeValue(buffer, value);
+    }
+  }
+  @override
+  Object? readValueOfType(int type, ReadBuffer buffer) {
+    switch (type) {
+      case 128:       
+        return DetailModelStateData.decode(readValue(buffer)!);
+      
+      case 129:       
+        return Owner.decode(readValue(buffer)!);
+      
+      case 130:       
+        return Snippet.decode(readValue(buffer)!);
+      
+      case 131:       
+        return SnippetCode.decode(readValue(buffer)!);
+      
+      case 132:       
+        return SnippetLanguage.decode(readValue(buffer)!);
+      
+      case 133:       
+        return SyntaxToken.decode(readValue(buffer)!);
+      
+      default:      
+        return super.readValueOfType(type, buffer);
+      
+    }
+  }
+}
+
+class DetailModelBridge {
+  /// Constructor for [DetailModelBridge].  The [binaryMessenger] named argument is
+  /// available for dependency injection.  If it is left null, the default
+  /// BinaryMessenger will be used which routes to the host platform.
+  DetailModelBridge({BinaryMessenger? binaryMessenger}) : _binaryMessenger = binaryMessenger;
+  final BinaryMessenger? _binaryMessenger;
+
+  static const MessageCodec<Object?> codec = _DetailModelBridgeCodec();
+
+  Future<DetailModelStateData> getState() async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.DetailModelBridge.getState', codec, binaryMessenger: _binaryMessenger);
+    final Map<Object?, Object?>? replyMap =
+        await channel.send(null) as Map<Object?, Object?>?;
+    if (replyMap == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyMap['error'] != null) {
+      final Map<Object?, Object?> error = (replyMap['error'] as Map<Object?, Object?>?)!;
+      throw PlatformException(
+        code: (error['code'] as String?)!,
+        message: error['message'] as String?,
+        details: error['details'],
+      );
+    } else if (replyMap['result'] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (replyMap['result'] as DetailModelStateData?)!;
     }
   }
 }

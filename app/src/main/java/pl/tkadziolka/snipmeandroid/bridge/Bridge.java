@@ -698,6 +698,84 @@ public class Bridge {
       return pigeonResult;
     }
   }
+
+  /** Generated class from Pigeon that represents data sent in messages. */
+  public static class DetailModelStateData {
+    private @Nullable ModelState state;
+    public @Nullable ModelState getState() { return state; }
+    public void setState(@Nullable ModelState setterArg) {
+      this.state = setterArg;
+    }
+
+    private @Nullable Boolean is_loading;
+    public @Nullable Boolean getIs_loading() { return is_loading; }
+    public void setIs_loading(@Nullable Boolean setterArg) {
+      this.is_loading = setterArg;
+    }
+
+    private @Nullable Snippet data;
+    public @Nullable Snippet getData() { return data; }
+    public void setData(@Nullable Snippet setterArg) {
+      this.data = setterArg;
+    }
+
+    private @Nullable String error;
+    public @Nullable String getError() { return error; }
+    public void setError(@Nullable String setterArg) {
+      this.error = setterArg;
+    }
+
+    public static final class Builder {
+      private @Nullable ModelState state;
+      public @NonNull Builder setState(@Nullable ModelState setterArg) {
+        this.state = setterArg;
+        return this;
+      }
+      private @Nullable Boolean is_loading;
+      public @NonNull Builder setIs_loading(@Nullable Boolean setterArg) {
+        this.is_loading = setterArg;
+        return this;
+      }
+      private @Nullable Snippet data;
+      public @NonNull Builder setData(@Nullable Snippet setterArg) {
+        this.data = setterArg;
+        return this;
+      }
+      private @Nullable String error;
+      public @NonNull Builder setError(@Nullable String setterArg) {
+        this.error = setterArg;
+        return this;
+      }
+      public @NonNull DetailModelStateData build() {
+        DetailModelStateData pigeonReturn = new DetailModelStateData();
+        pigeonReturn.setState(state);
+        pigeonReturn.setIs_loading(is_loading);
+        pigeonReturn.setData(data);
+        pigeonReturn.setError(error);
+        return pigeonReturn;
+      }
+    }
+    @NonNull Map<String, Object> toMap() {
+      Map<String, Object> toMapResult = new HashMap<>();
+      toMapResult.put("state", state == null ? null : state.index);
+      toMapResult.put("is_loading", is_loading);
+      toMapResult.put("data", (data == null) ? null : data.toMap());
+      toMapResult.put("error", error);
+      return toMapResult;
+    }
+    static @NonNull DetailModelStateData fromMap(@NonNull Map<String, Object> map) {
+      DetailModelStateData pigeonResult = new DetailModelStateData();
+      Object state = map.get("state");
+      pigeonResult.setState(state == null ? null : ModelState.values()[(int)state]);
+      Object is_loading = map.get("is_loading");
+      pigeonResult.setIs_loading((Boolean)is_loading);
+      Object data = map.get("data");
+      pigeonResult.setData((data == null) ? null : Snippet.fromMap((Map)data));
+      Object error = map.get("error");
+      pigeonResult.setError((String)error);
+      return pigeonResult;
+    }
+  }
   private static class MainModelBridgeCodec extends StandardMessageCodec {
     public static final MainModelBridgeCodec INSTANCE = new MainModelBridgeCodec();
     private MainModelBridgeCodec() {}
@@ -922,6 +1000,97 @@ public class Bridge {
             try {
               api.refreshSnippetUpdates();
               wrapped.put("result", null);
+            }
+            catch (Error | RuntimeException exception) {
+              wrapped.put("error", wrapError(exception));
+            }
+            reply.reply(wrapped);
+          });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+    }
+  }
+  private static class DetailModelBridgeCodec extends StandardMessageCodec {
+    public static final DetailModelBridgeCodec INSTANCE = new DetailModelBridgeCodec();
+    private DetailModelBridgeCodec() {}
+    @Override
+    protected Object readValueOfType(byte type, @NonNull ByteBuffer buffer) {
+      switch (type) {
+        case (byte)128:         
+          return DetailModelStateData.fromMap((Map<String, Object>) readValue(buffer));
+        
+        case (byte)129:         
+          return Owner.fromMap((Map<String, Object>) readValue(buffer));
+        
+        case (byte)130:         
+          return Snippet.fromMap((Map<String, Object>) readValue(buffer));
+        
+        case (byte)131:         
+          return SnippetCode.fromMap((Map<String, Object>) readValue(buffer));
+        
+        case (byte)132:         
+          return SnippetLanguage.fromMap((Map<String, Object>) readValue(buffer));
+        
+        case (byte)133:         
+          return SyntaxToken.fromMap((Map<String, Object>) readValue(buffer));
+        
+        default:        
+          return super.readValueOfType(type, buffer);
+        
+      }
+    }
+    @Override
+    protected void writeValue(@NonNull ByteArrayOutputStream stream, Object value)     {
+      if (value instanceof DetailModelStateData) {
+        stream.write(128);
+        writeValue(stream, ((DetailModelStateData) value).toMap());
+      } else 
+      if (value instanceof Owner) {
+        stream.write(129);
+        writeValue(stream, ((Owner) value).toMap());
+      } else 
+      if (value instanceof Snippet) {
+        stream.write(130);
+        writeValue(stream, ((Snippet) value).toMap());
+      } else 
+      if (value instanceof SnippetCode) {
+        stream.write(131);
+        writeValue(stream, ((SnippetCode) value).toMap());
+      } else 
+      if (value instanceof SnippetLanguage) {
+        stream.write(132);
+        writeValue(stream, ((SnippetLanguage) value).toMap());
+      } else 
+      if (value instanceof SyntaxToken) {
+        stream.write(133);
+        writeValue(stream, ((SyntaxToken) value).toMap());
+      } else 
+{
+        super.writeValue(stream, value);
+      }
+    }
+  }
+
+  /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
+  public interface DetailModelBridge {
+    @NonNull DetailModelStateData getState();
+
+    /** The codec used by DetailModelBridge. */
+    static MessageCodec<Object> getCodec() {
+      return       DetailModelBridgeCodec.INSTANCE;    }
+    /**Sets up an instance of `DetailModelBridge` to handle messages through the `binaryMessenger`. */
+    static void setup(BinaryMessenger binaryMessenger, DetailModelBridge api) {
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.DetailModelBridge.getState", getCodec());
+        if (api != null) {
+          channel.setMessageHandler((message, reply) -> {
+            Map<String, Object> wrapped = new HashMap<>();
+            try {
+              DetailModelStateData output = api.getState();
+              wrapped.put("result", output);
             }
             catch (Error | RuntimeException exception) {
               wrapped.put("error", wrapError(exception));
