@@ -23,7 +23,7 @@ data class Snippet(
             title = "",
             code = SnippetCode("", SpannableString("")),
             language = SnippetLanguage("", SnippetLanguageType.UNKNOWN),
-            visibility = SnippetVisibility.PUBLIC,
+            visibility = SnippetVisibility.PRIVATE,
             isOwner = false,
             owner = Owner(0, ""),
             modifiedAt = Date(),

@@ -176,6 +176,12 @@ public class Bridge {
       this.userReaction = setterArg;
     }
 
+    private @Nullable Boolean isPrivate;
+    public @Nullable Boolean getIsPrivate() { return isPrivate; }
+    public void setIsPrivate(@Nullable Boolean setterArg) {
+      this.isPrivate = setterArg;
+    }
+
     private @Nullable Boolean isLiked;
     public @Nullable Boolean getIsLiked() { return isLiked; }
     public void setIsLiked(@Nullable Boolean setterArg) {
@@ -240,6 +246,11 @@ public class Bridge {
         this.userReaction = setterArg;
         return this;
       }
+      private @Nullable Boolean isPrivate;
+      public @NonNull Builder setIsPrivate(@Nullable Boolean setterArg) {
+        this.isPrivate = setterArg;
+        return this;
+      }
       private @Nullable Boolean isLiked;
       public @NonNull Builder setIsLiked(@Nullable Boolean setterArg) {
         this.isLiked = setterArg;
@@ -266,6 +277,7 @@ public class Bridge {
         pigeonReturn.setTimeAgo(timeAgo);
         pigeonReturn.setVoteResult(voteResult);
         pigeonReturn.setUserReaction(userReaction);
+        pigeonReturn.setIsPrivate(isPrivate);
         pigeonReturn.setIsLiked(isLiked);
         pigeonReturn.setIsDisliked(isDisliked);
         pigeonReturn.setIsSaved(isSaved);
@@ -283,6 +295,7 @@ public class Bridge {
       toMapResult.put("timeAgo", timeAgo);
       toMapResult.put("voteResult", voteResult);
       toMapResult.put("userReaction", userReaction == null ? null : userReaction.index);
+      toMapResult.put("isPrivate", isPrivate);
       toMapResult.put("isLiked", isLiked);
       toMapResult.put("isDisliked", isDisliked);
       toMapResult.put("isSaved", isSaved);
@@ -308,6 +321,8 @@ public class Bridge {
       pigeonResult.setVoteResult((voteResult == null) ? null : ((voteResult instanceof Integer) ? (Integer)voteResult : (Long)voteResult));
       Object userReaction = map.get("userReaction");
       pigeonResult.setUserReaction(userReaction == null ? null : UserReaction.values()[(int)userReaction]);
+      Object isPrivate = map.get("isPrivate");
+      pigeonResult.setIsPrivate((Boolean)isPrivate);
       Object isLiked = map.get("isLiked");
       pigeonResult.setIsLiked((Boolean)isLiked);
       Object isDisliked = map.get("isDisliked");

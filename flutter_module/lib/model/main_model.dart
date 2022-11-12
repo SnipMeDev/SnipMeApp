@@ -90,6 +90,7 @@ class Snippet {
     this.timeAgo,
     this.voteResult,
     this.userReaction,
+    this.isPrivate,
     this.isLiked,
     this.isDisliked,
     this.isSaved,
@@ -104,6 +105,7 @@ class Snippet {
   String? timeAgo;
   int? voteResult;
   UserReaction? userReaction;
+  bool? isPrivate;
   bool? isLiked;
   bool? isDisliked;
   bool? isSaved;
@@ -119,6 +121,7 @@ class Snippet {
     pigeonMap['timeAgo'] = timeAgo;
     pigeonMap['voteResult'] = voteResult;
     pigeonMap['userReaction'] = userReaction?.index;
+    pigeonMap['isPrivate'] = isPrivate;
     pigeonMap['isLiked'] = isLiked;
     pigeonMap['isDisliked'] = isDisliked;
     pigeonMap['isSaved'] = isSaved;
@@ -145,6 +148,7 @@ class Snippet {
       userReaction: pigeonMap['userReaction'] != null
           ? UserReaction.values[pigeonMap['userReaction']! as int]
           : null,
+      isPrivate: pigeonMap['isPrivate'] as bool?,
       isLiked: pigeonMap['isLiked'] as bool?,
       isDisliked: pigeonMap['isDisliked'] as bool?,
       isSaved: pigeonMap['isSaved'] as bool?,

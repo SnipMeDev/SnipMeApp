@@ -18,7 +18,8 @@ class DetailsScreen extends NamedScreen {
   static String name = 'details';
 
   final DetailsNavigator navigator;
-  final DetailsModel
+
+  // final DetailsModel
 
   @override
   Widget builder(BuildContext context, GoRouterState state) {
@@ -52,6 +53,9 @@ class _DetailsPage extends HookWidget {
           onPressed: navigator.back,
           color: Colors.black,
         ),
+        actions: snippet?.isPrivate == true
+            ? [const PaddingStyles.regular(Icon(Icons.visibility_off_outlined))]
+            : null,
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -60,8 +64,19 @@ class _DetailsPage extends HookWidget {
           Expanded(
             child: ColoredBox(
               color: ColorStyles.codeBackground(),
-              child: PaddingStyles.regular(
-                CodeTextView(code: snippet!.code!.raw!),
+              child: NotificationListener<OverscrollIndicatorNotification>(
+                onNotification: (overScroll) {
+                  overScroll.disallowIndicator();
+                  return true;
+                },
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(Dimens.l),
+                  physics: const ClampingScrollPhysics(),
+                  child: CodeTextView(
+                    code: snippet!.code!.raw!,
+                    tokens: snippet?.code?.tokens,
+                  ),
+                ),
               ),
             ),
           ),
