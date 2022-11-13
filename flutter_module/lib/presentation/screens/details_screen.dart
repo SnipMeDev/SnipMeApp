@@ -57,7 +57,6 @@ class _DetailsPage extends HookWidget {
       () => model.getState(),
       (current, newState) => (current as DetailModelStateData).equals(newState),
     );
-
     final state = stateChange.value;
 
     useEffect(() {
@@ -69,7 +68,7 @@ class _DetailsPage extends HookWidget {
     return Scaffold(
       backgroundColor: ColorStyles.surfacePrimary(),
       appBar: AppBar(
-        title: Text(state.data!.title ?? 'Details'),
+        title: Text(state.data?.title ?? ''),
         backgroundColor: ColorStyles.surfacePrimary(),
         foregroundColor: Colors.black,
         elevation: 0,
@@ -87,7 +86,7 @@ class _DetailsPage extends HookWidget {
         data: state.data,
         builder: (_, snippet) => _DetailPageData(
           model: model,
-          state: state,
+          snippet: snippet,
         ),
       ),
     );
@@ -98,18 +97,20 @@ class _DetailPageData extends StatelessWidget {
   const _DetailPageData({
     Key? key,
     required this.model,
-    required this.state,
+    required this.snippet,
   }) : super(key: key);
 
   final DetailModelBridge model;
-  final DetailModelStateData state;
+  final Snippet? snippet;
 
   @override
   Widget build(BuildContext context) {
+    if (snippet == null) return const SizedBox();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        PaddingStyles.regular(SnippetDetailsBar(snippet: state.data!)),
+        PaddingStyles.regular(SnippetDetailsBar(snippet: snippet!)),
         Expanded(
           child: ColoredBox(
             color: ColorStyles.codeBackground(),
@@ -122,8 +123,8 @@ class _DetailPageData extends StatelessWidget {
                 padding: const EdgeInsets.all(Dimens.l),
                 physics: const ClampingScrollPhysics(),
                 child: CodeTextView(
-                  code: state.data!.code!.raw!,
-                  tokens: state.data?.code?.tokens,
+                  code: snippet!.code!.raw!,
+                  tokens: snippet!.code?.tokens,
                 ),
               ),
             ),
@@ -132,7 +133,7 @@ class _DetailPageData extends StatelessWidget {
         PaddingStyles.regular(
           Center(
             child: SnippetActionBar(
-              snippet: state.data!,
+              snippet: snippet!,
               onLikeTap: model.like,
               onDislikeTap: model.dislike,
               onSaveTap: model.save,

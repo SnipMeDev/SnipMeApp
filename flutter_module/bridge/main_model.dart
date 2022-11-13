@@ -110,6 +110,8 @@ class MainModelStateData {
   bool? is_loading;
   List<Snippet?>? data;
   String? error;
+  int? oldHash;
+  int? newHash;
 }
 
 class MainModelEventData {
@@ -122,6 +124,8 @@ class DetailModelStateData {
   bool? is_loading;
   Snippet? data;
   String? error;
+  double? oldHash;
+  int? newHash;
 }
 
 // Api

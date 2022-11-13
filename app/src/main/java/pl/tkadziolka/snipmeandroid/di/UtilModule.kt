@@ -2,6 +2,7 @@ package pl.tkadziolka.snipmeandroid.di
 
 import android.content.ClipboardManager
 import android.content.Context.CLIPBOARD_SERVICE
+import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import pl.tkadziolka.snipmeandroid.BuildConfig
@@ -17,5 +18,5 @@ internal val utilModule = module {
     factory { ErrorMessages(get()) }
     factory<ValidationMessages> { RealValidationMessages(get()) }
     factory { Dialogs(get()) }
-    factory { androidContext().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager }
+    factory { androidApplication().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager }
 }

@@ -6,6 +6,7 @@ import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.flow.MutableStateFlow
+import pl.tkadziolka.snipmeandroid.bridge.session.SessionModel
 import pl.tkadziolka.snipmeandroid.domain.clipboard.AddToClipboardUseCase
 import pl.tkadziolka.snipmeandroid.domain.error.exception.*
 import pl.tkadziolka.snipmeandroid.domain.message.ErrorMessages
@@ -16,16 +17,15 @@ import pl.tkadziolka.snipmeandroid.domain.snippet.GetSingleSnippetUseCase
 import pl.tkadziolka.snipmeandroid.domain.snippets.Snippet
 import pl.tkadziolka.snipmeandroid.ui.detail.*
 import pl.tkadziolka.snipmeandroid.ui.error.ErrorParsable
-import pl.tkadziolka.snipmeandroid.ui.session.SessionViewModel
 import timber.log.Timber
 
 class DetailModel(
     private val errorMessages: ErrorMessages,
     private val getSnippet: GetSingleSnippetUseCase,
-    private val clipboard: AddToClipboardUseCase,
+//    private val clipboard: AddToClipboardUseCase,
     private val getTargetReaction: GetTargetUserReactionUseCase,
     private val setUserReaction: SetUserReactionUseCase,
-    private val session: SessionViewModel
+    private val session: SessionModel
 ) : ErrorParsable {
     private val disposables = CompositeDisposable()
 
@@ -52,7 +52,6 @@ class DetailModel(
         setState(Loading)
         getSnippet(uuid)
             .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onSuccess = { setState(Loaded(it)) },
                 onError = {
@@ -72,7 +71,7 @@ class DetailModel(
 
     fun copyToClipboard() {
         getSnippet()?.let {
-            clipboard(it.title, it.code.raw)
+//            clipboard(it.title, it.code.raw)
         }
     }
 
@@ -84,7 +83,6 @@ class DetailModel(
 
         setUserReaction(previousState.snippet, newReaction)
             .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onSuccess = { snippet -> mutableState.value = Loaded(snippet) },
                 onError = {

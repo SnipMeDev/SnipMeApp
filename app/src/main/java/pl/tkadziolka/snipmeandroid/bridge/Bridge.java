@@ -599,6 +599,18 @@ public class Bridge {
       this.error = setterArg;
     }
 
+    private @Nullable Long oldHash;
+    public @Nullable Long getOldHash() { return oldHash; }
+    public void setOldHash(@Nullable Long setterArg) {
+      this.oldHash = setterArg;
+    }
+
+    private @Nullable Long newHash;
+    public @Nullable Long getNewHash() { return newHash; }
+    public void setNewHash(@Nullable Long setterArg) {
+      this.newHash = setterArg;
+    }
+
     public static final class Builder {
       private @Nullable ModelState state;
       public @NonNull Builder setState(@Nullable ModelState setterArg) {
@@ -620,12 +632,24 @@ public class Bridge {
         this.error = setterArg;
         return this;
       }
+      private @Nullable Long oldHash;
+      public @NonNull Builder setOldHash(@Nullable Long setterArg) {
+        this.oldHash = setterArg;
+        return this;
+      }
+      private @Nullable Long newHash;
+      public @NonNull Builder setNewHash(@Nullable Long setterArg) {
+        this.newHash = setterArg;
+        return this;
+      }
       public @NonNull MainModelStateData build() {
         MainModelStateData pigeonReturn = new MainModelStateData();
         pigeonReturn.setState(state);
         pigeonReturn.setIs_loading(is_loading);
         pigeonReturn.setData(data);
         pigeonReturn.setError(error);
+        pigeonReturn.setOldHash(oldHash);
+        pigeonReturn.setNewHash(newHash);
         return pigeonReturn;
       }
     }
@@ -635,6 +659,8 @@ public class Bridge {
       toMapResult.put("is_loading", is_loading);
       toMapResult.put("data", data);
       toMapResult.put("error", error);
+      toMapResult.put("oldHash", oldHash);
+      toMapResult.put("newHash", newHash);
       return toMapResult;
     }
     static @NonNull MainModelStateData fromMap(@NonNull Map<String, Object> map) {
@@ -647,6 +673,10 @@ public class Bridge {
       pigeonResult.setData((List<Snippet>)data);
       Object error = map.get("error");
       pigeonResult.setError((String)error);
+      Object oldHash = map.get("oldHash");
+      pigeonResult.setOldHash((oldHash == null) ? null : ((oldHash instanceof Integer) ? (Integer)oldHash : (Long)oldHash));
+      Object newHash = map.get("newHash");
+      pigeonResult.setNewHash((newHash == null) ? null : ((newHash instanceof Integer) ? (Integer)newHash : (Long)newHash));
       return pigeonResult;
     }
   }
@@ -725,6 +755,18 @@ public class Bridge {
       this.error = setterArg;
     }
 
+    private @Nullable Long oldHash;
+    public @Nullable Long getOldHash() { return oldHash; }
+    public void setOldHash(@Nullable Long setterArg) {
+      this.oldHash = setterArg;
+    }
+
+    private @Nullable Long newHash;
+    public @Nullable Long getNewHash() { return newHash; }
+    public void setNewHash(@Nullable Long setterArg) {
+      this.newHash = setterArg;
+    }
+
     public static final class Builder {
       private @Nullable ModelState state;
       public @NonNull Builder setState(@Nullable ModelState setterArg) {
@@ -746,12 +788,24 @@ public class Bridge {
         this.error = setterArg;
         return this;
       }
+      private @Nullable Long oldHash;
+      public @NonNull Builder setOldHash(@Nullable Long setterArg) {
+        this.oldHash = setterArg;
+        return this;
+      }
+      private @Nullable Long newHash;
+      public @NonNull Builder setNewHash(@Nullable Long setterArg) {
+        this.newHash = setterArg;
+        return this;
+      }
       public @NonNull DetailModelStateData build() {
         DetailModelStateData pigeonReturn = new DetailModelStateData();
         pigeonReturn.setState(state);
         pigeonReturn.setIs_loading(is_loading);
         pigeonReturn.setData(data);
         pigeonReturn.setError(error);
+        pigeonReturn.setOldHash(oldHash);
+        pigeonReturn.setNewHash(newHash);
         return pigeonReturn;
       }
     }
@@ -761,6 +815,8 @@ public class Bridge {
       toMapResult.put("is_loading", is_loading);
       toMapResult.put("data", (data == null) ? null : data.toMap());
       toMapResult.put("error", error);
+      toMapResult.put("oldHash", oldHash);
+      toMapResult.put("newHash", newHash);
       return toMapResult;
     }
     static @NonNull DetailModelStateData fromMap(@NonNull Map<String, Object> map) {
@@ -773,6 +829,10 @@ public class Bridge {
       pigeonResult.setData((data == null) ? null : Snippet.fromMap((Map)data));
       Object error = map.get("error");
       pigeonResult.setError((String)error);
+      Object oldHash = map.get("oldHash");
+      pigeonResult.setOldHash((oldHash == null) ? null : ((oldHash instanceof Integer) ? (Integer)oldHash : (Long)oldHash));
+      Object newHash = map.get("newHash");
+      pigeonResult.setNewHash((newHash == null) ? null : ((newHash instanceof Integer) ? (Integer)newHash : (Long)newHash));
       return pigeonResult;
     }
   }

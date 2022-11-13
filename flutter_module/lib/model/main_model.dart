@@ -291,12 +291,16 @@ class MainModelStateData {
     this.is_loading,
     this.data,
     this.error,
+    this.oldHash,
+    this.newHash,
   });
 
   ModelState? state;
   bool? is_loading;
   List<Snippet?>? data;
   String? error;
+  int? oldHash;
+  int? newHash;
 
   Object encode() {
     final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
@@ -304,6 +308,8 @@ class MainModelStateData {
     pigeonMap['is_loading'] = is_loading;
     pigeonMap['data'] = data;
     pigeonMap['error'] = error;
+    pigeonMap['oldHash'] = oldHash;
+    pigeonMap['newHash'] = newHash;
     return pigeonMap;
   }
 
@@ -316,6 +322,8 @@ class MainModelStateData {
       is_loading: pigeonMap['is_loading'] as bool?,
       data: (pigeonMap['data'] as List<Object?>?)?.cast<Snippet?>(),
       error: pigeonMap['error'] as String?,
+      oldHash: pigeonMap['oldHash'] as int?,
+      newHash: pigeonMap['newHash'] as int?,
     );
   }
 }
@@ -353,12 +361,16 @@ class DetailModelStateData {
     this.is_loading,
     this.data,
     this.error,
+    this.oldHash,
+    this.newHash,
   });
 
   ModelState? state;
   bool? is_loading;
   Snippet? data;
   String? error;
+  int? oldHash;
+  int? newHash;
 
   Object encode() {
     final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
@@ -366,6 +378,8 @@ class DetailModelStateData {
     pigeonMap['is_loading'] = is_loading;
     pigeonMap['data'] = data?.encode();
     pigeonMap['error'] = error;
+    pigeonMap['oldHash'] = oldHash;
+    pigeonMap['newHash'] = newHash;
     return pigeonMap;
   }
 
@@ -380,6 +394,8 @@ class DetailModelStateData {
           ? Snippet.decode(pigeonMap['data']!)
           : null,
       error: pigeonMap['error'] as String?,
+      oldHash: pigeonMap['oldHash'] as int?,
+      newHash: pigeonMap['newHash'] as int?,
     );
   }
 }

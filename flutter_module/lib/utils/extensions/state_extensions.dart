@@ -12,8 +12,6 @@ extension MainModelStateDataExtension on MainModelStateData {
 extension DetailModelStateDataExtension on DetailModelStateData {
   bool equals(Object other) {
     if (other is! DetailModelStateData) return false;
-    return state == other.state &&
-        is_loading == other.is_loading &&
-        error == other.error;
+    return other.oldHash != other.newHash;
   }
 }

@@ -10,8 +10,8 @@ import pl.tkadziolka.snipmeandroid.ui.detail.Loaded
 import pl.tkadziolka.snipmeandroid.ui.detail.Loading
 
 class DetailModelPlugin: ModelPlugin<Bridge.DetailModelBridge>(), Bridge.DetailModelBridge {
-
     private val model: DetailModel by inject()
+    private var oldState: DetailViewState? = null
 
     override fun getState(): Bridge.DetailModelStateData = getData(model.state.value)
 
@@ -43,10 +43,15 @@ class DetailModelPlugin: ModelPlugin<Bridge.DetailModelBridge>(), Bridge.DetailM
         TODO("Not yet implemented")
     }
 
-    private fun getData(viewState: DetailViewState) = Bridge.DetailModelStateData().apply {
-        state = viewState.toModelState()
-        is_loading = viewState is Loading
-        data = (viewState as? Loaded)?.snippet?.toModelData()
+    private fun getData(viewState: DetailViewState): Bridge.DetailModelStateData {
+        oldState = viewState
+        return Bridge.DetailModelStateData().apply {
+            state = viewState.toModelState()
+            is_loading = viewState is Loading
+            data = (viewState as? Loaded)?.snippet?.toModelData()
+            oldHash = oldState?.hashCode()?.toLong()
+            newHash = viewState.hashCode().toLong()
+        }
     }
 
     private fun DetailViewState.toModelState() =
