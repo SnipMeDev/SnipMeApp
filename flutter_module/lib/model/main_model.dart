@@ -90,6 +90,7 @@ class Snippet {
     this.timeAgo,
     this.voteResult,
     this.userReaction,
+    this.isPrivate,
     this.isLiked,
     this.isDisliked,
     this.isSaved,
@@ -104,6 +105,7 @@ class Snippet {
   String? timeAgo;
   int? voteResult;
   UserReaction? userReaction;
+  bool? isPrivate;
   bool? isLiked;
   bool? isDisliked;
   bool? isSaved;
@@ -119,6 +121,7 @@ class Snippet {
     pigeonMap['timeAgo'] = timeAgo;
     pigeonMap['voteResult'] = voteResult;
     pigeonMap['userReaction'] = userReaction?.index;
+    pigeonMap['isPrivate'] = isPrivate;
     pigeonMap['isLiked'] = isLiked;
     pigeonMap['isDisliked'] = isDisliked;
     pigeonMap['isSaved'] = isSaved;
@@ -145,6 +148,7 @@ class Snippet {
       userReaction: pigeonMap['userReaction'] != null
           ? UserReaction.values[pigeonMap['userReaction']! as int]
           : null,
+      isPrivate: pigeonMap['isPrivate'] as bool?,
       isLiked: pigeonMap['isLiked'] as bool?,
       isDisliked: pigeonMap['isDisliked'] as bool?,
       isSaved: pigeonMap['isSaved'] as bool?,
@@ -287,12 +291,16 @@ class MainModelStateData {
     this.is_loading,
     this.data,
     this.error,
+    this.oldHash,
+    this.newHash,
   });
 
   ModelState? state;
   bool? is_loading;
   List<Snippet?>? data;
   String? error;
+  int? oldHash;
+  int? newHash;
 
   Object encode() {
     final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
@@ -300,6 +308,8 @@ class MainModelStateData {
     pigeonMap['is_loading'] = is_loading;
     pigeonMap['data'] = data;
     pigeonMap['error'] = error;
+    pigeonMap['oldHash'] = oldHash;
+    pigeonMap['newHash'] = newHash;
     return pigeonMap;
   }
 
@@ -312,6 +322,8 @@ class MainModelStateData {
       is_loading: pigeonMap['is_loading'] as bool?,
       data: (pigeonMap['data'] as List<Object?>?)?.cast<Snippet?>(),
       error: pigeonMap['error'] as String?,
+      oldHash: pigeonMap['oldHash'] as int?,
+      newHash: pigeonMap['newHash'] as int?,
     );
   }
 }
@@ -339,6 +351,51 @@ class MainModelEventData {
           ? MainModelEvent.values[pigeonMap['event']! as int]
           : null,
       message: pigeonMap['message'] as String?,
+    );
+  }
+}
+
+class DetailModelStateData {
+  DetailModelStateData({
+    this.state,
+    this.is_loading,
+    this.data,
+    this.error,
+    this.oldHash,
+    this.newHash,
+  });
+
+  ModelState? state;
+  bool? is_loading;
+  Snippet? data;
+  String? error;
+  int? oldHash;
+  int? newHash;
+
+  Object encode() {
+    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
+    pigeonMap['state'] = state?.index;
+    pigeonMap['is_loading'] = is_loading;
+    pigeonMap['data'] = data?.encode();
+    pigeonMap['error'] = error;
+    pigeonMap['oldHash'] = oldHash;
+    pigeonMap['newHash'] = newHash;
+    return pigeonMap;
+  }
+
+  static DetailModelStateData decode(Object message) {
+    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+    return DetailModelStateData(
+      state: pigeonMap['state'] != null
+          ? ModelState.values[pigeonMap['state']! as int]
+          : null,
+      is_loading: pigeonMap['is_loading'] as bool?,
+      data: pigeonMap['data'] != null
+          ? Snippet.decode(pigeonMap['data']!)
+          : null,
+      error: pigeonMap['error'] as String?,
+      oldHash: pigeonMap['oldHash'] as int?,
+      newHash: pigeonMap['newHash'] as int?,
     );
   }
 }
@@ -571,6 +628,235 @@ class MainModelBridge {
   Future<void> refreshSnippetUpdates() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.MainModelBridge.refreshSnippetUpdates', codec, binaryMessenger: _binaryMessenger);
+    final Map<Object?, Object?>? replyMap =
+        await channel.send(null) as Map<Object?, Object?>?;
+    if (replyMap == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyMap['error'] != null) {
+      final Map<Object?, Object?> error = (replyMap['error'] as Map<Object?, Object?>?)!;
+      throw PlatformException(
+        code: (error['code'] as String?)!,
+        message: error['message'] as String?,
+        details: error['details'],
+      );
+    } else {
+      return;
+    }
+  }
+}
+
+class _DetailModelBridgeCodec extends StandardMessageCodec{
+  const _DetailModelBridgeCodec();
+  @override
+  void writeValue(WriteBuffer buffer, Object? value) {
+    if (value is DetailModelStateData) {
+      buffer.putUint8(128);
+      writeValue(buffer, value.encode());
+    } else 
+    if (value is Owner) {
+      buffer.putUint8(129);
+      writeValue(buffer, value.encode());
+    } else 
+    if (value is Snippet) {
+      buffer.putUint8(130);
+      writeValue(buffer, value.encode());
+    } else 
+    if (value is SnippetCode) {
+      buffer.putUint8(131);
+      writeValue(buffer, value.encode());
+    } else 
+    if (value is SnippetLanguage) {
+      buffer.putUint8(132);
+      writeValue(buffer, value.encode());
+    } else 
+    if (value is SyntaxToken) {
+      buffer.putUint8(133);
+      writeValue(buffer, value.encode());
+    } else 
+{
+      super.writeValue(buffer, value);
+    }
+  }
+  @override
+  Object? readValueOfType(int type, ReadBuffer buffer) {
+    switch (type) {
+      case 128:       
+        return DetailModelStateData.decode(readValue(buffer)!);
+      
+      case 129:       
+        return Owner.decode(readValue(buffer)!);
+      
+      case 130:       
+        return Snippet.decode(readValue(buffer)!);
+      
+      case 131:       
+        return SnippetCode.decode(readValue(buffer)!);
+      
+      case 132:       
+        return SnippetLanguage.decode(readValue(buffer)!);
+      
+      case 133:       
+        return SyntaxToken.decode(readValue(buffer)!);
+      
+      default:      
+        return super.readValueOfType(type, buffer);
+      
+    }
+  }
+}
+
+class DetailModelBridge {
+  /// Constructor for [DetailModelBridge].  The [binaryMessenger] named argument is
+  /// available for dependency injection.  If it is left null, the default
+  /// BinaryMessenger will be used which routes to the host platform.
+  DetailModelBridge({BinaryMessenger? binaryMessenger}) : _binaryMessenger = binaryMessenger;
+  final BinaryMessenger? _binaryMessenger;
+
+  static const MessageCodec<Object?> codec = _DetailModelBridgeCodec();
+
+  Future<DetailModelStateData> getState() async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.DetailModelBridge.getState', codec, binaryMessenger: _binaryMessenger);
+    final Map<Object?, Object?>? replyMap =
+        await channel.send(null) as Map<Object?, Object?>?;
+    if (replyMap == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyMap['error'] != null) {
+      final Map<Object?, Object?> error = (replyMap['error'] as Map<Object?, Object?>?)!;
+      throw PlatformException(
+        code: (error['code'] as String?)!,
+        message: error['message'] as String?,
+        details: error['details'],
+      );
+    } else if (replyMap['result'] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (replyMap['result'] as DetailModelStateData?)!;
+    }
+  }
+
+  Future<void> load(String arg_uuid) async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.DetailModelBridge.load', codec, binaryMessenger: _binaryMessenger);
+    final Map<Object?, Object?>? replyMap =
+        await channel.send(<Object?>[arg_uuid]) as Map<Object?, Object?>?;
+    if (replyMap == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyMap['error'] != null) {
+      final Map<Object?, Object?> error = (replyMap['error'] as Map<Object?, Object?>?)!;
+      throw PlatformException(
+        code: (error['code'] as String?)!,
+        message: error['message'] as String?,
+        details: error['details'],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<void> like() async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.DetailModelBridge.like', codec, binaryMessenger: _binaryMessenger);
+    final Map<Object?, Object?>? replyMap =
+        await channel.send(null) as Map<Object?, Object?>?;
+    if (replyMap == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyMap['error'] != null) {
+      final Map<Object?, Object?> error = (replyMap['error'] as Map<Object?, Object?>?)!;
+      throw PlatformException(
+        code: (error['code'] as String?)!,
+        message: error['message'] as String?,
+        details: error['details'],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<void> dislike() async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.DetailModelBridge.dislike', codec, binaryMessenger: _binaryMessenger);
+    final Map<Object?, Object?>? replyMap =
+        await channel.send(null) as Map<Object?, Object?>?;
+    if (replyMap == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyMap['error'] != null) {
+      final Map<Object?, Object?> error = (replyMap['error'] as Map<Object?, Object?>?)!;
+      throw PlatformException(
+        code: (error['code'] as String?)!,
+        message: error['message'] as String?,
+        details: error['details'],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<void> save() async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.DetailModelBridge.save', codec, binaryMessenger: _binaryMessenger);
+    final Map<Object?, Object?>? replyMap =
+        await channel.send(null) as Map<Object?, Object?>?;
+    if (replyMap == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyMap['error'] != null) {
+      final Map<Object?, Object?> error = (replyMap['error'] as Map<Object?, Object?>?)!;
+      throw PlatformException(
+        code: (error['code'] as String?)!,
+        message: error['message'] as String?,
+        details: error['details'],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<void> copyToClipboard() async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.DetailModelBridge.copyToClipboard', codec, binaryMessenger: _binaryMessenger);
+    final Map<Object?, Object?>? replyMap =
+        await channel.send(null) as Map<Object?, Object?>?;
+    if (replyMap == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyMap['error'] != null) {
+      final Map<Object?, Object?> error = (replyMap['error'] as Map<Object?, Object?>?)!;
+      throw PlatformException(
+        code: (error['code'] as String?)!,
+        message: error['message'] as String?,
+        details: error['details'],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<void> share() async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.DetailModelBridge.share', codec, binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
         await channel.send(null) as Map<Object?, Object?>?;
     if (replyMap == null) {

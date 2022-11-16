@@ -25,15 +25,3 @@ internal val viewModelModule = module {
     viewModel { ShareViewModel(get(), get(), get()) }
     viewModel { DonateViewModel(get()) }
 }
-
-internal val modelModule = module {
-//    viewModel { SplashViewModel(get(), get()) }
-//    viewModel { LoginViewModel(get(), get(), get(), get()) }
-    single { SessionModel(get()) }
-    single { MainModel(get(), get(), get(), get(), get(), get(), get()) }
-//    viewModel { PreviewViewModel(get(), get()) }
-//    viewModel { DetailViewModel(get(), get(), get(), get(), get(), get(), get()) }
-//    viewModel { EditViewModel(get(), get(), get(), get(), get(), get()) }
-//    viewModel { ShareViewModel(get(), get(), get()) }
-//    viewModel { DonateViewModel(get()) }
-}

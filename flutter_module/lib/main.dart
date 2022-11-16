@@ -14,6 +14,7 @@ class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
 
   final mainModel = MainModelBridge();
+  final detailModel = DetailModelBridge();
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +28,10 @@ class MyApp extends StatelessWidget {
           detailsNavigator: detailsNavigator,
           model: mainModel,
         ),
-        DetailsScreen(detailsNavigator)
+        DetailsScreen(
+          navigator: detailsNavigator,
+          model: detailModel,
+        )
       ],
       redirectors: [
         ScreenRedirector(),

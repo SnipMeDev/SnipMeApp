@@ -8,11 +8,12 @@ import io.flutter.embedding.engine.FlutterEngineCache
 import io.flutter.embedding.engine.dart.DartExecutor
 import pl.tkadziolka.snipmeandroid.bridge.main.MainModelPlugin
 import pl.tkadziolka.snipmeandroid.R
+import pl.tkadziolka.snipmeandroid.bridge.detail.DetailModelPlugin
 
 class MainActivity : AppCompatActivity() {
     private lateinit var flutterEngine : FlutterEngine
 
-    private val cachedEngineId = "ENGINE_1"
+    private val cachedEngineId = "ID_CACHED_FLUTTER_ENGINE"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +28,7 @@ class MainActivity : AppCompatActivity() {
         )
 
         flutterEngine.plugins.add(MainModelPlugin())
+        flutterEngine.plugins.add(DetailModelPlugin())
 
         // Cache the FlutterEngine to be used by FlutterActivity.
         FlutterEngineCache

@@ -12,6 +12,7 @@ class Snippet {
   String? timeAgo;
   int? voteResult;
   UserReaction? userReaction;
+  bool? isPrivate;
   bool? isLiked;
   bool? isDisliked;
   bool? isSaved;
@@ -109,11 +110,22 @@ class MainModelStateData {
   bool? is_loading;
   List<Snippet?>? data;
   String? error;
+  int? oldHash;
+  int? newHash;
 }
 
 class MainModelEventData {
   MainModelEvent? event;
   String? message;
+}
+
+class DetailModelStateData {
+  ModelState? state;
+  bool? is_loading;
+  Snippet? data;
+  String? error;
+  int? oldHash;
+  int? newHash;
 }
 
 // Api
@@ -138,4 +150,21 @@ abstract class MainModelBridge {
 
   @TaskQueue(type: TaskQueueType.serialBackgroundThread)
   void refreshSnippetUpdates();
+}
+
+@HostApi()
+abstract class DetailModelBridge {
+  DetailModelStateData getState();
+
+  void load(String uuid);
+
+  void like();
+
+  void dislike();
+
+  void save();
+
+  void copyToClipboard();
+
+  void share();
 }

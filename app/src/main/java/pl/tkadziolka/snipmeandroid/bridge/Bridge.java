@@ -176,6 +176,12 @@ public class Bridge {
       this.userReaction = setterArg;
     }
 
+    private @Nullable Boolean isPrivate;
+    public @Nullable Boolean getIsPrivate() { return isPrivate; }
+    public void setIsPrivate(@Nullable Boolean setterArg) {
+      this.isPrivate = setterArg;
+    }
+
     private @Nullable Boolean isLiked;
     public @Nullable Boolean getIsLiked() { return isLiked; }
     public void setIsLiked(@Nullable Boolean setterArg) {
@@ -240,6 +246,11 @@ public class Bridge {
         this.userReaction = setterArg;
         return this;
       }
+      private @Nullable Boolean isPrivate;
+      public @NonNull Builder setIsPrivate(@Nullable Boolean setterArg) {
+        this.isPrivate = setterArg;
+        return this;
+      }
       private @Nullable Boolean isLiked;
       public @NonNull Builder setIsLiked(@Nullable Boolean setterArg) {
         this.isLiked = setterArg;
@@ -266,6 +277,7 @@ public class Bridge {
         pigeonReturn.setTimeAgo(timeAgo);
         pigeonReturn.setVoteResult(voteResult);
         pigeonReturn.setUserReaction(userReaction);
+        pigeonReturn.setIsPrivate(isPrivate);
         pigeonReturn.setIsLiked(isLiked);
         pigeonReturn.setIsDisliked(isDisliked);
         pigeonReturn.setIsSaved(isSaved);
@@ -283,6 +295,7 @@ public class Bridge {
       toMapResult.put("timeAgo", timeAgo);
       toMapResult.put("voteResult", voteResult);
       toMapResult.put("userReaction", userReaction == null ? null : userReaction.index);
+      toMapResult.put("isPrivate", isPrivate);
       toMapResult.put("isLiked", isLiked);
       toMapResult.put("isDisliked", isDisliked);
       toMapResult.put("isSaved", isSaved);
@@ -308,6 +321,8 @@ public class Bridge {
       pigeonResult.setVoteResult((voteResult == null) ? null : ((voteResult instanceof Integer) ? (Integer)voteResult : (Long)voteResult));
       Object userReaction = map.get("userReaction");
       pigeonResult.setUserReaction(userReaction == null ? null : UserReaction.values()[(int)userReaction]);
+      Object isPrivate = map.get("isPrivate");
+      pigeonResult.setIsPrivate((Boolean)isPrivate);
       Object isLiked = map.get("isLiked");
       pigeonResult.setIsLiked((Boolean)isLiked);
       Object isDisliked = map.get("isDisliked");
@@ -584,6 +599,18 @@ public class Bridge {
       this.error = setterArg;
     }
 
+    private @Nullable Long oldHash;
+    public @Nullable Long getOldHash() { return oldHash; }
+    public void setOldHash(@Nullable Long setterArg) {
+      this.oldHash = setterArg;
+    }
+
+    private @Nullable Long newHash;
+    public @Nullable Long getNewHash() { return newHash; }
+    public void setNewHash(@Nullable Long setterArg) {
+      this.newHash = setterArg;
+    }
+
     public static final class Builder {
       private @Nullable ModelState state;
       public @NonNull Builder setState(@Nullable ModelState setterArg) {
@@ -605,12 +632,24 @@ public class Bridge {
         this.error = setterArg;
         return this;
       }
+      private @Nullable Long oldHash;
+      public @NonNull Builder setOldHash(@Nullable Long setterArg) {
+        this.oldHash = setterArg;
+        return this;
+      }
+      private @Nullable Long newHash;
+      public @NonNull Builder setNewHash(@Nullable Long setterArg) {
+        this.newHash = setterArg;
+        return this;
+      }
       public @NonNull MainModelStateData build() {
         MainModelStateData pigeonReturn = new MainModelStateData();
         pigeonReturn.setState(state);
         pigeonReturn.setIs_loading(is_loading);
         pigeonReturn.setData(data);
         pigeonReturn.setError(error);
+        pigeonReturn.setOldHash(oldHash);
+        pigeonReturn.setNewHash(newHash);
         return pigeonReturn;
       }
     }
@@ -620,6 +659,8 @@ public class Bridge {
       toMapResult.put("is_loading", is_loading);
       toMapResult.put("data", data);
       toMapResult.put("error", error);
+      toMapResult.put("oldHash", oldHash);
+      toMapResult.put("newHash", newHash);
       return toMapResult;
     }
     static @NonNull MainModelStateData fromMap(@NonNull Map<String, Object> map) {
@@ -632,6 +673,10 @@ public class Bridge {
       pigeonResult.setData((List<Snippet>)data);
       Object error = map.get("error");
       pigeonResult.setError((String)error);
+      Object oldHash = map.get("oldHash");
+      pigeonResult.setOldHash((oldHash == null) ? null : ((oldHash instanceof Integer) ? (Integer)oldHash : (Long)oldHash));
+      Object newHash = map.get("newHash");
+      pigeonResult.setNewHash((newHash == null) ? null : ((newHash instanceof Integer) ? (Integer)newHash : (Long)newHash));
       return pigeonResult;
     }
   }
@@ -680,6 +725,114 @@ public class Bridge {
       pigeonResult.setEvent(event == null ? null : MainModelEvent.values()[(int)event]);
       Object message = map.get("message");
       pigeonResult.setMessage((String)message);
+      return pigeonResult;
+    }
+  }
+
+  /** Generated class from Pigeon that represents data sent in messages. */
+  public static class DetailModelStateData {
+    private @Nullable ModelState state;
+    public @Nullable ModelState getState() { return state; }
+    public void setState(@Nullable ModelState setterArg) {
+      this.state = setterArg;
+    }
+
+    private @Nullable Boolean is_loading;
+    public @Nullable Boolean getIs_loading() { return is_loading; }
+    public void setIs_loading(@Nullable Boolean setterArg) {
+      this.is_loading = setterArg;
+    }
+
+    private @Nullable Snippet data;
+    public @Nullable Snippet getData() { return data; }
+    public void setData(@Nullable Snippet setterArg) {
+      this.data = setterArg;
+    }
+
+    private @Nullable String error;
+    public @Nullable String getError() { return error; }
+    public void setError(@Nullable String setterArg) {
+      this.error = setterArg;
+    }
+
+    private @Nullable Long oldHash;
+    public @Nullable Long getOldHash() { return oldHash; }
+    public void setOldHash(@Nullable Long setterArg) {
+      this.oldHash = setterArg;
+    }
+
+    private @Nullable Long newHash;
+    public @Nullable Long getNewHash() { return newHash; }
+    public void setNewHash(@Nullable Long setterArg) {
+      this.newHash = setterArg;
+    }
+
+    public static final class Builder {
+      private @Nullable ModelState state;
+      public @NonNull Builder setState(@Nullable ModelState setterArg) {
+        this.state = setterArg;
+        return this;
+      }
+      private @Nullable Boolean is_loading;
+      public @NonNull Builder setIs_loading(@Nullable Boolean setterArg) {
+        this.is_loading = setterArg;
+        return this;
+      }
+      private @Nullable Snippet data;
+      public @NonNull Builder setData(@Nullable Snippet setterArg) {
+        this.data = setterArg;
+        return this;
+      }
+      private @Nullable String error;
+      public @NonNull Builder setError(@Nullable String setterArg) {
+        this.error = setterArg;
+        return this;
+      }
+      private @Nullable Long oldHash;
+      public @NonNull Builder setOldHash(@Nullable Long setterArg) {
+        this.oldHash = setterArg;
+        return this;
+      }
+      private @Nullable Long newHash;
+      public @NonNull Builder setNewHash(@Nullable Long setterArg) {
+        this.newHash = setterArg;
+        return this;
+      }
+      public @NonNull DetailModelStateData build() {
+        DetailModelStateData pigeonReturn = new DetailModelStateData();
+        pigeonReturn.setState(state);
+        pigeonReturn.setIs_loading(is_loading);
+        pigeonReturn.setData(data);
+        pigeonReturn.setError(error);
+        pigeonReturn.setOldHash(oldHash);
+        pigeonReturn.setNewHash(newHash);
+        return pigeonReturn;
+      }
+    }
+    @NonNull Map<String, Object> toMap() {
+      Map<String, Object> toMapResult = new HashMap<>();
+      toMapResult.put("state", state == null ? null : state.index);
+      toMapResult.put("is_loading", is_loading);
+      toMapResult.put("data", (data == null) ? null : data.toMap());
+      toMapResult.put("error", error);
+      toMapResult.put("oldHash", oldHash);
+      toMapResult.put("newHash", newHash);
+      return toMapResult;
+    }
+    static @NonNull DetailModelStateData fromMap(@NonNull Map<String, Object> map) {
+      DetailModelStateData pigeonResult = new DetailModelStateData();
+      Object state = map.get("state");
+      pigeonResult.setState(state == null ? null : ModelState.values()[(int)state]);
+      Object is_loading = map.get("is_loading");
+      pigeonResult.setIs_loading((Boolean)is_loading);
+      Object data = map.get("data");
+      pigeonResult.setData((data == null) ? null : Snippet.fromMap((Map)data));
+      Object error = map.get("error");
+      pigeonResult.setError((String)error);
+      Object oldHash = map.get("oldHash");
+      pigeonResult.setOldHash((oldHash == null) ? null : ((oldHash instanceof Integer) ? (Integer)oldHash : (Long)oldHash));
+      Object newHash = map.get("newHash");
+      pigeonResult.setNewHash((newHash == null) ? null : ((newHash instanceof Integer) ? (Integer)newHash : (Long)newHash));
       return pigeonResult;
     }
   }
@@ -906,6 +1059,223 @@ public class Bridge {
             Map<String, Object> wrapped = new HashMap<>();
             try {
               api.refreshSnippetUpdates();
+              wrapped.put("result", null);
+            }
+            catch (Error | RuntimeException exception) {
+              wrapped.put("error", wrapError(exception));
+            }
+            reply.reply(wrapped);
+          });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+    }
+  }
+  private static class DetailModelBridgeCodec extends StandardMessageCodec {
+    public static final DetailModelBridgeCodec INSTANCE = new DetailModelBridgeCodec();
+    private DetailModelBridgeCodec() {}
+    @Override
+    protected Object readValueOfType(byte type, @NonNull ByteBuffer buffer) {
+      switch (type) {
+        case (byte)128:         
+          return DetailModelStateData.fromMap((Map<String, Object>) readValue(buffer));
+        
+        case (byte)129:         
+          return Owner.fromMap((Map<String, Object>) readValue(buffer));
+        
+        case (byte)130:         
+          return Snippet.fromMap((Map<String, Object>) readValue(buffer));
+        
+        case (byte)131:         
+          return SnippetCode.fromMap((Map<String, Object>) readValue(buffer));
+        
+        case (byte)132:         
+          return SnippetLanguage.fromMap((Map<String, Object>) readValue(buffer));
+        
+        case (byte)133:         
+          return SyntaxToken.fromMap((Map<String, Object>) readValue(buffer));
+        
+        default:        
+          return super.readValueOfType(type, buffer);
+        
+      }
+    }
+    @Override
+    protected void writeValue(@NonNull ByteArrayOutputStream stream, Object value)     {
+      if (value instanceof DetailModelStateData) {
+        stream.write(128);
+        writeValue(stream, ((DetailModelStateData) value).toMap());
+      } else 
+      if (value instanceof Owner) {
+        stream.write(129);
+        writeValue(stream, ((Owner) value).toMap());
+      } else 
+      if (value instanceof Snippet) {
+        stream.write(130);
+        writeValue(stream, ((Snippet) value).toMap());
+      } else 
+      if (value instanceof SnippetCode) {
+        stream.write(131);
+        writeValue(stream, ((SnippetCode) value).toMap());
+      } else 
+      if (value instanceof SnippetLanguage) {
+        stream.write(132);
+        writeValue(stream, ((SnippetLanguage) value).toMap());
+      } else 
+      if (value instanceof SyntaxToken) {
+        stream.write(133);
+        writeValue(stream, ((SyntaxToken) value).toMap());
+      } else 
+{
+        super.writeValue(stream, value);
+      }
+    }
+  }
+
+  /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
+  public interface DetailModelBridge {
+    @NonNull DetailModelStateData getState();
+    void load(@NonNull String uuid);
+    void like();
+    void dislike();
+    void save();
+    void copyToClipboard();
+    void share();
+
+    /** The codec used by DetailModelBridge. */
+    static MessageCodec<Object> getCodec() {
+      return       DetailModelBridgeCodec.INSTANCE;    }
+    /**Sets up an instance of `DetailModelBridge` to handle messages through the `binaryMessenger`. */
+    static void setup(BinaryMessenger binaryMessenger, DetailModelBridge api) {
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.DetailModelBridge.getState", getCodec());
+        if (api != null) {
+          channel.setMessageHandler((message, reply) -> {
+            Map<String, Object> wrapped = new HashMap<>();
+            try {
+              DetailModelStateData output = api.getState();
+              wrapped.put("result", output);
+            }
+            catch (Error | RuntimeException exception) {
+              wrapped.put("error", wrapError(exception));
+            }
+            reply.reply(wrapped);
+          });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.DetailModelBridge.load", getCodec());
+        if (api != null) {
+          channel.setMessageHandler((message, reply) -> {
+            Map<String, Object> wrapped = new HashMap<>();
+            try {
+              ArrayList<Object> args = (ArrayList<Object>)message;
+              assert args != null;
+              String uuidArg = (String)args.get(0);
+              if (uuidArg == null) {
+                throw new NullPointerException("uuidArg unexpectedly null.");
+              }
+              api.load(uuidArg);
+              wrapped.put("result", null);
+            }
+            catch (Error | RuntimeException exception) {
+              wrapped.put("error", wrapError(exception));
+            }
+            reply.reply(wrapped);
+          });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.DetailModelBridge.like", getCodec());
+        if (api != null) {
+          channel.setMessageHandler((message, reply) -> {
+            Map<String, Object> wrapped = new HashMap<>();
+            try {
+              api.like();
+              wrapped.put("result", null);
+            }
+            catch (Error | RuntimeException exception) {
+              wrapped.put("error", wrapError(exception));
+            }
+            reply.reply(wrapped);
+          });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.DetailModelBridge.dislike", getCodec());
+        if (api != null) {
+          channel.setMessageHandler((message, reply) -> {
+            Map<String, Object> wrapped = new HashMap<>();
+            try {
+              api.dislike();
+              wrapped.put("result", null);
+            }
+            catch (Error | RuntimeException exception) {
+              wrapped.put("error", wrapError(exception));
+            }
+            reply.reply(wrapped);
+          });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.DetailModelBridge.save", getCodec());
+        if (api != null) {
+          channel.setMessageHandler((message, reply) -> {
+            Map<String, Object> wrapped = new HashMap<>();
+            try {
+              api.save();
+              wrapped.put("result", null);
+            }
+            catch (Error | RuntimeException exception) {
+              wrapped.put("error", wrapError(exception));
+            }
+            reply.reply(wrapped);
+          });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.DetailModelBridge.copyToClipboard", getCodec());
+        if (api != null) {
+          channel.setMessageHandler((message, reply) -> {
+            Map<String, Object> wrapped = new HashMap<>();
+            try {
+              api.copyToClipboard();
+              wrapped.put("result", null);
+            }
+            catch (Error | RuntimeException exception) {
+              wrapped.put("error", wrapError(exception));
+            }
+            reply.reply(wrapped);
+          });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.DetailModelBridge.share", getCodec());
+        if (api != null) {
+          channel.setMessageHandler((message, reply) -> {
+            Map<String, Object> wrapped = new HashMap<>();
+            try {
+              api.share();
               wrapped.put("result", null);
             }
             catch (Error | RuntimeException exception) {
