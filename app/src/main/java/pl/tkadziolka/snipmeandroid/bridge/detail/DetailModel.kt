@@ -1,6 +1,5 @@
 package pl.tkadziolka.snipmeandroid.bridge.detail
 
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
@@ -22,7 +21,7 @@ import timber.log.Timber
 class DetailModel(
     private val errorMessages: ErrorMessages,
     private val getSnippet: GetSingleSnippetUseCase,
-//    private val clipboard: AddToClipboardUseCase,
+    private val clipboard: AddToClipboardUseCase,
     private val getTargetReaction: GetTargetUserReactionUseCase,
     private val setUserReaction: SetUserReactionUseCase,
     private val session: SessionModel
@@ -71,7 +70,7 @@ class DetailModel(
 
     fun copyToClipboard() {
         getSnippet()?.let {
-//            clipboard(it.title, it.code.raw)
+            clipboard(it.title, it.code.raw)
         }
     }
 

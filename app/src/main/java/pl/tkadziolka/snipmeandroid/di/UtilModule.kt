@@ -18,5 +18,5 @@ internal val utilModule = module {
     factory { ErrorMessages(get()) }
     factory<ValidationMessages> { RealValidationMessages(get()) }
     factory { Dialogs(get()) }
-    factory { androidApplication().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager }
+    single { androidApplication().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager }
 }

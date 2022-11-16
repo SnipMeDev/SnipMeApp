@@ -5,6 +5,7 @@ import io.github.kbiakov.codeview.classifier.CodeProcessor
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
+import org.koin.dsl.koinApplication
 import pl.tkadziolka.snipmeandroid.di.koinModules
 import pl.tkadziolka.snipmeandroid.util.CrashReportingTree
 import timber.log.Timber

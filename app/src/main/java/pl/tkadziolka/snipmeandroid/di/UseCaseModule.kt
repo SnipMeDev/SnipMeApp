@@ -46,7 +46,7 @@ internal val useCaseModule = module {
     factory { ClearCachedShareUsersUseCase(get()) }
     factory { ShareSnippetUseCase(get(), get(), get(), get()) }
     // Clipboard
-    factory { AddToClipboardUseCase(get()) }
+    single { AddToClipboardUseCase(get()) }
     factory { GetFromClipboardUseCase(get()) }
 }
 
