@@ -32,7 +32,7 @@ class DetailModelPlugin: ModelPlugin<Bridge.DetailModelBridge>(), Bridge.DetailM
     }
 
     override fun save() {
-        TODO("Not yet implemented")
+        model.save()
     }
 
     override fun copyToClipboard() {

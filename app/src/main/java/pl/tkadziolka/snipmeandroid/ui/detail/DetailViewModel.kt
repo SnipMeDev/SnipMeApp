@@ -125,6 +125,7 @@ data class Loaded(val snippet: Snippet) : DetailViewState()
 data class Error(val error: String?) : DetailViewState()
 
 sealed class DetailEvent
-object Idle: DetailEvent()
+object Idle : DetailEvent()
 data class Alert(val message: String) : DetailEvent()
+data class Saved(val uuid: String) : DetailEvent()
 object Logout : DetailEvent()
