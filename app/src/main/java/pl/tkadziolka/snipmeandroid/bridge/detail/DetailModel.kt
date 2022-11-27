@@ -82,9 +82,9 @@ class DetailModel(
             saveSnippet(it)
                 .subscribeOn(Schedulers.io())
                 .subscribeBy(
-                    onSuccess = {
+                    onSuccess = { saved ->
                         setState(Loaded(it))
-                        mutableEvent.value = Saved(it.uuid)
+                        mutableEvent.value = Saved(saved.uuid)
                     },
                     onError = {
                         Timber.e("Couldn't load snippets, error = $it")
