@@ -79,6 +79,11 @@ enum MainModelEvent {
   logout,
 }
 
+enum DetailModelEvent {
+  none,
+  saved,
+}
+
 class Snippet {
   Snippet({
     this.uuid,
@@ -400,6 +405,41 @@ class DetailModelStateData {
   }
 }
 
+class DetailModelEventData {
+  DetailModelEventData({
+    this.event,
+    this.value,
+    this.oldHash,
+    this.newHash,
+  });
+
+  DetailModelEvent? event;
+  String? value;
+  int? oldHash;
+  int? newHash;
+
+  Object encode() {
+    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
+    pigeonMap['event'] = event?.index;
+    pigeonMap['value'] = value;
+    pigeonMap['oldHash'] = oldHash;
+    pigeonMap['newHash'] = newHash;
+    return pigeonMap;
+  }
+
+  static DetailModelEventData decode(Object message) {
+    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+    return DetailModelEventData(
+      event: pigeonMap['event'] != null
+          ? DetailModelEvent.values[pigeonMap['event']! as int]
+          : null,
+      value: pigeonMap['value'] as String?,
+      oldHash: pigeonMap['oldHash'] as int?,
+      newHash: pigeonMap['newHash'] as int?,
+    );
+  }
+}
+
 class _MainModelBridgeCodec extends StandardMessageCodec{
   const _MainModelBridgeCodec();
   @override
@@ -652,28 +692,32 @@ class _DetailModelBridgeCodec extends StandardMessageCodec{
   const _DetailModelBridgeCodec();
   @override
   void writeValue(WriteBuffer buffer, Object? value) {
-    if (value is DetailModelStateData) {
+    if (value is DetailModelEventData) {
       buffer.putUint8(128);
       writeValue(buffer, value.encode());
     } else 
-    if (value is Owner) {
+    if (value is DetailModelStateData) {
       buffer.putUint8(129);
       writeValue(buffer, value.encode());
     } else 
-    if (value is Snippet) {
+    if (value is Owner) {
       buffer.putUint8(130);
       writeValue(buffer, value.encode());
     } else 
-    if (value is SnippetCode) {
+    if (value is Snippet) {
       buffer.putUint8(131);
       writeValue(buffer, value.encode());
     } else 
-    if (value is SnippetLanguage) {
+    if (value is SnippetCode) {
       buffer.putUint8(132);
       writeValue(buffer, value.encode());
     } else 
-    if (value is SyntaxToken) {
+    if (value is SnippetLanguage) {
       buffer.putUint8(133);
+      writeValue(buffer, value.encode());
+    } else 
+    if (value is SyntaxToken) {
+      buffer.putUint8(134);
       writeValue(buffer, value.encode());
     } else 
 {
@@ -684,21 +728,24 @@ class _DetailModelBridgeCodec extends StandardMessageCodec{
   Object? readValueOfType(int type, ReadBuffer buffer) {
     switch (type) {
       case 128:       
-        return DetailModelStateData.decode(readValue(buffer)!);
+        return DetailModelEventData.decode(readValue(buffer)!);
       
       case 129:       
-        return Owner.decode(readValue(buffer)!);
+        return DetailModelStateData.decode(readValue(buffer)!);
       
       case 130:       
-        return Snippet.decode(readValue(buffer)!);
+        return Owner.decode(readValue(buffer)!);
       
       case 131:       
-        return SnippetCode.decode(readValue(buffer)!);
+        return Snippet.decode(readValue(buffer)!);
       
       case 132:       
-        return SnippetLanguage.decode(readValue(buffer)!);
+        return SnippetCode.decode(readValue(buffer)!);
       
       case 133:       
+        return SnippetLanguage.decode(readValue(buffer)!);
+      
+      case 134:       
         return SyntaxToken.decode(readValue(buffer)!);
       
       default:      
@@ -741,6 +788,55 @@ class DetailModelBridge {
       );
     } else {
       return (replyMap['result'] as DetailModelStateData?)!;
+    }
+  }
+
+  Future<DetailModelEventData> getEvent() async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.DetailModelBridge.getEvent', codec, binaryMessenger: _binaryMessenger);
+    final Map<Object?, Object?>? replyMap =
+        await channel.send(null) as Map<Object?, Object?>?;
+    if (replyMap == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyMap['error'] != null) {
+      final Map<Object?, Object?> error = (replyMap['error'] as Map<Object?, Object?>?)!;
+      throw PlatformException(
+        code: (error['code'] as String?)!,
+        message: error['message'] as String?,
+        details: error['details'],
+      );
+    } else if (replyMap['result'] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (replyMap['result'] as DetailModelEventData?)!;
+    }
+  }
+
+  Future<void> resetEvent() async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.DetailModelBridge.resetEvent', codec, binaryMessenger: _binaryMessenger);
+    final Map<Object?, Object?>? replyMap =
+        await channel.send(null) as Map<Object?, Object?>?;
+    if (replyMap == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyMap['error'] != null) {
+      final Map<Object?, Object?> error = (replyMap['error'] as Map<Object?, Object?>?)!;
+      throw PlatformException(
+        code: (error['code'] as String?)!,
+        message: error['message'] as String?,
+        details: error['details'],
+      );
+    } else {
+      return;
     }
   }
 

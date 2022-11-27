@@ -15,3 +15,10 @@ extension DetailModelStateDataExtension on DetailModelStateData {
     return other.oldHash != other.newHash;
   }
 }
+
+extension DetailModelEventDataExtension on DetailModelEventData {
+  bool equals(Object other) {
+    if (other is! DetailModelEventData) return false;
+    return other.oldHash != other.newHash;
+  }
+}

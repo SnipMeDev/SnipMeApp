@@ -52,19 +52,35 @@ class _DetailsPage extends HookWidget {
   Widget build(BuildContext context) {
     useNavigator([navigator]);
 
-    final stateChange = useObservableState(
+    final state = useObservableState(
       DetailModelStateData(),
       () => model.getState(),
       (current, newState) => (current as DetailModelStateData).equals(newState),
-    );
-    final state = stateChange.value;
+    ).value;
+
+    final event = useObservableState(
+      DetailModelEventData(),
+      () => model.getEvent(),
+      (current, newState) => (current as DetailModelEventData).equals(newState),
+    ).value;
 
     useEffect(() {
       model.load(snippetId);
       return null;
     }, []);
 
-    // TODO Add view state wrapper and show error for null snippet
+    if (event.event == DetailModelEvent.saved) {
+      final snippetId = event.value;
+      if (snippetId == null) {
+        model.resetEvent();
+        navigator.back();
+        return const SizedBox();
+      }
+
+      model.resetEvent();
+      navigator.goToDetails(context, snippetId);
+    }
+
     return Scaffold(
       backgroundColor: ColorStyles.surfacePrimary(),
       appBar: AppBar(
@@ -77,11 +93,12 @@ class _DetailsPage extends HookWidget {
           color: Colors.black,
         ),
         actions: state.data?.isPrivate == true
-            ? [const PaddingStyles.regular(Icon(Icons.visibility_off_outlined))]
+            ? [const PaddingStyles.regular(Icon(Icons.lock_outlined))]
             : null,
       ),
       body: ViewStateWrapper<Snippet>(
-        isLoading: state.state == ModelState.loading || state.is_loading == true,
+        isLoading:
+            state.state == ModelState.loading || state.is_loading == true,
         error: state.error,
         data: state.data,
         builder: (_, snippet) => _DetailPageData(

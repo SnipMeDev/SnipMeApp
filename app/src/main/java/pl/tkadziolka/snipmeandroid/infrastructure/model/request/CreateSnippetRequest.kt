@@ -6,5 +6,6 @@ import com.squareup.moshi.JsonClass
 data class CreateSnippetRequest(
     val title: String,
     val code: String,
-    val language: String
+    val language: String,
+    val visibility: String
 )

@@ -49,7 +49,8 @@ class SnippetRepositoryTest(private val errorHandler: ErrorHandler) : SnippetRep
     override fun create(
         title: String,
         code: String,
-        language: String
+        language: String,
+        visibility: SnippetVisibility
     ): Single<Snippet> = Single.just(
         Snippet(
             uuid = uuid,
@@ -70,7 +71,8 @@ class SnippetRepositoryTest(private val errorHandler: ErrorHandler) : SnippetRep
         uuid: String,
         title: String,
         code: String,
-        language: String
+        language: String,
+        visibility: SnippetVisibility
     ): Single<Snippet> = Single.just(
         Snippet(
             uuid = uuid,

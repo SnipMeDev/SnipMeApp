@@ -105,6 +105,8 @@ enum ModelState { loading, loaded, error }
 
 enum MainModelEvent { none, alert, logout }
 
+enum DetailModelEvent { none, saved }
+
 class MainModelStateData {
   ModelState? state;
   bool? is_loading;
@@ -124,6 +126,13 @@ class DetailModelStateData {
   bool? is_loading;
   Snippet? data;
   String? error;
+  int? oldHash;
+  int? newHash;
+}
+
+class DetailModelEventData {
+  DetailModelEvent? event;
+  String? value;
   int? oldHash;
   int? newHash;
 }
@@ -155,6 +164,10 @@ abstract class MainModelBridge {
 @HostApi()
 abstract class DetailModelBridge {
   DetailModelStateData getState();
+
+  DetailModelEventData getEvent();
+
+  void resetEvent();
 
   void load(String uuid);
 
