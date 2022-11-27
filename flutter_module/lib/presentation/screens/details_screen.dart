@@ -77,6 +77,7 @@ class _DetailsPage extends HookWidget {
         return const SizedBox();
       }
 
+      navigator.back();
       model.resetEvent();
       navigator.goToDetails(context, snippetId);
     }

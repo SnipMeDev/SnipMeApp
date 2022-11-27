@@ -119,6 +119,7 @@ class MainModel(
             .subscribeBy(
                 onSuccess = {
                     mutableState.value = (Loaded(user, it, pages, scope))
+                    loadNextPage()
                     if (shouldRefresh) {
                         mutableEvent.value = ListRefreshed
                         shouldRefresh = false

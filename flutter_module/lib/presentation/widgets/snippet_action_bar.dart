@@ -44,7 +44,7 @@ class SnippetActionBar extends StatelessWidget {
           StateIcon(
             icon: Icons.save_alt_outlined,
             active: snippet.isSaved,
-            onTap: snippet.isSaved == false ? null : onSaveTap,
+            onTap: snippet.isSaved == false ? onSaveTap : null,
           ),
           const SizedBox(width: Dimens.l),
           StateIcon(

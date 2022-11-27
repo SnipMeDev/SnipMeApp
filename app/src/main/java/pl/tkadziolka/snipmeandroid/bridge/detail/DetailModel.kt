@@ -86,9 +86,9 @@ class DetailModel(
                         setState(Loaded(it))
                         mutableEvent.value = Saved(saved.uuid)
                     },
-                    onError = {
-                        Timber.e("Couldn't load snippets, error = $it")
-                        parseError(it)
+                    onError = { error ->
+                        Timber.e("Couldn't save snippet, error = $error")
+                        parseError(error)
                     }
                 ).also { disposables += it }
         }
