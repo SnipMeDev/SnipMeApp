@@ -12,6 +12,7 @@ import pl.tkadziolka.snipmeandroid.domain.message.ErrorMessages
 import pl.tkadziolka.snipmeandroid.domain.reaction.GetTargetUserReactionUseCase
 import pl.tkadziolka.snipmeandroid.domain.reaction.SetUserReactionUseCase
 import pl.tkadziolka.snipmeandroid.domain.reaction.UserReaction
+import pl.tkadziolka.snipmeandroid.domain.share.ShareSnippetCodeUseCase
 import pl.tkadziolka.snipmeandroid.domain.snippet.GetSingleSnippetUseCase
 import pl.tkadziolka.snipmeandroid.domain.snippet.SaveSnippetUseCase
 import pl.tkadziolka.snipmeandroid.domain.snippets.Snippet
@@ -26,6 +27,7 @@ class DetailModel(
     private val getTargetReaction: GetTargetUserReactionUseCase,
     private val setUserReaction: SetUserReactionUseCase,
     private val saveSnippet: SaveSnippetUseCase,
+    private val shareSnippet: ShareSnippetCodeUseCase,
     private val session: SessionModel
 ) : ErrorParsable {
     private val disposables = CompositeDisposable()
@@ -92,6 +94,12 @@ class DetailModel(
                         parseError(error)
                     }
                 ).also { disposables += it }
+        }
+    }
+
+    fun share() {
+        getSnippet()?.let {
+            shareSnippet(it)
         }
     }
 

@@ -10,6 +10,7 @@ import pl.tkadziolka.snipmeandroid.domain.reaction.GetTargetUserReactionUseCase
 import pl.tkadziolka.snipmeandroid.domain.reaction.SetUserReactionUseCase
 import pl.tkadziolka.snipmeandroid.domain.share.ClearCachedShareUsersUseCase
 import pl.tkadziolka.snipmeandroid.domain.share.ShareInteractor
+import pl.tkadziolka.snipmeandroid.domain.share.ShareSnippetCodeUseCase
 import pl.tkadziolka.snipmeandroid.domain.share.ShareSnippetUseCase
 import pl.tkadziolka.snipmeandroid.domain.snippet.*
 import pl.tkadziolka.snipmeandroid.domain.snippets.GetSnippetsUseCase
@@ -45,6 +46,7 @@ internal val useCaseModule = module {
     factory { GetShareUsersUseCase(get(), get(), get(), get()) }
     factory { ClearCachedShareUsersUseCase(get()) }
     factory { ShareSnippetUseCase(get(), get(), get(), get()) }
+    factory { ShareSnippetCodeUseCase(get()) }
     // Clipboard
     single { AddToClipboardUseCase(get()) }
     factory { GetFromClipboardUseCase(get()) }

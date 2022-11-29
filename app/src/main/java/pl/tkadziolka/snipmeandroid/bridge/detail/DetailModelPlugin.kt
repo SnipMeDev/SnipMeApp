@@ -46,7 +46,7 @@ class DetailModelPlugin : ModelPlugin<Bridge.DetailModelBridge>(), Bridge.Detail
     }
 
     override fun share() {
-        TODO("Not yet implemented")
+        model.share()
     }
 
     private fun getData(viewState: DetailViewState): Bridge.DetailModelStateData {
