@@ -91,10 +91,9 @@ private fun UserReaction.toModelReactionState(reaction: UserReaction) =
 private fun calculateSavedState(
     isOwner: Boolean,
     visibility: SnippetVisibility
-): Boolean? = when {
-    isOwner && visibility == SnippetVisibility.PUBLIC -> false
-    isOwner && visibility == SnippetVisibility.PRIVATE -> true
-    else -> null
+): Boolean? {
+    if (isOwner.not()) return null
+    return visibility == SnippetVisibility.PRIVATE
 }
 
 private fun ForegroundColorSpan.toSyntaxToken(spannable: Spanned) =
