@@ -337,15 +337,21 @@ class MainModelEventData {
   MainModelEventData({
     this.event,
     this.message,
+    this.oldHash,
+    this.newHash,
   });
 
   MainModelEvent? event;
   String? message;
+  int? oldHash;
+  int? newHash;
 
   Object encode() {
     final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
     pigeonMap['event'] = event?.index;
     pigeonMap['message'] = message;
+    pigeonMap['oldHash'] = oldHash;
+    pigeonMap['newHash'] = newHash;
     return pigeonMap;
   }
 
@@ -356,6 +362,8 @@ class MainModelEventData {
           ? MainModelEvent.values[pigeonMap['event']! as int]
           : null,
       message: pigeonMap['message'] as String?,
+      oldHash: pigeonMap['oldHash'] as int?,
+      newHash: pigeonMap['newHash'] as int?,
     );
   }
 }

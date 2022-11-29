@@ -31,7 +31,6 @@ class DetailsScreen extends NamedScreen {
     return _DetailsPage(
       navigator: navigator,
       model: model,
-      snippetId: navigator.snippetId!,
     );
   }
 }
@@ -41,12 +40,10 @@ class _DetailsPage extends HookWidget {
     Key? key,
     required this.navigator,
     required this.model,
-    required this.snippetId,
   }) : super(key: key);
 
   final DetailsNavigator navigator;
   final DetailModelBridge model;
-  final String snippetId;
 
   @override
   Widget build(BuildContext context) {
@@ -64,23 +61,23 @@ class _DetailsPage extends HookWidget {
       (current, newState) => (current as DetailModelEventData).equals(newState),
     ).value;
 
-    useEffect(() {
-      model.load(snippetId);
-      return null;
-    }, []);
-
     if (event.event == DetailModelEvent.saved) {
       final snippetId = event.value;
       if (snippetId == null) {
-        model.resetEvent();
         navigator.back();
+        model.resetEvent();
         return const SizedBox();
       }
 
       navigator.back();
-      model.resetEvent();
       navigator.goToDetails(context, snippetId);
+      model.resetEvent();
     }
+
+    useEffect(() {
+      model.load(navigator.snippetId ?? '');
+      return null;
+    }, []);
 
     return Scaffold(
       backgroundColor: ColorStyles.surfacePrimary(),
@@ -98,8 +95,7 @@ class _DetailsPage extends HookWidget {
             : null,
       ),
       body: ViewStateWrapper<Snippet>(
-        isLoading:
-            state.state == ModelState.loading || state.is_loading == true,
+        isLoading: state.state == ModelState.loading || state.is_loading == true,
         error: state.error,
         data: state.data,
         builder: (_, snippet) => _DetailPageData(

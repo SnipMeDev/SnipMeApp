@@ -119,6 +119,8 @@ class MainModelStateData {
 class MainModelEventData {
   MainModelEvent? event;
   String? message;
+  int? oldHash;
+  int? newHash;
 }
 
 class DetailModelStateData {

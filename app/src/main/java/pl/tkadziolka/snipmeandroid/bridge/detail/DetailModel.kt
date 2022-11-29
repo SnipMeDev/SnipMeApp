@@ -85,6 +85,7 @@ class DetailModel(
                     onSuccess = { saved ->
                         setState(Loaded(it))
                         mutableEvent.value = Saved(saved.uuid)
+
                     },
                     onError = { error ->
                         Timber.e("Couldn't save snippet, error = $error")

@@ -705,6 +705,18 @@ public class Bridge {
       this.message = setterArg;
     }
 
+    private @Nullable Long oldHash;
+    public @Nullable Long getOldHash() { return oldHash; }
+    public void setOldHash(@Nullable Long setterArg) {
+      this.oldHash = setterArg;
+    }
+
+    private @Nullable Long newHash;
+    public @Nullable Long getNewHash() { return newHash; }
+    public void setNewHash(@Nullable Long setterArg) {
+      this.newHash = setterArg;
+    }
+
     public static final class Builder {
       private @Nullable MainModelEvent event;
       public @NonNull Builder setEvent(@Nullable MainModelEvent setterArg) {
@@ -716,10 +728,22 @@ public class Bridge {
         this.message = setterArg;
         return this;
       }
+      private @Nullable Long oldHash;
+      public @NonNull Builder setOldHash(@Nullable Long setterArg) {
+        this.oldHash = setterArg;
+        return this;
+      }
+      private @Nullable Long newHash;
+      public @NonNull Builder setNewHash(@Nullable Long setterArg) {
+        this.newHash = setterArg;
+        return this;
+      }
       public @NonNull MainModelEventData build() {
         MainModelEventData pigeonReturn = new MainModelEventData();
         pigeonReturn.setEvent(event);
         pigeonReturn.setMessage(message);
+        pigeonReturn.setOldHash(oldHash);
+        pigeonReturn.setNewHash(newHash);
         return pigeonReturn;
       }
     }
@@ -727,6 +751,8 @@ public class Bridge {
       Map<String, Object> toMapResult = new HashMap<>();
       toMapResult.put("event", event == null ? null : event.index);
       toMapResult.put("message", message);
+      toMapResult.put("oldHash", oldHash);
+      toMapResult.put("newHash", newHash);
       return toMapResult;
     }
     static @NonNull MainModelEventData fromMap(@NonNull Map<String, Object> map) {
@@ -735,6 +761,10 @@ public class Bridge {
       pigeonResult.setEvent(event == null ? null : MainModelEvent.values()[(int)event]);
       Object message = map.get("message");
       pigeonResult.setMessage((String)message);
+      Object oldHash = map.get("oldHash");
+      pigeonResult.setOldHash((oldHash == null) ? null : ((oldHash instanceof Integer) ? (Integer)oldHash : (Long)oldHash));
+      Object newHash = map.get("newHash");
+      pigeonResult.setNewHash((newHash == null) ? null : ((newHash instanceof Integer) ? (Integer)newHash : (Long)newHash));
       return pigeonResult;
     }
   }

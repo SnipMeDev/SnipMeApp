@@ -10,8 +10,9 @@ import pl.tkadziolka.snipmeandroid.ui.main.*
 import pl.tkadziolka.snipmeandroid.util.view.SnippetFilter
 
 class MainModelPlugin : ModelPlugin<Bridge.MainModelBridge>(), Bridge.MainModelBridge {
-
     private val model: MainModel by inject()
+    private var oldEvent: MainEvent? = null
+    private var oldState: MainViewState? = null
 
     override fun onSetup(
         messenger: BinaryMessenger,
@@ -20,7 +21,7 @@ class MainModelPlugin : ModelPlugin<Bridge.MainModelBridge>(), Bridge.MainModelB
         Bridge.MainModelBridge.setup(messenger, bridge)
     }
 
-    override fun getState(): Bridge.MainModelStateData = getData(model.state.value)
+    override fun getState(): Bridge.MainModelStateData = getState(model.state.value)
 
     override fun getEvent(): Bridge.MainModelEventData = getEvent(model.event.value)
 
@@ -46,15 +47,25 @@ class MainModelPlugin : ModelPlugin<Bridge.MainModelBridge>(), Bridge.MainModelB
         model.refreshSnippetUpdates()
     }
 
-    private fun getData(viewState: MainViewState) = Bridge.MainModelStateData().apply {
-        state = viewState.toModelState()
-        is_loading = viewState is Loading
-        data = (viewState as? Loaded)?.snippets?.toModelData()
+    private fun getState(viewState: MainViewState): Bridge.MainModelStateData {
+        oldState = viewState
+        return Bridge.MainModelStateData().apply {
+            state = viewState.toModelState()
+            is_loading = viewState is Loading
+            data = (viewState as? Loaded)?.snippets?.toModelData()
+            oldHash = oldState?.hashCode()?.toLong()
+            newHash = viewState.hashCode().toLong()
+        }
     }
 
-    private fun getEvent(viewEvent: MainEvent) = Bridge.MainModelEventData().apply {
-        event = viewEvent.toModelEvent()
-        message = (viewEvent as? Alert)?.message
+    private fun getEvent(viewEvent: MainEvent): Bridge.MainModelEventData {
+        oldEvent = viewEvent
+        return Bridge.MainModelEventData().apply {
+            event = viewEvent.toModelEvent()
+            message = (viewEvent as? Alert)?.message
+            oldHash = oldEvent?.hashCode()?.toLong()
+            newHash = viewEvent.hashCode().toLong()
+        }
     }
 
     private fun MainEvent.toModelEvent() =

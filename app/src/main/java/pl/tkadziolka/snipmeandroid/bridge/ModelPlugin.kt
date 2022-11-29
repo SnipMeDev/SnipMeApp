@@ -45,6 +45,7 @@ fun Snippet.toModelData(): Bridge.Snippet {
         userReaction = it.userReaction.toModelUserReaction()
         isLiked = it.userReaction.toModelReactionState(UserReaction.LIKE)
         isDisliked = it.userReaction.toModelReactionState(UserReaction.DISLIKE)
+        isPrivate = it.visibility == SnippetVisibility.PRIVATE
         isSaved = calculateSavedState(it.isOwner, it.visibility)
         timeAgo = DateUtils.getRelativeTimeSpanString(
             it.modifiedAt.time,

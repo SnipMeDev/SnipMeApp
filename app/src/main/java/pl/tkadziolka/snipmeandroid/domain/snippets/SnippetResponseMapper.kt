@@ -52,9 +52,8 @@ class SnippetResponseMapper {
         return getHighlighted(preview)
     }
 
-    private fun getVisibility(visibility: String?) =
-        if (visibility != null)
-            SnippetVisibility.valueOf(visibility)
-        else
-            SnippetVisibility.PRIVATE
+    private fun getVisibility(visibility: String?): SnippetVisibility {
+        if (visibility == null) return SnippetVisibility.PRIVATE
+        return SnippetVisibility.valueOf(visibility)
+    }
 }

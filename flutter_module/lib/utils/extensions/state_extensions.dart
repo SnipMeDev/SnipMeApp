@@ -3,9 +3,14 @@ import 'package:flutter_module/model/main_model.dart';
 extension MainModelStateDataExtension on MainModelStateData {
   bool equals(Object other) {
     if (other is! MainModelStateData) return false;
-    return state == other.state &&
-        is_loading == other.is_loading &&
-        error == other.error;
+    return other.oldHash != other.newHash;
+  }
+}
+
+extension MainModelEventDataExtension on MainModelEventData {
+  bool equals(Object other) {
+    if (other is! MainModelEventData) return false;
+    return other.oldHash != other.newHash;
   }
 }
 

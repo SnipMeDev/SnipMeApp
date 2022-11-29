@@ -6,6 +6,7 @@ import pl.tkadziolka.snipmeandroid.bridge.Bridge
 import pl.tkadziolka.snipmeandroid.bridge.ModelPlugin
 import pl.tkadziolka.snipmeandroid.bridge.toModelData
 import pl.tkadziolka.snipmeandroid.ui.detail.*
+import timber.log.Timber
 
 class DetailModelPlugin : ModelPlugin<Bridge.DetailModelBridge>(), Bridge.DetailModelBridge {
     private val model: DetailModel by inject()
