@@ -31,7 +31,6 @@ class DetailsScreen extends NamedScreen {
     return _DetailsPage(
       navigator: navigator,
       model: model,
-      snippetId: navigator.snippetId!,
     );
   }
 }
@@ -41,30 +40,45 @@ class _DetailsPage extends HookWidget {
     Key? key,
     required this.navigator,
     required this.model,
-    required this.snippetId,
   }) : super(key: key);
 
   final DetailsNavigator navigator;
   final DetailModelBridge model;
-  final String snippetId;
 
   @override
   Widget build(BuildContext context) {
     useNavigator([navigator]);
 
-    final stateChange = useObservableState(
+    final state = useObservableState(
       DetailModelStateData(),
       () => model.getState(),
       (current, newState) => (current as DetailModelStateData).equals(newState),
-    );
-    final state = stateChange.value;
+    ).value;
+
+    final event = useObservableState(
+      DetailModelEventData(),
+      () => model.getEvent(),
+      (current, newState) => (current as DetailModelEventData).equals(newState),
+    ).value;
+
+    if (event.event == DetailModelEvent.saved) {
+      final snippetId = event.value;
+      if (snippetId == null) {
+        navigator.back();
+        model.resetEvent();
+        return const SizedBox();
+      }
+
+      navigator.back();
+      navigator.goToDetails(context, snippetId);
+      model.resetEvent();
+    }
 
     useEffect(() {
-      model.load(snippetId);
+      model.load(navigator.snippetId ?? '');
       return null;
     }, []);
 
-    // TODO Add view state wrapper and show error for null snippet
     return Scaffold(
       backgroundColor: ColorStyles.surfacePrimary(),
       appBar: AppBar(
@@ -77,7 +91,7 @@ class _DetailsPage extends HookWidget {
           color: Colors.black,
         ),
         actions: state.data?.isPrivate == true
-            ? [const PaddingStyles.regular(Icon(Icons.visibility_off_outlined))]
+            ? [const PaddingStyles.regular(Icon(Icons.lock_outlined))]
             : null,
       ),
       body: ViewStateWrapper<Snippet>(

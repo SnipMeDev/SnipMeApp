@@ -112,7 +112,13 @@ class EditViewModel(
 
         getSnippetOnValid()?.let { snip ->
             setState(Loading)
-            createDisposable = interactor.update(uuid, snip.title, snip.code.raw, snip.language.raw)
+            createDisposable = interactor.update(
+                uuid,
+                snip.title,
+                snip.code.raw,
+                snip.language.raw,
+                snip.visibility
+            )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
@@ -225,6 +231,7 @@ data class Loaded(
     val snippet: Snippet?,
     val error: String?
 ) : EditViewState()
+
 data class Completed(val snippet: Snippet) : EditViewState()
 data class Error(val error: String?) : EditViewState()
 

@@ -6,6 +6,7 @@ import io.reactivex.subjects.BehaviorSubject
 import pl.tkadziolka.snipmeandroid.domain.reaction.UserReaction
 import pl.tkadziolka.snipmeandroid.domain.snippets.Snippet
 import pl.tkadziolka.snipmeandroid.domain.snippets.SnippetScope
+import pl.tkadziolka.snipmeandroid.domain.snippets.SnippetVisibility
 
 interface SnippetRepository {
 
@@ -15,9 +16,20 @@ interface SnippetRepository {
 
     fun snippet(id: String): Single<Snippet>
 
-    fun create(title: String, code: String, language: String): Single<Snippet>
+    fun create(
+        title: String,
+        code: String,
+        language: String,
+        visibility: SnippetVisibility
+    ): Single<Snippet>
 
-    fun update(uuid: String, title: String, code: String, language: String): Single<Snippet>
+    fun update(
+        uuid: String,
+        title: String,
+        code: String,
+        language: String,
+        visibility: SnippetVisibility
+    ): Single<Snippet>
 
     fun count(scope: SnippetScope): Single<Int>
 

@@ -13,6 +13,7 @@ import pl.tkadziolka.snipmeandroid.domain.reaction.GetTargetUserReactionUseCase
 import pl.tkadziolka.snipmeandroid.domain.reaction.SetUserReactionUseCase
 import pl.tkadziolka.snipmeandroid.domain.reaction.UserReaction
 import pl.tkadziolka.snipmeandroid.domain.snippet.GetSingleSnippetUseCase
+import pl.tkadziolka.snipmeandroid.domain.snippet.SaveSnippetUseCase
 import pl.tkadziolka.snipmeandroid.domain.snippets.Snippet
 import pl.tkadziolka.snipmeandroid.ui.detail.*
 import pl.tkadziolka.snipmeandroid.ui.error.ErrorParsable
@@ -24,6 +25,7 @@ class DetailModel(
     private val clipboard: AddToClipboardUseCase,
     private val getTargetReaction: GetTargetUserReactionUseCase,
     private val setUserReaction: SetUserReactionUseCase,
+    private val saveSnippet: SaveSnippetUseCase,
     private val session: SessionModel
 ) : ErrorParsable {
     private val disposables = CompositeDisposable()
@@ -71,6 +73,25 @@ class DetailModel(
     fun copyToClipboard() {
         getSnippet()?.let {
             clipboard(it.title, it.code.raw)
+        }
+    }
+
+    fun save() {
+        getSnippet()?.let {
+            setState(Loading)
+            saveSnippet(it)
+                .subscribeOn(Schedulers.io())
+                .subscribeBy(
+                    onSuccess = { saved ->
+                        setState(Loaded(it))
+                        mutableEvent.value = Saved(saved.uuid)
+
+                    },
+                    onError = { error ->
+                        Timber.e("Couldn't save snippet, error = $error")
+                        parseError(error)
+                    }
+                ).also { disposables += it }
         }
     }
 

@@ -48,6 +48,8 @@ internal val useCaseModule = module {
     // Clipboard
     single { AddToClipboardUseCase(get()) }
     factory { GetFromClipboardUseCase(get()) }
+    // Save
+    factory { SaveSnippetUseCase(get()) }
 }
 
 internal val interactorModule = module {

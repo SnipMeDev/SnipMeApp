@@ -93,7 +93,7 @@ class _MainPage extends HookWidget {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => detailsNavigator.goToDetails(context, Mocks.snippet.uuid!),
+        onPressed: () => model.loadNextPage(),
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ),

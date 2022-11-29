@@ -25,6 +25,7 @@ class StateIcon extends StatelessWidget {
         splashRadius: Dimens.xl,
         icon: Icon(icon),
         color: color,
+        disabledColor: color,
         onPressed: onTap,
       ),
     );

@@ -120,6 +120,16 @@ public class Bridge {
     }
   }
 
+  public enum DetailModelEvent {
+    NONE(0),
+    SAVED(1);
+
+    private int index;
+    private DetailModelEvent(final int index) {
+      this.index = index;
+    }
+  }
+
   /** Generated class from Pigeon that represents data sent in messages. */
   public static class Snippet {
     private @Nullable String uuid;
@@ -695,6 +705,18 @@ public class Bridge {
       this.message = setterArg;
     }
 
+    private @Nullable Long oldHash;
+    public @Nullable Long getOldHash() { return oldHash; }
+    public void setOldHash(@Nullable Long setterArg) {
+      this.oldHash = setterArg;
+    }
+
+    private @Nullable Long newHash;
+    public @Nullable Long getNewHash() { return newHash; }
+    public void setNewHash(@Nullable Long setterArg) {
+      this.newHash = setterArg;
+    }
+
     public static final class Builder {
       private @Nullable MainModelEvent event;
       public @NonNull Builder setEvent(@Nullable MainModelEvent setterArg) {
@@ -706,10 +728,22 @@ public class Bridge {
         this.message = setterArg;
         return this;
       }
+      private @Nullable Long oldHash;
+      public @NonNull Builder setOldHash(@Nullable Long setterArg) {
+        this.oldHash = setterArg;
+        return this;
+      }
+      private @Nullable Long newHash;
+      public @NonNull Builder setNewHash(@Nullable Long setterArg) {
+        this.newHash = setterArg;
+        return this;
+      }
       public @NonNull MainModelEventData build() {
         MainModelEventData pigeonReturn = new MainModelEventData();
         pigeonReturn.setEvent(event);
         pigeonReturn.setMessage(message);
+        pigeonReturn.setOldHash(oldHash);
+        pigeonReturn.setNewHash(newHash);
         return pigeonReturn;
       }
     }
@@ -717,6 +751,8 @@ public class Bridge {
       Map<String, Object> toMapResult = new HashMap<>();
       toMapResult.put("event", event == null ? null : event.index);
       toMapResult.put("message", message);
+      toMapResult.put("oldHash", oldHash);
+      toMapResult.put("newHash", newHash);
       return toMapResult;
     }
     static @NonNull MainModelEventData fromMap(@NonNull Map<String, Object> map) {
@@ -725,6 +761,10 @@ public class Bridge {
       pigeonResult.setEvent(event == null ? null : MainModelEvent.values()[(int)event]);
       Object message = map.get("message");
       pigeonResult.setMessage((String)message);
+      Object oldHash = map.get("oldHash");
+      pigeonResult.setOldHash((oldHash == null) ? null : ((oldHash instanceof Integer) ? (Integer)oldHash : (Long)oldHash));
+      Object newHash = map.get("newHash");
+      pigeonResult.setNewHash((newHash == null) ? null : ((newHash instanceof Integer) ? (Integer)newHash : (Long)newHash));
       return pigeonResult;
     }
   }
@@ -829,6 +869,84 @@ public class Bridge {
       pigeonResult.setData((data == null) ? null : Snippet.fromMap((Map)data));
       Object error = map.get("error");
       pigeonResult.setError((String)error);
+      Object oldHash = map.get("oldHash");
+      pigeonResult.setOldHash((oldHash == null) ? null : ((oldHash instanceof Integer) ? (Integer)oldHash : (Long)oldHash));
+      Object newHash = map.get("newHash");
+      pigeonResult.setNewHash((newHash == null) ? null : ((newHash instanceof Integer) ? (Integer)newHash : (Long)newHash));
+      return pigeonResult;
+    }
+  }
+
+  /** Generated class from Pigeon that represents data sent in messages. */
+  public static class DetailModelEventData {
+    private @Nullable DetailModelEvent event;
+    public @Nullable DetailModelEvent getEvent() { return event; }
+    public void setEvent(@Nullable DetailModelEvent setterArg) {
+      this.event = setterArg;
+    }
+
+    private @Nullable String value;
+    public @Nullable String getValue() { return value; }
+    public void setValue(@Nullable String setterArg) {
+      this.value = setterArg;
+    }
+
+    private @Nullable Long oldHash;
+    public @Nullable Long getOldHash() { return oldHash; }
+    public void setOldHash(@Nullable Long setterArg) {
+      this.oldHash = setterArg;
+    }
+
+    private @Nullable Long newHash;
+    public @Nullable Long getNewHash() { return newHash; }
+    public void setNewHash(@Nullable Long setterArg) {
+      this.newHash = setterArg;
+    }
+
+    public static final class Builder {
+      private @Nullable DetailModelEvent event;
+      public @NonNull Builder setEvent(@Nullable DetailModelEvent setterArg) {
+        this.event = setterArg;
+        return this;
+      }
+      private @Nullable String value;
+      public @NonNull Builder setValue(@Nullable String setterArg) {
+        this.value = setterArg;
+        return this;
+      }
+      private @Nullable Long oldHash;
+      public @NonNull Builder setOldHash(@Nullable Long setterArg) {
+        this.oldHash = setterArg;
+        return this;
+      }
+      private @Nullable Long newHash;
+      public @NonNull Builder setNewHash(@Nullable Long setterArg) {
+        this.newHash = setterArg;
+        return this;
+      }
+      public @NonNull DetailModelEventData build() {
+        DetailModelEventData pigeonReturn = new DetailModelEventData();
+        pigeonReturn.setEvent(event);
+        pigeonReturn.setValue(value);
+        pigeonReturn.setOldHash(oldHash);
+        pigeonReturn.setNewHash(newHash);
+        return pigeonReturn;
+      }
+    }
+    @NonNull Map<String, Object> toMap() {
+      Map<String, Object> toMapResult = new HashMap<>();
+      toMapResult.put("event", event == null ? null : event.index);
+      toMapResult.put("value", value);
+      toMapResult.put("oldHash", oldHash);
+      toMapResult.put("newHash", newHash);
+      return toMapResult;
+    }
+    static @NonNull DetailModelEventData fromMap(@NonNull Map<String, Object> map) {
+      DetailModelEventData pigeonResult = new DetailModelEventData();
+      Object event = map.get("event");
+      pigeonResult.setEvent(event == null ? null : DetailModelEvent.values()[(int)event]);
+      Object value = map.get("value");
+      pigeonResult.setValue((String)value);
       Object oldHash = map.get("oldHash");
       pigeonResult.setOldHash((oldHash == null) ? null : ((oldHash instanceof Integer) ? (Integer)oldHash : (Long)oldHash));
       Object newHash = map.get("newHash");
@@ -1079,21 +1197,24 @@ public class Bridge {
     protected Object readValueOfType(byte type, @NonNull ByteBuffer buffer) {
       switch (type) {
         case (byte)128:         
-          return DetailModelStateData.fromMap((Map<String, Object>) readValue(buffer));
+          return DetailModelEventData.fromMap((Map<String, Object>) readValue(buffer));
         
         case (byte)129:         
-          return Owner.fromMap((Map<String, Object>) readValue(buffer));
+          return DetailModelStateData.fromMap((Map<String, Object>) readValue(buffer));
         
         case (byte)130:         
-          return Snippet.fromMap((Map<String, Object>) readValue(buffer));
+          return Owner.fromMap((Map<String, Object>) readValue(buffer));
         
         case (byte)131:         
-          return SnippetCode.fromMap((Map<String, Object>) readValue(buffer));
+          return Snippet.fromMap((Map<String, Object>) readValue(buffer));
         
         case (byte)132:         
-          return SnippetLanguage.fromMap((Map<String, Object>) readValue(buffer));
+          return SnippetCode.fromMap((Map<String, Object>) readValue(buffer));
         
         case (byte)133:         
+          return SnippetLanguage.fromMap((Map<String, Object>) readValue(buffer));
+        
+        case (byte)134:         
           return SyntaxToken.fromMap((Map<String, Object>) readValue(buffer));
         
         default:        
@@ -1103,28 +1224,32 @@ public class Bridge {
     }
     @Override
     protected void writeValue(@NonNull ByteArrayOutputStream stream, Object value)     {
-      if (value instanceof DetailModelStateData) {
+      if (value instanceof DetailModelEventData) {
         stream.write(128);
+        writeValue(stream, ((DetailModelEventData) value).toMap());
+      } else 
+      if (value instanceof DetailModelStateData) {
+        stream.write(129);
         writeValue(stream, ((DetailModelStateData) value).toMap());
       } else 
       if (value instanceof Owner) {
-        stream.write(129);
+        stream.write(130);
         writeValue(stream, ((Owner) value).toMap());
       } else 
       if (value instanceof Snippet) {
-        stream.write(130);
+        stream.write(131);
         writeValue(stream, ((Snippet) value).toMap());
       } else 
       if (value instanceof SnippetCode) {
-        stream.write(131);
+        stream.write(132);
         writeValue(stream, ((SnippetCode) value).toMap());
       } else 
       if (value instanceof SnippetLanguage) {
-        stream.write(132);
+        stream.write(133);
         writeValue(stream, ((SnippetLanguage) value).toMap());
       } else 
       if (value instanceof SyntaxToken) {
-        stream.write(133);
+        stream.write(134);
         writeValue(stream, ((SyntaxToken) value).toMap());
       } else 
 {
@@ -1136,6 +1261,8 @@ public class Bridge {
   /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
   public interface DetailModelBridge {
     @NonNull DetailModelStateData getState();
+    @NonNull DetailModelEventData getEvent();
+    void resetEvent();
     void load(@NonNull String uuid);
     void like();
     void dislike();
@@ -1157,6 +1284,44 @@ public class Bridge {
             try {
               DetailModelStateData output = api.getState();
               wrapped.put("result", output);
+            }
+            catch (Error | RuntimeException exception) {
+              wrapped.put("error", wrapError(exception));
+            }
+            reply.reply(wrapped);
+          });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.DetailModelBridge.getEvent", getCodec());
+        if (api != null) {
+          channel.setMessageHandler((message, reply) -> {
+            Map<String, Object> wrapped = new HashMap<>();
+            try {
+              DetailModelEventData output = api.getEvent();
+              wrapped.put("result", output);
+            }
+            catch (Error | RuntimeException exception) {
+              wrapped.put("error", wrapError(exception));
+            }
+            reply.reply(wrapped);
+          });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.DetailModelBridge.resetEvent", getCodec());
+        if (api != null) {
+          channel.setMessageHandler((message, reply) -> {
+            Map<String, Object> wrapped = new HashMap<>();
+            try {
+              api.resetEvent();
+              wrapped.put("result", null);
             }
             catch (Error | RuntimeException exception) {
               wrapped.put("error", wrapError(exception));

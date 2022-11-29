@@ -45,6 +45,7 @@ fun Snippet.toModelData(): Bridge.Snippet {
         userReaction = it.userReaction.toModelUserReaction()
         isLiked = it.userReaction.toModelReactionState(UserReaction.LIKE)
         isDisliked = it.userReaction.toModelReactionState(UserReaction.DISLIKE)
+        isPrivate = it.visibility == SnippetVisibility.PRIVATE
         isSaved = calculateSavedState(it.isOwner, it.visibility)
         timeAgo = DateUtils.getRelativeTimeSpanString(
             it.modifiedAt.time,
@@ -90,10 +91,9 @@ private fun UserReaction.toModelReactionState(reaction: UserReaction) =
 private fun calculateSavedState(
     isOwner: Boolean,
     visibility: SnippetVisibility
-): Boolean? = when {
-    isOwner && visibility == SnippetVisibility.PUBLIC -> false
-    isOwner && visibility == SnippetVisibility.PRIVATE -> true
-    else -> null
+): Boolean? {
+    if (isOwner.not()) return null
+    return visibility == SnippetVisibility.PRIVATE
 }
 
 private fun ForegroundColorSpan.toSyntaxToken(spannable: Spanned) =

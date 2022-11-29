@@ -54,6 +54,7 @@ class MainModel(
     }
 
     fun initState() {
+        mutableState.value = (Loading)
         getUser()
             .subscribeOn(Schedulers.io())
             .subscribeBy(
@@ -113,12 +114,12 @@ class MainModel(
         pages: Int = 1,
         scope: SnippetScope = SnippetScope.ALL
     ) {
-        mutableState.value = (Loading)
         getSnippets(scope, pages)
             .subscribeOn(Schedulers.io())
             .subscribeBy(
                 onSuccess = {
                     mutableState.value = (Loaded(user, it, pages, scope))
+                    loadNextPage()
                     if (shouldRefresh) {
                         mutableEvent.value = ListRefreshed
                         shouldRefresh = false
