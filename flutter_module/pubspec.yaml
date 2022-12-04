@@ -55,9 +55,15 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
+    - assets/images/illustrations/app_logo.png
     - assets/images/icons/reaction_undefined.png
     - assets/images/icons/reaction_like.png
     - assets/images/icons/reaction_dislike.png
+  fonts:
+    - family: Kanit
+      fonts:
+        - asset: fonts/Kanit-Regular.ttf
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
