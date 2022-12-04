@@ -36,9 +36,9 @@ class TextInputField extends HookWidget {
       decoration: InputDecoration(
         labelText: label,
         floatingLabelStyle: TextStyle(color: ColorStyles.accent()),
-        border: OutlineInputBorder(
+        enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(
-            color: ColorStyles.pageBackground(),
+            color: Colors.grey,
             width: Dimens.inputBorderWidth,
           ),
         ),
