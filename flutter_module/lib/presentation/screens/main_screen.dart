@@ -11,7 +11,6 @@ import 'package:flutter_module/presentation/widgets/view_state_wrapper.dart';
 import 'package:flutter_module/utils/extensions/state_extensions.dart';
 import 'package:flutter_module/utils/hooks/use_navigator.dart';
 import 'package:flutter_module/utils/hooks/use_observable_state_hook.dart';
-import 'package:flutter_module/utils/mock/mocks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:go_router/src/state.dart';
 import 'package:go_router_plus/go_router_plus.dart';
@@ -52,25 +51,33 @@ class _MainPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    useNavigator([loginNavigator, detailsNavigator]);
     final state = useObservableState(
       MainModelStateData(),
       () => model.getState(),
       (current, newState) => (current as MainModelStateData).equals(newState),
-    );
-
-    final data = state.value;
+    ).value;
 
     // Event
-    final event = useState(MainModelEventData());
+    final event = useObservableState(
+      MainModelEventData(),
+      () => model.getEvent(),
+      (current, newState) => (current as MainModelEventData).equals(newState),
+    ).value;
 
-    useNavigator([loginNavigator, detailsNavigator]);
     useEffect(() {
       model.initState();
     }, []);
 
-    if (event.value.event == MainModelEvent.logout) {
+    if (event.event == MainModelEvent.logout) {
       loginNavigator.logout();
     }
+
+    print("State old hash = ${state.oldHash}");
+    print("State new hash = ${state.newHash}");
+
+    print("Event old hash = ${event.oldHash}");
+    print("Event new hash = ${event.newHash}");
 
     return Scaffold(
       appBar: AppBar(
@@ -82,9 +89,9 @@ class _MainPage extends HookWidget {
       ),
       backgroundColor: ColorStyles.pageBackground(),
       body: ViewStateWrapper<List<Snippet>>(
-        isLoading: data.state == ModelState.loading || data.is_loading == true,
-        error: data.error,
-        data: data.data?.cast(),
+        isLoading: state.state == ModelState.loading || state.is_loading == true,
+        error: state.error,
+        data: state.data?.cast(),
         builder: (_, snippets) {
           return _MainPageData(
             navigator: detailsNavigator,

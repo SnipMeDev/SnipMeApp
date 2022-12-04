@@ -48,23 +48,25 @@ class MainModelPlugin : ModelPlugin<Bridge.MainModelBridge>(), Bridge.MainModelB
     }
 
     private fun getState(viewState: MainViewState): Bridge.MainModelStateData {
-        oldState = viewState
         return Bridge.MainModelStateData().apply {
             state = viewState.toModelState()
             is_loading = viewState is Loading
             data = (viewState as? Loaded)?.snippets?.toModelData()
             oldHash = oldState?.hashCode()?.toLong()
             newHash = viewState.hashCode().toLong()
+        }.also {
+            oldState = viewState
         }
     }
 
     private fun getEvent(viewEvent: MainEvent): Bridge.MainModelEventData {
-        oldEvent = viewEvent
         return Bridge.MainModelEventData().apply {
             event = viewEvent.toModelEvent()
             message = (viewEvent as? Alert)?.message
             oldHash = oldEvent?.hashCode()?.toLong()
             newHash = viewEvent.hashCode().toLong()
+        }.also {
+            oldEvent = viewEvent
         }
     }
 
