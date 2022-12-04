@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_module/presentation/navigation/login/login_navigator.dart';
 import 'package:flutter_module/presentation/screens/named_screen.dart';
+import 'package:flutter_module/presentation/styles/padding_styles.dart';
+import 'package:flutter_module/presentation/widgets/login_input_card.dart';
 import 'package:flutter_module/utils/hooks/use_navigator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:go_router_plus/go_router_plus.dart';
@@ -27,6 +29,9 @@ class _MainPage extends HookWidget {
   Widget build(BuildContext context) {
     useNavigator([navigator]);
 
+    final login = useState("");
+    final password = useState("");
+
     return Scaffold(
       body: Center(
         child: Column(
@@ -34,6 +39,12 @@ class _MainPage extends HookWidget {
           children: [
             // TODO Extract strings
             Text(LoginScreen.name),
+            PaddingStyles.regular(
+              LoginInputCard(
+                onLoginChanged: (value) => login.value = value,
+                onPasswordChanged: (value) => password.value = value,
+              ),
+            ),
             MaterialButton(
               child: const Text("Navigate to login"),
               onPressed: navigator.login,
