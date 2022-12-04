@@ -54,7 +54,8 @@ extension SyntaxSpanExtension on List<SyntaxToken?>? {
     final tokenIndices =
         uniqueTokens.expand((token) => [token.start, token.end]).toList();
 
-    final phrases = text.splitByIndices(tokenIndices);
+    final phrases =
+        tokenIndices.isNotEmpty ? text.splitByIndices(tokenIndices) : [text];
 
     return phrases.map((phrase) {
       TextStyle style = baseStyle;
