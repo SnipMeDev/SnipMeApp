@@ -41,4 +41,23 @@ class SurfaceStyles {
       ),
     );
   }
+
+  static Widget roundedFloatingCard({
+    required Widget child,
+    GestureTapCallback? onTap,
+  }) {
+    return Card(
+      color: ColorStyles.surfacePrimary(),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(
+          Dimens.xxl * 2,
+        ),
+      ),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(Dimens.xxl * 2),
+        child: child,
+      ),
+    );
+  }
 }

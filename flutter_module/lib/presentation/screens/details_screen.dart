@@ -7,6 +7,7 @@ import 'package:flutter_module/presentation/styles/color_styles.dart';
 import 'package:flutter_module/presentation/styles/dimens.dart';
 import 'package:flutter_module/presentation/styles/padding_styles.dart';
 import 'package:flutter_module/presentation/widgets/code_text_view.dart';
+import 'package:flutter_module/presentation/widgets/no_overscroll_single_child_scroll_view.dart';
 import 'package:flutter_module/presentation/widgets/snippet_action_bar.dart';
 import 'package:flutter_module/presentation/widgets/snippet_details_bar.dart';
 import 'package:flutter_module/presentation/widgets/view_state_wrapper.dart';
@@ -95,7 +96,8 @@ class _DetailsPage extends HookWidget {
             : null,
       ),
       body: ViewStateWrapper<Snippet>(
-        isLoading: state.state == ModelState.loading || state.is_loading == true,
+        isLoading:
+            state.state == ModelState.loading || state.is_loading == true,
         error: state.error,
         data: state.data,
         builder: (_, snippet) => _DetailPageData(
@@ -128,18 +130,11 @@ class _DetailPageData extends StatelessWidget {
         Expanded(
           child: ColoredBox(
             color: ColorStyles.codeBackground(),
-            child: NotificationListener<OverscrollIndicatorNotification>(
-              onNotification: (overScroll) {
-                overScroll.disallowIndicator();
-                return true;
-              },
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(Dimens.l),
-                physics: const ClampingScrollPhysics(),
-                child: CodeTextView(
-                  code: snippet!.code!.raw!,
-                  tokens: snippet!.code?.tokens,
-                ),
+            child: NoOverscrollSingleChildScrollView(
+              padding: const EdgeInsets.all(Dimens.l),
+              child: CodeTextView(
+                code: snippet!.code!.raw!,
+                tokens: snippet!.code?.tokens,
               ),
             ),
           ),

@@ -21,11 +21,11 @@ class TextStyles extends Text {
           ),
         );
 
-  const TextStyles.regular(this.text, {Key? key})
+  TextStyles.regular(this.text, {Key? key, Color? color})
       : super(
           text,
           key: key,
-          style: const TextStyle(),
+          style: TextStyle(color: color),
         );
 
   const TextStyles.secondary(this.text, {Key? key})
