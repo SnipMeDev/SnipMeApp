@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_module/model/main_model.dart';
 import 'package:flutter_module/presentation/styles/text_styles.dart';
 import 'package:flutter_module/utils/extensions/collection_extensions.dart';
@@ -42,32 +43,35 @@ class CodeTextView extends StatelessWidget {
   final GestureTapCallback? onTap;
 
   const CodeTextView.preview({
-    Key? key,
+    super.key,
     required this.code,
     this.tokens,
     this.options,
     this.onTap,
-  })  : maxLines = 5,
-        super(key: key);
+  }) : maxLines = 5;
 
   @override
   Widget build(BuildContext context) {
     final maxLinesOrAll = maxLines ?? splitter.convert(code).length;
 
-    return SelectableText.rich(
-      TextSpan(
-        children: tokens.toSpans(
-          code.lines(maxLinesOrAll),
-          TextStyles.code(code).style!,
-        ),
+    return FutureBuilder(
+      initialData: const <TextSpan>[],
+      future: tokens.toSpans(
+        code.lines(maxLinesOrAll),
+        TextStyles.code(code).style!,
       ),
-      minLines: 1,
-      maxLines: maxLinesOrAll,
-      onTap: onTap,
-      toolbarOptions: options?.toolbarOptions,
-      showCursor: options?.showCursor ?? false,
-      enableInteractiveSelection: false,
-      scrollPhysics: const NeverScrollableScrollPhysics(),
+      builder: (_, value) {
+        return SelectableText.rich(
+          TextSpan(children: value.requireData),
+          minLines: 1,
+          maxLines: maxLinesOrAll,
+          onTap: () {},
+          toolbarOptions: options?.toolbarOptions,
+          showCursor: options?.showCursor ?? false,
+          enableInteractiveSelection: false,
+          scrollPhysics: const NeverScrollableScrollPhysics(),
+        );
+      },
     );
   }
 }

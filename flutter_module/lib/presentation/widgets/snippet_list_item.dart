@@ -44,7 +44,8 @@ class SnippetListTile extends HookWidget {
                   horizontal: Dimens.l,
                 ),
                 child: Expanded(
-                  child: CodeTextView.preview(
+                  child:
+                  CodeTextView.preview(
                     code: snippet.code?.raw ?? "",
                     tokens: snippet.code?.tokens,
                   ),

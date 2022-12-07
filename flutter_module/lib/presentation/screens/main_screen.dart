@@ -73,12 +73,6 @@ class _MainPage extends HookWidget {
       loginNavigator.logout();
     }
 
-    print("State old hash = ${state.oldHash}");
-    print("State new hash = ${state.newHash}");
-
-    print("Event old hash = ${event.oldHash}");
-    print("Event new hash = ${event.newHash}");
-
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
