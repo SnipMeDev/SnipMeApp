@@ -7,48 +7,48 @@ void main() {
   const style = TextStyle(color: Colors.black);
 
   group('toSpans', () {
-    test('Returns list with single span for null or empty collection', () {
+    test('Returns list with single span for null or empty collection', () async {
       // null
       List<SyntaxToken?>? nullList = null;
-      expect(nullList.toSpans("", style).length, 1);
+      expect((await nullList.toSpans("", style)).length, 1);
       // empty
       List<SyntaxToken?>? emptyList = List.empty();
-      expect(emptyList.toSpans("", style).length, 1);
+      expect((await emptyList.toSpans("", style)).length, 1);
     });
 
-    test('Returns spans for whole phrase', () {
+    test('Returns spans for whole phrase', () async {
       const code = "class Abcd { }";
       List<SyntaxToken?>? tokens = [SyntaxToken(start: 0, end: 4, color: 0)];
 
-      final result = tokens.toSpans(code, style);
+      final result = await tokens.toSpans(code, style);
 
       expect(result.length, 2);
     });
 
-    test('Returns base span for non syntax phrases', () {
+    test('Returns base span for non syntax phrases', () async {
       const code = "class Abcd { }";
       List<SyntaxToken?>? tokens = [SyntaxToken(start: 0, end: 4, color: 0)];
 
-      final result = tokens.toSpans(code, style);
+      final result = await tokens.toSpans(code, style);
 
       expect(result.length, 2);
       expect(result.last.style!.color!.value, style.color!.value);
     });
 
-    test('Returns syntax spans for syntax phrases', () {
+    test('Returns syntax spans for syntax phrases', () async {
       const code = "class Abcd { }";
       List<SyntaxToken?>? tokens = [
         null,
         SyntaxToken(start: 0, end: 4, color: Colors.red.value)
       ];
 
-      final result = tokens.toSpans(code, style);
+      final result = await tokens.toSpans(code, style);
 
       expect(result.length, 2);
       expect(result.first.style!.color!.value, Colors.red.value);
     });
 
-    test('Larger syntax span overlaps smaller', () {
+    test('Larger syntax span overlaps smaller', () async {
       const code = "Code = 'class Abcd { }'";
 
       List<SyntaxToken?>? tokens = [
@@ -56,7 +56,7 @@ void main() {
         SyntaxToken(start: 7, end: 23, color: Colors.green.value),
       ];
 
-      final result = tokens.toSpans(code, style);
+      final result = await tokens.toSpans(code, style);
 
       print(result);
 

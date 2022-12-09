@@ -50,23 +50,25 @@ class DetailModelPlugin : ModelPlugin<Bridge.DetailModelBridge>(), Bridge.Detail
     }
 
     private fun getData(viewState: DetailViewState): Bridge.DetailModelStateData {
-        oldState = viewState
         return Bridge.DetailModelStateData().apply {
             state = viewState.toModelState()
             is_loading = viewState is Loading
             data = (viewState as? Loaded)?.snippet?.toModelData()
             oldHash = oldState?.hashCode()?.toLong()
             newHash = viewState.hashCode().toLong()
+        }.also {
+            oldState = viewState
         }
     }
 
     private fun getEvent(detailEvent: DetailEvent): Bridge.DetailModelEventData {
-        oldEvent = detailEvent
         return Bridge.DetailModelEventData().apply {
             event = detailEvent.toModelEvent()
             value = (detailEvent as? Saved)?.snippetId
             oldHash = oldEvent?.hashCode()?.toLong()
             newHash = detailEvent.hashCode().toLong()
+        }.also {
+            oldEvent = detailEvent
         }
     }
 
