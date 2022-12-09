@@ -10,30 +10,35 @@ class RoundedActionButton extends StatelessWidget {
     Key? key,
     required this.icon,
     required this.title,
-    required this.onPressed,
+    this.enabled = true,
+    this.onPressed,
   }) : super(key: key);
 
   final IconData icon;
   final String title;
-  final GestureTapCallback onPressed;
+  final bool enabled;
+  final GestureTapCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
     return SurfaceStyles.roundedFloatingCard(
-      onTap: onPressed,
+      onTap: enabled ? () => onPressed?.call() : null,
       child: PaddingStyles.small(
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const SizedBox(width: Dimens.m),
-            Icon(icon, color: ColorStyles.accent()),
-            const SizedBox(width: Dimens.m),
-            TextStyles.regular(
-              title.toUpperCase(),
-              color: ColorStyles.accent(),
-            ),
-            const SizedBox(width: Dimens.m),
-          ],
+        Opacity(
+          opacity: enabled ? 1.0 : 0.3,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(width: Dimens.m),
+              Icon(icon, color: ColorStyles.accent()),
+              const SizedBox(width: Dimens.m),
+              TextStyles.regular(
+                title.toUpperCase(),
+                color: ColorStyles.accent(),
+              ),
+              const SizedBox(width: Dimens.m),
+            ],
+          ),
         ),
       ),
     );

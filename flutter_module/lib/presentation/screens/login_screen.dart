@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_module/generated/assets.dart';
@@ -26,7 +28,10 @@ class LoginScreen extends NamedScreen implements InitialScreen, GuestScreen {
 }
 
 class _MainPage extends HookWidget {
-  const _MainPage({Key? key, required this.navigator}) : super(key: key);
+  const _MainPage({
+    Key? key,
+    required this.navigator,
+  }) : super(key: key);
 
   final LoginNavigator navigator;
 
@@ -34,8 +39,12 @@ class _MainPage extends HookWidget {
   Widget build(BuildContext context) {
     useNavigator([navigator]);
 
-    final login = useState("");
-    final password = useState("");
+    // TODO Debug why useState not rebuilds view
+    final stream = useMemoized(() => StreamController(), []);
+    useStream(stream.stream);
+
+    final login = useState('');
+    final password = useState('');
 
     return Scaffold(
       body: SafeArea(
@@ -53,14 +62,22 @@ class _MainPage extends HookWidget {
                   const TextStyles.secondary('Snip your favorite code'),
                   PaddingStyles.regular(
                     LoginInputCard(
-                      onLoginChanged: (value) => login.value = value,
-                      onPasswordChanged: (value) => password.value = value,
+                      onLoginChanged: (loginValue) {
+                        login.value = loginValue;
+                        stream.add(loginValue);
+                      },
+                      onPasswordChanged: (passwordValue) {
+                        password.value = passwordValue;
+                        stream.add(passwordValue);
+                      },
                     ),
                   ),
                   Center(
                     child: RoundedActionButton(
                       icon: Icons.check_circle,
                       title: 'Login',
+                      enabled:
+                          login.value.isNotEmpty && password.value.isNotEmpty,
                       onPressed: navigator.login,
                     ),
                   ),
