@@ -43,8 +43,9 @@ class _MainPage extends HookWidget {
     final stream = useMemoized(() => StreamController(), []);
     useStream(stream.stream);
 
-    final login = useState('');
+    final email = useState('');
     final password = useState('');
+    final validationCorrect = useState(false);
 
     return Scaffold(
       body: SafeArea(
@@ -62,13 +63,16 @@ class _MainPage extends HookWidget {
                   const TextStyles.secondary('Snip your favorite code'),
                   PaddingStyles.regular(
                     LoginInputCard(
-                      onLoginChanged: (loginValue) {
-                        login.value = loginValue;
-                        stream.add(loginValue);
+                      onEmailChanged: (emailValue) {
+                        email.value = emailValue;
+                        stream.add(emailValue);
                       },
                       onPasswordChanged: (passwordValue) {
                         password.value = passwordValue;
                         stream.add(passwordValue);
+                      },
+                      onValidChanged: (isValid) {
+                        validationCorrect.value = isValid;
                       },
                     ),
                   ),
@@ -76,8 +80,9 @@ class _MainPage extends HookWidget {
                     child: RoundedActionButton(
                       icon: Icons.check_circle,
                       title: 'Login',
-                      enabled:
-                          login.value.isNotEmpty && password.value.isNotEmpty,
+                      enabled: validationCorrect.value &&
+                          email.value.isNotEmpty &&
+                          password.value.isNotEmpty,
                       onPressed: navigator.login,
                     ),
                   ),

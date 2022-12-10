@@ -107,6 +107,8 @@ enum MainModelEvent { none, alert, logout }
 
 enum DetailModelEvent { none, saved }
 
+enum LoginModelEvent { none, logged }
+
 class MainModelStateData {
   ModelState? state;
   bool? is_loading;
@@ -134,6 +136,13 @@ class DetailModelStateData {
 
 class DetailModelEventData {
   DetailModelEvent? event;
+  String? value;
+  int? oldHash;
+  int? newHash;
+}
+
+class LoginModelEventData {
+  LoginModelEvent? event;
   String? value;
   int? oldHash;
   int? newHash;
@@ -182,4 +191,11 @@ abstract class DetailModelBridge {
   void copyToClipboard();
 
   void share();
+}
+
+@HostApi()
+abstract class LoginModelBridge {
+  LoginModelEventData getEvent();
+
+  void loginOrRegister(String email, String password);
 }
