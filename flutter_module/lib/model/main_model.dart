@@ -453,6 +453,41 @@ class DetailModelEventData {
   }
 }
 
+class LoginModelStateData {
+  LoginModelStateData({
+    this.state,
+    this.is_loading,
+    this.oldHash,
+    this.newHash,
+  });
+
+  ModelState? state;
+  bool? is_loading;
+  int? oldHash;
+  int? newHash;
+
+  Object encode() {
+    final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
+    pigeonMap['state'] = state?.index;
+    pigeonMap['is_loading'] = is_loading;
+    pigeonMap['oldHash'] = oldHash;
+    pigeonMap['newHash'] = newHash;
+    return pigeonMap;
+  }
+
+  static LoginModelStateData decode(Object message) {
+    final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
+    return LoginModelStateData(
+      state: pigeonMap['state'] != null
+          ? ModelState.values[pigeonMap['state']! as int]
+          : null,
+      is_loading: pigeonMap['is_loading'] as bool?,
+      oldHash: pigeonMap['oldHash'] as int?,
+      newHash: pigeonMap['newHash'] as int?,
+    );
+  }
+}
+
 class LoginModelEventData {
   LoginModelEventData({
     this.event,
@@ -618,6 +653,28 @@ class MainModelBridge {
       );
     } else {
       return (replyMap['result'] as MainModelEventData?)!;
+    }
+  }
+
+  Future<void> resetEvent() async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.MainModelBridge.resetEvent', codec, binaryMessenger: _binaryMessenger);
+    final Map<Object?, Object?>? replyMap =
+        await channel.send(null) as Map<Object?, Object?>?;
+    if (replyMap == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyMap['error'] != null) {
+      final Map<Object?, Object?> error = (replyMap['error'] as Map<Object?, Object?>?)!;
+      throw PlatformException(
+        code: (error['code'] as String?)!,
+        message: error['message'] as String?,
+        details: error['details'],
+      );
+    } else {
+      return;
     }
   }
 
@@ -1025,6 +1082,10 @@ class _LoginModelBridgeCodec extends StandardMessageCodec{
       buffer.putUint8(128);
       writeValue(buffer, value.encode());
     } else 
+    if (value is LoginModelStateData) {
+      buffer.putUint8(129);
+      writeValue(buffer, value.encode());
+    } else 
 {
       super.writeValue(buffer, value);
     }
@@ -1034,6 +1095,9 @@ class _LoginModelBridgeCodec extends StandardMessageCodec{
     switch (type) {
       case 128:       
         return LoginModelEventData.decode(readValue(buffer)!);
+      
+      case 129:       
+        return LoginModelStateData.decode(readValue(buffer)!);
       
       default:      
         return super.readValueOfType(type, buffer);
@@ -1050,6 +1114,33 @@ class LoginModelBridge {
   final BinaryMessenger? _binaryMessenger;
 
   static const MessageCodec<Object?> codec = _LoginModelBridgeCodec();
+
+  Future<LoginModelStateData> getState() async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.LoginModelBridge.getState', codec, binaryMessenger: _binaryMessenger);
+    final Map<Object?, Object?>? replyMap =
+        await channel.send(null) as Map<Object?, Object?>?;
+    if (replyMap == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyMap['error'] != null) {
+      final Map<Object?, Object?> error = (replyMap['error'] as Map<Object?, Object?>?)!;
+      throw PlatformException(
+        code: (error['code'] as String?)!,
+        message: error['message'] as String?,
+        details: error['details'],
+      );
+    } else if (replyMap['result'] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (replyMap['result'] as LoginModelStateData?)!;
+    }
+  }
 
   Future<LoginModelEventData> getEvent() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
@@ -1083,6 +1174,28 @@ class LoginModelBridge {
         'dev.flutter.pigeon.LoginModelBridge.loginOrRegister', codec, binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
         await channel.send(<Object?>[arg_email, arg_password]) as Map<Object?, Object?>?;
+    if (replyMap == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyMap['error'] != null) {
+      final Map<Object?, Object?> error = (replyMap['error'] as Map<Object?, Object?>?)!;
+      throw PlatformException(
+        code: (error['code'] as String?)!,
+        message: error['message'] as String?,
+        details: error['details'],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<void> checkLoginState() async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.LoginModelBridge.checkLoginState', codec, binaryMessenger: _binaryMessenger);
+    final Map<Object?, Object?>? replyMap =
+        await channel.send(null) as Map<Object?, Object?>?;
     if (replyMap == null) {
       throw PlatformException(
         code: 'channel-error',

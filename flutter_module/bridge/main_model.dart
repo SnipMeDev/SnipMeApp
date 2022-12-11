@@ -141,6 +141,13 @@ class DetailModelEventData {
   int? newHash;
 }
 
+class LoginModelStateData {
+  ModelState? state;
+  bool? is_loading;
+  int? oldHash;
+  int? newHash;
+}
+
 class LoginModelEventData {
   LoginModelEvent? event;
   int? oldHash;
@@ -154,6 +161,8 @@ abstract class MainModelBridge {
   MainModelStateData getState();
 
   MainModelEventData getEvent();
+
+  void resetEvent();
 
   @TaskQueue(type: TaskQueueType.serialBackgroundThread)
   void initState();
@@ -194,9 +203,13 @@ abstract class DetailModelBridge {
 
 @HostApi()
 abstract class LoginModelBridge {
+  LoginModelStateData getState();
+
   LoginModelEventData getEvent();
 
   void loginOrRegister(String email, String password);
+
+  void checkLoginState();
 
   void resetEvent();
 }
