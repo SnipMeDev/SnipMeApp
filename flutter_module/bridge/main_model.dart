@@ -143,7 +143,6 @@ class DetailModelEventData {
 
 class LoginModelEventData {
   LoginModelEvent? event;
-  String? value;
   int? oldHash;
   int? newHash;
 }
@@ -198,4 +197,6 @@ abstract class LoginModelBridge {
   LoginModelEventData getEvent();
 
   void loginOrRegister(String email, String password);
+
+  void resetEvent();
 }

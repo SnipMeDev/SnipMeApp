@@ -9,6 +9,7 @@ import io.flutter.embedding.engine.dart.DartExecutor
 import pl.tkadziolka.snipmeandroid.bridge.main.MainModelPlugin
 import pl.tkadziolka.snipmeandroid.R
 import pl.tkadziolka.snipmeandroid.bridge.detail.DetailModelPlugin
+import pl.tkadziolka.snipmeandroid.bridge.login.LoginModelPlugin
 
 class MainActivity : AppCompatActivity() {
     private lateinit var flutterEngine : FlutterEngine
@@ -27,6 +28,7 @@ class MainActivity : AppCompatActivity() {
             DartExecutor.DartEntrypoint.createDefault()
         )
 
+        flutterEngine.plugins.add(LoginModelPlugin())
         flutterEngine.plugins.add(MainModelPlugin())
         flutterEngine.plugins.add(DetailModelPlugin())
 

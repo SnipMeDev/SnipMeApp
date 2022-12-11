@@ -13,6 +13,7 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
 
+  final loginModel = LoginModelBridge();
   final mainModel = MainModelBridge();
   final detailModel = DetailModelBridge();
 
@@ -22,7 +23,10 @@ class MyApp extends StatelessWidget {
     final detailsNavigator = DetailsNavigator();
     final router = createGoRouter(
       screens: [
-        LoginScreen(loginNavigator),
+        LoginScreen(
+          navigator: loginNavigator,
+          model: loginModel,
+        ),
         MainScreen(
           loginNavigator: loginNavigator,
           detailsNavigator: detailsNavigator,

@@ -130,6 +130,16 @@ public class Bridge {
     }
   }
 
+  public enum LoginModelEvent {
+    NONE(0),
+    LOGGED(1);
+
+    private int index;
+    private LoginModelEvent(final int index) {
+      this.index = index;
+    }
+  }
+
   /** Generated class from Pigeon that represents data sent in messages. */
   public static class Snippet {
     private @Nullable String uuid;
@@ -954,6 +964,69 @@ public class Bridge {
       return pigeonResult;
     }
   }
+
+  /** Generated class from Pigeon that represents data sent in messages. */
+  public static class LoginModelEventData {
+    private @Nullable LoginModelEvent event;
+    public @Nullable LoginModelEvent getEvent() { return event; }
+    public void setEvent(@Nullable LoginModelEvent setterArg) {
+      this.event = setterArg;
+    }
+
+    private @Nullable Long oldHash;
+    public @Nullable Long getOldHash() { return oldHash; }
+    public void setOldHash(@Nullable Long setterArg) {
+      this.oldHash = setterArg;
+    }
+
+    private @Nullable Long newHash;
+    public @Nullable Long getNewHash() { return newHash; }
+    public void setNewHash(@Nullable Long setterArg) {
+      this.newHash = setterArg;
+    }
+
+    public static final class Builder {
+      private @Nullable LoginModelEvent event;
+      public @NonNull Builder setEvent(@Nullable LoginModelEvent setterArg) {
+        this.event = setterArg;
+        return this;
+      }
+      private @Nullable Long oldHash;
+      public @NonNull Builder setOldHash(@Nullable Long setterArg) {
+        this.oldHash = setterArg;
+        return this;
+      }
+      private @Nullable Long newHash;
+      public @NonNull Builder setNewHash(@Nullable Long setterArg) {
+        this.newHash = setterArg;
+        return this;
+      }
+      public @NonNull LoginModelEventData build() {
+        LoginModelEventData pigeonReturn = new LoginModelEventData();
+        pigeonReturn.setEvent(event);
+        pigeonReturn.setOldHash(oldHash);
+        pigeonReturn.setNewHash(newHash);
+        return pigeonReturn;
+      }
+    }
+    @NonNull Map<String, Object> toMap() {
+      Map<String, Object> toMapResult = new HashMap<>();
+      toMapResult.put("event", event == null ? null : event.index);
+      toMapResult.put("oldHash", oldHash);
+      toMapResult.put("newHash", newHash);
+      return toMapResult;
+    }
+    static @NonNull LoginModelEventData fromMap(@NonNull Map<String, Object> map) {
+      LoginModelEventData pigeonResult = new LoginModelEventData();
+      Object event = map.get("event");
+      pigeonResult.setEvent(event == null ? null : LoginModelEvent.values()[(int)event]);
+      Object oldHash = map.get("oldHash");
+      pigeonResult.setOldHash((oldHash == null) ? null : ((oldHash instanceof Integer) ? (Integer)oldHash : (Long)oldHash));
+      Object newHash = map.get("newHash");
+      pigeonResult.setNewHash((newHash == null) ? null : ((newHash instanceof Integer) ? (Integer)newHash : (Long)newHash));
+      return pigeonResult;
+    }
+  }
   private static class MainModelBridgeCodec extends StandardMessageCodec {
     public static final MainModelBridgeCodec INSTANCE = new MainModelBridgeCodec();
     private MainModelBridgeCodec() {}
@@ -1441,6 +1514,112 @@ public class Bridge {
             Map<String, Object> wrapped = new HashMap<>();
             try {
               api.share();
+              wrapped.put("result", null);
+            }
+            catch (Error | RuntimeException exception) {
+              wrapped.put("error", wrapError(exception));
+            }
+            reply.reply(wrapped);
+          });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+    }
+  }
+  private static class LoginModelBridgeCodec extends StandardMessageCodec {
+    public static final LoginModelBridgeCodec INSTANCE = new LoginModelBridgeCodec();
+    private LoginModelBridgeCodec() {}
+    @Override
+    protected Object readValueOfType(byte type, @NonNull ByteBuffer buffer) {
+      switch (type) {
+        case (byte)128:         
+          return LoginModelEventData.fromMap((Map<String, Object>) readValue(buffer));
+        
+        default:        
+          return super.readValueOfType(type, buffer);
+        
+      }
+    }
+    @Override
+    protected void writeValue(@NonNull ByteArrayOutputStream stream, Object value)     {
+      if (value instanceof LoginModelEventData) {
+        stream.write(128);
+        writeValue(stream, ((LoginModelEventData) value).toMap());
+      } else 
+{
+        super.writeValue(stream, value);
+      }
+    }
+  }
+
+  /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
+  public interface LoginModelBridge {
+    @NonNull LoginModelEventData getEvent();
+    void loginOrRegister(@NonNull String email, @NonNull String password);
+    void resetEvent();
+
+    /** The codec used by LoginModelBridge. */
+    static MessageCodec<Object> getCodec() {
+      return       LoginModelBridgeCodec.INSTANCE;    }
+    /**Sets up an instance of `LoginModelBridge` to handle messages through the `binaryMessenger`. */
+    static void setup(BinaryMessenger binaryMessenger, LoginModelBridge api) {
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.LoginModelBridge.getEvent", getCodec());
+        if (api != null) {
+          channel.setMessageHandler((message, reply) -> {
+            Map<String, Object> wrapped = new HashMap<>();
+            try {
+              LoginModelEventData output = api.getEvent();
+              wrapped.put("result", output);
+            }
+            catch (Error | RuntimeException exception) {
+              wrapped.put("error", wrapError(exception));
+            }
+            reply.reply(wrapped);
+          });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.LoginModelBridge.loginOrRegister", getCodec());
+        if (api != null) {
+          channel.setMessageHandler((message, reply) -> {
+            Map<String, Object> wrapped = new HashMap<>();
+            try {
+              ArrayList<Object> args = (ArrayList<Object>)message;
+              assert args != null;
+              String emailArg = (String)args.get(0);
+              if (emailArg == null) {
+                throw new NullPointerException("emailArg unexpectedly null.");
+              }
+              String passwordArg = (String)args.get(1);
+              if (passwordArg == null) {
+                throw new NullPointerException("passwordArg unexpectedly null.");
+              }
+              api.loginOrRegister(emailArg, passwordArg);
+              wrapped.put("result", null);
+            }
+            catch (Error | RuntimeException exception) {
+              wrapped.put("error", wrapError(exception));
+            }
+            reply.reply(wrapped);
+          });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.LoginModelBridge.resetEvent", getCodec());
+        if (api != null) {
+          channel.setMessageHandler((message, reply) -> {
+            Map<String, Object> wrapped = new HashMap<>();
+            try {
+              api.resetEvent();
               wrapped.put("result", null);
             }
             catch (Error | RuntimeException exception) {

@@ -42,11 +42,11 @@ class LoginViewModel(
         when (throwable) {
             is ConnectionException -> setEvent(Error(errorMessages.parse(throwable)))
             is ContentNotFoundException -> setEvent(Error(errorMessages.parse(throwable)))
-            is ForbiddenActionException -> setEvent(Dialog(errorMessages.alreadyRegistered))
+            is ForbiddenActionException -> setEvent(Error(errorMessages.alreadyRegistered))
             is NetworkNotAvailableException -> setEvent(Error(errorMessages.parse(throwable)))
-            is NotAuthorizedException -> setEvent(Alert(errorMessages.parse(throwable)))
+            is NotAuthorizedException -> setEvent(Error(errorMessages.parse(throwable)))
             is RemoteException -> setEvent(Error(errorMessages.parse(throwable)))
-            is SessionExpiredException -> setEvent(Alert(errorMessages.parse(throwable)))
+            is SessionExpiredException -> setEvent(Error(errorMessages.parse(throwable)))
             else -> setEvent(Error(errorMessages.parse(throwable)))
         }
     }
@@ -216,6 +216,6 @@ data class Completed(
 ) : LoginViewState()
 
 sealed class LoginEvent
+object Idle : LoginEvent()
+object Logged : LoginEvent()
 data class Error(val message: String?) : LoginEvent()
-data class Alert(val message: String) : LoginEvent()
-data class Dialog(val message: String) : LoginEvent()
