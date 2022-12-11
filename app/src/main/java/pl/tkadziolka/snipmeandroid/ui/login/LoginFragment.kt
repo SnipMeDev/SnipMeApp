@@ -57,9 +57,7 @@ class LoginFragment : ViewModelFragment<LoginViewModel>(LoginViewModel::class) {
             viewModel.event.observeNotNull(this) { event ->
                 hideLoading()
                 when (event) {
-                    is Alert -> showToast(event.message)
                     is Error -> viewModel.goToError(findNavController(), event.message)
-                    is Dialog -> showDialog(event.message)
                 }
             }
         }

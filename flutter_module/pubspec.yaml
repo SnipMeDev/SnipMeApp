@@ -28,6 +28,7 @@ dependencies:
   test: ^1.21.4
   go_router: ^5.1.5
   go_router_plus: ^2.0.0
+  validators: ^3.0.0
 
 dev_dependencies:
   flutter_test:

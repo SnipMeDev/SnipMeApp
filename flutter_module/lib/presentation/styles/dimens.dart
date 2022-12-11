@@ -5,5 +5,5 @@ class Dimens {
   static const xl = 24.0;
   static const xxl = 32.0;
 
-  static const inputBorderWidth = 0.5;
+  static const inputBorderWidth = 1.0;
 }
