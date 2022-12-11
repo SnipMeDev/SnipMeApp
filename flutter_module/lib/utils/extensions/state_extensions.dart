@@ -28,6 +28,13 @@ extension DetailModelEventDataExtension on DetailModelEventData {
   }
 }
 
+extension LoginModelStateDataExtension on LoginModelStateData {
+  bool equals(Object other) {
+    if (other is! LoginModelStateData) return false;
+    return other.oldHash == other.newHash;
+  }
+}
+
 extension LoginModelEventDataExtension on LoginModelEventData {
   bool equals(Object other) {
     if (other is! LoginModelEventData) return false;

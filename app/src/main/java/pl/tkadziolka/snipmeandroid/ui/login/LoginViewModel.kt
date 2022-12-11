@@ -30,7 +30,7 @@ class LoginViewModel(
     private val messages: ValidationMessages,
     private val interactor: LoginInteractor,
     private val navigator: LoginNavigator
-) : StateViewModel<LoginViewState>(), ErrorParsable {
+) : StateViewModel<LoginState>(), ErrorParsable {
     private var identifyDisposable: Disposable? = null
     private var loginDisposable: Disposable? = null
     private var registerDisposable: Disposable? = null
@@ -185,19 +185,20 @@ class LoginViewModel(
     }
 }
 
-sealed class LoginViewState
-object Loading : LoginViewState()
+sealed class LoginState
+object Loading : LoginState()
+object Loaded : LoginState()
 
 data class Startup(
     val login: String,
     val error: String?
-) : LoginViewState()
+) : LoginState()
 
 data class Login(
     val login: String,
     val password: String,
     val error: String?
-) : LoginViewState()
+) : LoginState()
 
 data class Register(
     val login: String,
@@ -205,15 +206,15 @@ data class Register(
     val repeatedPassword: String,
     val email: String,
     val error: String?
-) : LoginViewState()
+) : LoginState()
 
 data class UserFound(
     val login: String
-) : LoginViewState()
+) : LoginState()
 
 data class Completed(
     val login: String
-) : LoginViewState()
+) : LoginState()
 
 sealed class LoginEvent
 object Idle : LoginEvent()

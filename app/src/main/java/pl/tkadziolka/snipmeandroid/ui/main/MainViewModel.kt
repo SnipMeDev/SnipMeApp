@@ -195,6 +195,7 @@ data class Loaded(
     val pages: Int,
     val scope: SnippetScope
 ) : MainViewState()
+
 data class Error(val message: String?) : MainViewState()
 
 sealed class MainEvent

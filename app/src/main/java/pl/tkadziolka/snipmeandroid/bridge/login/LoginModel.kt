@@ -6,22 +6,29 @@ import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.flow.MutableStateFlow
+import pl.tkadziolka.snipmeandroid.domain.auth.InitialLoginUseCase
 import pl.tkadziolka.snipmeandroid.domain.auth.LoginInteractor
 import pl.tkadziolka.snipmeandroid.domain.error.exception.*
 import pl.tkadziolka.snipmeandroid.domain.message.ErrorMessages
 import pl.tkadziolka.snipmeandroid.ui.error.ErrorParsable
 import pl.tkadziolka.snipmeandroid.ui.login.*
+import pl.tkadziolka.snipmeandroid.ui.splash.NotAuthorized
 import pl.tkadziolka.snipmeandroid.util.extension.inProgress
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
 class LoginModel(
     private val errorMessages: ErrorMessages,
     private val interactor: LoginInteractor,
-): ErrorParsable {
+    private val initialLogin: InitialLoginUseCase,
+) : ErrorParsable {
     private val disposables = CompositeDisposable()
     private var identifyDisposable: Disposable? = null
     private var loginDisposable: Disposable? = null
     private var registerDisposable: Disposable? = null
+
+    private val mutableState = MutableStateFlow<LoginState>(Loading)
+    val state = mutableState
 
     private val mutableEvent = MutableStateFlow<LoginEvent>(Idle)
     val event = mutableEvent
@@ -39,8 +46,25 @@ class LoginModel(
         }
     }
 
+    fun init() {
+        initialLogin()
+            .delay(3, TimeUnit.SECONDS)
+            .subscribeOn(Schedulers.io())
+            .doOnEvent { setState(Loaded) }
+            .subscribeBy(
+                onComplete = { setEvent(Logged) },
+                onError = {
+                    if (it !is NotAuthorizedException) {
+                        Timber.e("Couldn't get token or user, error = $it")
+                    }
+                }
+            ).also { disposables += it }
+    }
+
     fun loginOrRegister(email: String, password: String) {
         if (identifyDisposable.inProgress()) return
+
+        setState(Loading)
 
         identifyDisposable = interactor.identify(email)
             .subscribeOn(Schedulers.io())
@@ -58,6 +82,7 @@ class LoginModel(
 
         loginDisposable = interactor.login(email, password)
             .subscribeOn(Schedulers.io())
+            .doOnEvent { setState(Loaded) }
             .subscribeBy(
                 onComplete = { setEvent(Logged) },
                 onError = {
@@ -72,6 +97,7 @@ class LoginModel(
 
         registerDisposable = interactor.register(email, password, email)
             .subscribeOn(Schedulers.io())
+            .doOnEvent { setState(Loaded) }
             .subscribeBy(
                 onComplete = { setEvent(Logged) },
                 onError = {
@@ -91,5 +117,9 @@ class LoginModel(
 
     private fun setEvent(event: LoginEvent) {
         mutableEvent.value = event
+    }
+
+    private fun setState(state: LoginState) {
+        mutableState.value = state
     }
 }

@@ -69,15 +69,18 @@ class _MainPage extends HookWidget {
       model.initState();
     }, []);
 
-    if (event.event == MainModelEvent.logout) {
-      loginNavigator.logout();
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (event.event == MainModelEvent.logout) {
+        model.resetEvent();
+        loginNavigator.logout();
+      }
+    });
 
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.logout),
-          onPressed: loginNavigator.logout,
+          onPressed: model.logOut,
         ),
         title: const Text("SnipMe"),
       ),

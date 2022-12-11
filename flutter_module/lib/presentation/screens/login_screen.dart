@@ -12,6 +12,7 @@ import 'package:flutter_module/presentation/styles/text_styles.dart';
 import 'package:flutter_module/presentation/widgets/login_input_card.dart';
 import 'package:flutter_module/presentation/widgets/no_overscroll_single_child_scroll_view.dart';
 import 'package:flutter_module/presentation/widgets/rounded_action_button.dart';
+import 'package:flutter_module/presentation/widgets/view_state_wrapper.dart';
 import 'package:flutter_module/utils/extensions/state_extensions.dart';
 import 'package:flutter_module/utils/hooks/use_navigator.dart';
 import 'package:flutter_module/utils/hooks/use_observable_state_hook.dart';
@@ -59,11 +60,21 @@ class _MainPage extends HookWidget {
     final password = useState('');
     final validationCorrect = useState(false);
 
+    final state = useObservableState(
+      LoginModelStateData(),
+      () => model.getState(),
+      (current, newState) => (current as LoginModelStateData).equals(newState),
+    ).value;
+
     final event = useObservableState(
       LoginModelEventData(),
       () => model.getEvent(),
       (current, newState) => (current as LoginModelEventData).equals(newState),
     ).value;
+
+    useEffect(() {
+      model.checkLoginState();
+    }, []);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (event.event == LoginModelEvent.logged) {
@@ -74,50 +85,54 @@ class _MainPage extends HookWidget {
 
     return Scaffold(
       body: SafeArea(
-        child: NoOverscrollSingleChildScrollView(
-          child: Expanded(
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const SizedBox(height: Dimens.xxl),
-                  TextStyles.appLogo('SnipMe'),
-                  const SizedBox(height: Dimens.xxl),
-                  Image.asset(Assets.appLogo),
-                  const SizedBox(height: Dimens.xxl),
-                  const TextStyles.secondary('Snip your favorite code'),
-                  PaddingStyles.regular(
-                    LoginInputCard(
-                      onEmailChanged: (emailValue) {
-                        email.value = emailValue;
-                        stream.add(emailValue);
-                      },
-                      onPasswordChanged: (passwordValue) {
-                        password.value = passwordValue;
-                        stream.add(passwordValue);
-                      },
-                      onValidChanged: (isValid) {
-                        validationCorrect.value = isValid;
-                      },
+        child: ViewStateWrapper(
+          isLoading: state.state == ModelState.loading,
+          data: state.state,
+          builder: (BuildContext context, _) {
+            return NoOverscrollSingleChildScrollView(
+              child: Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: Dimens.xxl),
+                    TextStyles.appLogo('SnipMe'),
+                    const SizedBox(height: Dimens.xxl),
+                    Image.asset(Assets.appLogo),
+                    const SizedBox(height: Dimens.xxl),
+                    const TextStyles.secondary('Snip your favorite code'),
+                    PaddingStyles.regular(
+                      LoginInputCard(
+                        onEmailChanged: (emailValue) {
+                          email.value = emailValue;
+                          stream.add(emailValue);
+                        },
+                        onPasswordChanged: (passwordValue) {
+                          password.value = passwordValue;
+                          stream.add(passwordValue);
+                        },
+                        onValidChanged: (isValid) {
+                          validationCorrect.value = isValid;
+                        },
+                      ),
                     ),
-                  ),
-                  Center(
-                    child: RoundedActionButton(
-                      icon: Icons.check_circle,
-                      title: 'Login',
-                      enabled: validationCorrect.value &&
-                          email.value.isNotEmpty &&
-                          password.value.isNotEmpty,
-                      onPressed: () {
-                        model.loginOrRegister(email.value, password.value);
-                      },
+                    Center(
+                      child: RoundedActionButton(
+                        icon: Icons.check_circle,
+                        title: 'Login',
+                        enabled: validationCorrect.value &&
+                            email.value.isNotEmpty &&
+                            password.value.isNotEmpty,
+                        onPressed: () {
+                          model.loginOrRegister(email.value, password.value);
+                        },
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: Dimens.xxl),
-                ],
+                    const SizedBox(height: Dimens.xxl),
+                  ],
+                ),
               ),
-            ),
-          ),
+            );
+          },
         ),
       ),
     );

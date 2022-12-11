@@ -25,6 +25,10 @@ class MainModelPlugin : ModelPlugin<Bridge.MainModelBridge>(), Bridge.MainModelB
 
     override fun getEvent(): Bridge.MainModelEventData = getEvent(model.event.value)
 
+    override fun resetEvent() {
+        model.event.value = Startup
+    }
+
     override fun initState() {
         model.initState()
     }
