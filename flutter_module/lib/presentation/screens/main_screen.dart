@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_module/generated/assets.dart';
 import 'package:flutter_module/model/main_model.dart';
 import 'package:flutter_module/presentation/navigation/details/details_navigator.dart';
 import 'package:flutter_module/presentation/navigation/login/login_navigator.dart';
@@ -99,7 +100,10 @@ class _MainPage extends HookWidget {
         onPressed: () => model.loadNextPage(),
         tooltip: 'Scroll to top',
         backgroundColor: ColorStyles.surfacePrimary(),
-        child: const Icon(Icons.arrow_upward_outlined, color: Colors.black,),
+        child: const Icon(
+          Icons.arrow_upward_outlined,
+          color: Colors.black,
+        ),
       ),
     );
   }
@@ -124,8 +128,13 @@ class _MainPageData extends HookWidget {
       headerSliverBuilder: (_, __) {
         return [
           SliverAppBar(
+            elevation: 0.0,
             centerTitle: true,
-            title: TextStyles.appBarLogo('SnipMe'),
+            title: Row(mainAxisSize: MainAxisSize.min, children: [
+              Image.asset(Assets.appLogo, width: 18.0),
+              const SizedBox(width: Dimens.m),
+              TextStyles.appBarLogo('SnipMe'),
+            ]),
             backgroundColor: ColorStyles.surfacePrimary(),
             leading: IconButton(
               icon: const Icon(Icons.logout),
@@ -145,10 +154,12 @@ class _MainPageData extends HookWidget {
           SliverAppBar(
               floating: true,
               expandedHeight: 120,
-              shape: RoundedRectangleBorder(
+              elevation: Dimens.m,
+              backgroundColor: ColorStyles.surfacePrimary(),
+              shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(Dimens.m),
-                  bottomRight: Radius.circular(Dimens.m),
+                  bottomLeft: Radius.circular(Dimens.l),
+                  bottomRight: Radius.circular(Dimens.l),
                 ),
               ),
               flexibleSpace: FlexibleSpaceBar(
@@ -156,7 +167,7 @@ class _MainPageData extends HookWidget {
                 background: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Row(children: [Text("Language")]),
+                    Row(children: [const Text("Language")]),
                     SizedBox(
                       height: 64,
                       child: FilterListView(
@@ -170,7 +181,9 @@ class _MainPageData extends HookWidget {
         ];
       },
       body: CustomScrollView(
-        // scrollBehavior: const ConstantScrollBehavior(),
+        scrollBehavior: const ScrollBehavior(
+          androidOverscrollIndicator: AndroidOverscrollIndicator.stretch,
+        ),
         slivers: [
           SliverList(
             delegate: SliverChildListDelegate([
@@ -197,61 +210,3 @@ class _MainPageData extends HookWidget {
     );
   }
 }
-
-class MySliverPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
-  final Widget child;
-
-  MySliverPersistentHeaderDelegate({required this.child});
-
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    print("Offset: $shrinkOffset");
-
-    return OverflowBox(
-      maxWidth: double.infinity,
-      alignment: Alignment.center,
-      maxHeight: 150 - shrinkOffset,
-      child: FittedBox(
-        fit: BoxFit.cover,
-        alignment: Alignment.center,
-        child: Container(color: Colors.red, child: child),
-      ),
-    );
-  }
-
-  @override
-  double get maxExtent => 150.0;
-
-  @override
-  double get minExtent => 50.0;
-
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
-    return true;
-  }
-}
-
-class MyRenderSliverFloatingPersistentHeader
-    extends RenderSliverFloatingPinnedPersistentHeader {
-  MyRenderSliverFloatingPersistentHeader({
-    required super.child,
-  });
-
-  @override
-  double get maxExtent => 250.0;
-
-  @override
-  double get minExtent => 100.0;
-}
-
-// Column(
-// children: [
-// Text("Language"),
-// FilterListView(
-// filters: ['a', 'b'],
-// selected: ['a'],
-// ),
-// Text("Language"),
-// ],
-// ),
