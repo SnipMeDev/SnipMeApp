@@ -8,6 +8,7 @@ import 'package:flutter_module/presentation/navigation/login/login_navigator.dar
 import 'package:flutter_module/presentation/screens/named_screen.dart';
 import 'package:flutter_module/presentation/styles/color_styles.dart';
 import 'package:flutter_module/presentation/styles/dimens.dart';
+import 'package:flutter_module/presentation/styles/text_styles.dart';
 import 'package:flutter_module/presentation/widgets/filter_list_view.dart';
 import 'package:flutter_module/presentation/widgets/snippet_list_item.dart';
 import 'package:flutter_module/presentation/widgets/view_state_wrapper.dart';
@@ -80,13 +81,6 @@ class _MainPage extends HookWidget {
     });
 
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.logout),
-          onPressed: model.logOut,
-        ),
-        title: const Text("SnipMe"),
-      ),
       backgroundColor: ColorStyles.pageBackground(),
       body: ViewStateWrapper<List<Snippet>>(
         isLoading:
@@ -96,14 +90,16 @@ class _MainPage extends HookWidget {
         builder: (_, snippets) {
           return _MainPageData(
             navigator: detailsNavigator,
+            model: model,
             snippets: snippets ?? List.empty(),
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.small(
         onPressed: () => model.loadNextPage(),
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+        tooltip: 'Scroll to top',
+        backgroundColor: ColorStyles.surfacePrimary(),
+        child: const Icon(Icons.arrow_upward_outlined, color: Colors.black,),
       ),
     );
   }
@@ -113,10 +109,12 @@ class _MainPageData extends HookWidget {
   const _MainPageData({
     Key? key,
     required this.navigator,
+    required this.model,
     required this.snippets,
   }) : super(key: key);
 
   final DetailsNavigator navigator;
+  final MainModelBridge model;
   final List<Snippet> snippets;
 
   @override
@@ -126,23 +124,46 @@ class _MainPageData extends HookWidget {
       headerSliverBuilder: (_, __) {
         return [
           SliverAppBar(
+            centerTitle: true,
+            title: TextStyles.appBarLogo('SnipMe'),
+            backgroundColor: ColorStyles.surfacePrimary(),
+            leading: IconButton(
+              icon: const Icon(Icons.logout),
+              color: Colors.black,
+              onPressed: model.logOut,
+            ),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.close_fullscreen_outlined),
+                color: Colors.black,
+                onPressed: () {
+                  // TODO Handle collapse items
+                },
+              ),
+            ],
+          ),
+          SliverAppBar(
               floating: true,
               expandedHeight: 120,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(Dimens.m),
+                  bottomRight: Radius.circular(Dimens.m),
+                ),
+              ),
               flexibleSpace: FlexibleSpaceBar(
                 collapseMode: CollapseMode.parallax,
                 background: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Row(children: [Text("Language")]),
-                    // FilterListView(
-                    //   filters: ['a', 'b'],
-                    //   selected: ['a'],
-                    // ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [Text("Language2")],
+                    SizedBox(
+                      height: 64,
+                      child: FilterListView(
+                        filters: ['a', 'b' * 200],
+                        selected: ['a'],
+                      ),
                     ),
-                    Text("Languag3"),
                   ],
                 ),
               ))

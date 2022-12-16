@@ -65,8 +65,19 @@ class TextStyles extends Text {
           key: key,
           style: TextStyle(
             fontFamily: 'Kanit',
-            fontSize: 24,
+            fontSize: 24.0,
             color: ColorStyles.accent(),
           ),
         );
+
+  TextStyles.appBarLogo(this.text, {Key? key})
+      : super(
+    text,
+    key: key,
+    style: const TextStyle(
+      fontFamily: 'Kanit',
+      fontSize: 18.0,
+      color: Colors.black,
+    ),
+  );
 }
