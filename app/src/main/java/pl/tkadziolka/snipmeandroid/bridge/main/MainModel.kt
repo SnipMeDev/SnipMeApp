@@ -7,12 +7,14 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.flow.MutableStateFlow
 import pl.tkadziolka.snipmeandroid.bridge.session.SessionModel
 import pl.tkadziolka.snipmeandroid.domain.error.exception.*
+import pl.tkadziolka.snipmeandroid.domain.filter.FilterSnippetsByLanguageUseCase
+import pl.tkadziolka.snipmeandroid.domain.filter.GetLanguageFiltersUseCase
+import pl.tkadziolka.snipmeandroid.domain.filter.SNIPPET_LANGUAGE_FILTER_ALL
+import pl.tkadziolka.snipmeandroid.domain.filter.UpdateSnippetFiltersLanguageUseCase
 import pl.tkadziolka.snipmeandroid.domain.message.ErrorMessages
 import pl.tkadziolka.snipmeandroid.domain.snippet.ObserveUpdatedSnippetPageUseCase
 import pl.tkadziolka.snipmeandroid.domain.snippet.ResetUpdatedSnippetPageUseCase
-import pl.tkadziolka.snipmeandroid.domain.snippets.GetSnippetsUseCase
-import pl.tkadziolka.snipmeandroid.domain.snippets.HasMoreSnippetPagesUseCase
-import pl.tkadziolka.snipmeandroid.domain.snippets.SnippetScope
+import pl.tkadziolka.snipmeandroid.domain.snippets.*
 import pl.tkadziolka.snipmeandroid.domain.user.GetSingleUserUseCase
 import pl.tkadziolka.snipmeandroid.domain.user.User
 import pl.tkadziolka.snipmeandroid.ui.error.ErrorParsable
@@ -29,10 +31,12 @@ class MainModel(
     private val observeUpdatedPage: ObserveUpdatedSnippetPageUseCase,
     private val resetUpdatedPage: ResetUpdatedSnippetPageUseCase,
     private val hasMore: HasMoreSnippetPagesUseCase,
+    private val getLanguageFilters: GetLanguageFiltersUseCase,
+    private val filterSnippetsByLanguage: FilterSnippetsByLanguageUseCase,
+    private val updateFilterLanguage: UpdateSnippetFiltersLanguageUseCase,
     private val session: SessionModel
 ) : ErrorParsable {
     private val disposables = CompositeDisposable()
-    private var shouldRefresh = false
 
     private val mutableEvent = MutableStateFlow<MainEvent>(Startup)
     val event = mutableEvent
@@ -40,12 +44,23 @@ class MainModel(
     private val mutableState = MutableStateFlow<MainViewState>(Loading)
     val state = mutableState
 
+    private var cachedSnippets = emptyList<Snippet>()
+    private var shouldRefresh = false
+    private var filterState = SnippetFilters(
+        languages = listOf(SNIPPET_LANGUAGE_FILTER_ALL),
+        selectedLanguages = listOf(SNIPPET_LANGUAGE_FILTER_ALL),
+        scope = SnippetScope.ALL
+    )
+
     override fun parseError(throwable: Throwable) {
         when (throwable) {
             is ConnectionException -> mutableState.value = Error(errorMessages.parse(throwable))
-            is ContentNotFoundException -> mutableState.value = Error(errorMessages.parse(throwable))
-            is ForbiddenActionException -> mutableState.value = Error(errorMessages.parse(throwable))
-            is NetworkNotAvailableException -> mutableState.value = Error(errorMessages.parse(throwable))
+            is ContentNotFoundException -> mutableState.value =
+                Error(errorMessages.parse(throwable))
+            is ForbiddenActionException -> mutableState.value =
+                Error(errorMessages.parse(throwable))
+            is NetworkNotAvailableException -> mutableState.value =
+                Error(errorMessages.parse(throwable))
             is NotAuthorizedException -> session.logOut { mutableEvent.value = Logout }
             is RemoteException -> mutableState.value = Error(errorMessages.parse(throwable))
             is SessionExpiredException -> session.logOut { mutableEvent.value = Logout }
@@ -54,7 +69,7 @@ class MainModel(
     }
 
     fun initState() {
-        mutableState.value = (Loading)
+        mutableState.value = Loading
         getUser()
             .subscribeOn(Schedulers.io())
             .subscribeBy(
@@ -66,23 +81,15 @@ class MainModel(
             ).also { disposables += it }
     }
 
-    fun loadNextPage() {
-        getLoadedState()?.let { state ->
-            hasMore(state.scope, state.pages)
-                .subscribeOn(Schedulers.io())
-                .subscribeBy(
-                    onSuccess = { hasMore ->
-                        if (hasMore) loadSnippets(state.user, pages = state.pages + ONE_PAGE)
-                    },
-                    onError = {
-                        Timber.e("Couldn't check next page, error = $it")
-                        mutableEvent.value = Alert(errorMessages.parse(it))
-                    })
-                .also { disposables += it }
+    fun filterLanguage(language: String, isSelected: Boolean) {
+        getLoadedState()?.let {
+            filterState = updateFilterLanguage(filterState, language, isSelected)
+            val filteredSnippets = filterSnippetsByLanguage(cachedSnippets, filterState.selectedLanguages)
+            state.value = it.copy(snippets = filteredSnippets, filters = filterState)
         }
     }
 
-    fun filter(filter: SnippetFilter) {
+    fun filterScope(filter: SnippetFilter) {
         val scope = filterToScope(filter)
         getLoadedState()?.let { state ->
             loadSnippets(state.user, pages = ONE_PAGE, scope = scope)
@@ -109,6 +116,24 @@ class MainModel(
         }
     }
 
+    private fun loadNextPage() {
+        getLoadedState()?.let { state ->
+            hasMore(state.filters.scope, state.pages)
+                .subscribeOn(Schedulers.io())
+                .subscribeBy(
+                    onSuccess = { hasMore ->
+                        if (hasMore) {
+                            loadSnippets(state.user, pages = state.pages + ONE_PAGE)
+                        }
+                    },
+                    onError = {
+                        Timber.e("Couldn't check next page, error = $it")
+                        mutableEvent.value = Alert(errorMessages.parse(it))
+                    })
+                .also { disposables += it }
+        }
+    }
+
     private fun loadSnippets(
         user: User,
         pages: Int = 1,
@@ -118,7 +143,15 @@ class MainModel(
             .subscribeOn(Schedulers.io())
             .subscribeBy(
                 onSuccess = {
-                    mutableState.value = (Loaded(user, it, pages, scope))
+                    cachedSnippets = it
+                    val updatedFilters = getLanguageFilters(cachedSnippets)
+                    filterState = filterState.copy(languages = updatedFilters)
+                    mutableState.value = Loaded(
+                        user,
+                        it,
+                        pages,
+                        filterState
+                    )
                     loadNextPage()
                     if (shouldRefresh) {
                         mutableEvent.value = ListRefreshed
@@ -143,7 +176,7 @@ class MainModel(
 
     private fun getScope(): SnippetScope {
         getLoadedState()?.let {
-            return it.scope
+            return it.filters.scope
         }
         return SnippetScope.ALL
     }

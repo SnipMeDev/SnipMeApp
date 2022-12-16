@@ -4,20 +4,21 @@
 package pl.tkadziolka.snipmeandroid.bridge;
 
 import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import java.io.ByteArrayOutputStream;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import io.flutter.plugin.common.BasicMessageChannel;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MessageCodec;
 import io.flutter.plugin.common.StandardMessageCodec;
-import java.io.ByteArrayOutputStream;
-import java.nio.ByteBuffer;
-import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
 
 /**Generated class from Pigeon. */
 @SuppressWarnings({"unused", "unchecked", "CodeBlock2Expr", "RedundantSuppression"})
@@ -562,33 +563,48 @@ public class Bridge {
 
   /** Generated class from Pigeon that represents data sent in messages. */
   public static class SnippetFilter {
-    private @Nullable SnippetFilterType type;
-    public @Nullable SnippetFilterType getType() { return type; }
-    public void setType(@Nullable SnippetFilterType setterArg) {
-      this.type = setterArg;
+    private @Nullable List<String> languages;
+    public @Nullable List<String> getLanguages() { return languages; }
+    public void setLanguages(@Nullable List<String> setterArg) {
+      this.languages = setterArg;
+    }
+
+    private @Nullable List<String> selectedLanguages;
+    public @Nullable List<String> getSelectedLanguages() { return selectedLanguages; }
+    public void setSelectedLanguages(@Nullable List<String> setterArg) {
+      this.selectedLanguages = setterArg;
     }
 
     public static final class Builder {
-      private @Nullable SnippetFilterType type;
-      public @NonNull Builder setType(@Nullable SnippetFilterType setterArg) {
-        this.type = setterArg;
+      private @Nullable List<String> languages;
+      public @NonNull Builder setLanguages(@Nullable List<String> setterArg) {
+        this.languages = setterArg;
+        return this;
+      }
+      private @Nullable List<String> selectedLanguages;
+      public @NonNull Builder setSelectedLanguages(@Nullable List<String> setterArg) {
+        this.selectedLanguages = setterArg;
         return this;
       }
       public @NonNull SnippetFilter build() {
         SnippetFilter pigeonReturn = new SnippetFilter();
-        pigeonReturn.setType(type);
+        pigeonReturn.setLanguages(languages);
+        pigeonReturn.setSelectedLanguages(selectedLanguages);
         return pigeonReturn;
       }
     }
     @NonNull Map<String, Object> toMap() {
       Map<String, Object> toMapResult = new HashMap<>();
-      toMapResult.put("type", type == null ? null : type.index);
+      toMapResult.put("languages", languages);
+      toMapResult.put("selectedLanguages", selectedLanguages);
       return toMapResult;
     }
     static @NonNull SnippetFilter fromMap(@NonNull Map<String, Object> map) {
       SnippetFilter pigeonResult = new SnippetFilter();
-      Object type = map.get("type");
-      pigeonResult.setType(type == null ? null : SnippetFilterType.values()[(int)type]);
+      Object languages = map.get("languages");
+      pigeonResult.setLanguages((List<String>)languages);
+      Object selectedLanguages = map.get("selectedLanguages");
+      pigeonResult.setSelectedLanguages((List<String>)selectedLanguages);
       return pigeonResult;
     }
   }
@@ -611,6 +627,12 @@ public class Bridge {
     public @Nullable List<Snippet> getData() { return data; }
     public void setData(@Nullable List<Snippet> setterArg) {
       this.data = setterArg;
+    }
+
+    private @Nullable SnippetFilter filter;
+    public @Nullable SnippetFilter getFilter() { return filter; }
+    public void setFilter(@Nullable SnippetFilter setterArg) {
+      this.filter = setterArg;
     }
 
     private @Nullable String error;
@@ -647,6 +669,11 @@ public class Bridge {
         this.data = setterArg;
         return this;
       }
+      private @Nullable SnippetFilter filter;
+      public @NonNull Builder setFilter(@Nullable SnippetFilter setterArg) {
+        this.filter = setterArg;
+        return this;
+      }
       private @Nullable String error;
       public @NonNull Builder setError(@Nullable String setterArg) {
         this.error = setterArg;
@@ -667,6 +694,7 @@ public class Bridge {
         pigeonReturn.setState(state);
         pigeonReturn.setIs_loading(is_loading);
         pigeonReturn.setData(data);
+        pigeonReturn.setFilter(filter);
         pigeonReturn.setError(error);
         pigeonReturn.setOldHash(oldHash);
         pigeonReturn.setNewHash(newHash);
@@ -678,6 +706,7 @@ public class Bridge {
       toMapResult.put("state", state == null ? null : state.index);
       toMapResult.put("is_loading", is_loading);
       toMapResult.put("data", data);
+      toMapResult.put("filter", (filter == null) ? null : filter.toMap());
       toMapResult.put("error", error);
       toMapResult.put("oldHash", oldHash);
       toMapResult.put("newHash", newHash);
@@ -691,6 +720,8 @@ public class Bridge {
       pigeonResult.setIs_loading((Boolean)is_loading);
       Object data = map.get("data");
       pigeonResult.setData((List<Snippet>)data);
+      Object filter = map.get("filter");
+      pigeonResult.setFilter((filter == null) ? null : SnippetFilter.fromMap((Map)filter));
       Object error = map.get("error");
       pigeonResult.setError((String)error);
       Object oldHash = map.get("oldHash");
@@ -1186,8 +1217,7 @@ public class Bridge {
     @NonNull MainModelEventData getEvent();
     void resetEvent();
     void initState();
-    void loadNextPage();
-    void filter(@NonNull SnippetFilter filter);
+    void filterLanguage(@NonNull String language, @NonNull Boolean isSelected);
     void logOut();
     void refreshSnippetUpdates();
 
@@ -1276,38 +1306,22 @@ public class Bridge {
       {
         BinaryMessenger.TaskQueue taskQueue = binaryMessenger.makeBackgroundTaskQueue();
         BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.MainModelBridge.loadNextPage", getCodec(), taskQueue);
-        if (api != null) {
-          channel.setMessageHandler((message, reply) -> {
-            Map<String, Object> wrapped = new HashMap<>();
-            try {
-              api.loadNextPage();
-              wrapped.put("result", null);
-            }
-            catch (Error | RuntimeException exception) {
-              wrapped.put("error", wrapError(exception));
-            }
-            reply.reply(wrapped);
-          });
-        } else {
-          channel.setMessageHandler(null);
-        }
-      }
-      {
-        BinaryMessenger.TaskQueue taskQueue = binaryMessenger.makeBackgroundTaskQueue();
-        BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.MainModelBridge.filter", getCodec(), taskQueue);
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.MainModelBridge.filterLanguage", getCodec(), taskQueue);
         if (api != null) {
           channel.setMessageHandler((message, reply) -> {
             Map<String, Object> wrapped = new HashMap<>();
             try {
               ArrayList<Object> args = (ArrayList<Object>)message;
               assert args != null;
-              SnippetFilter filterArg = (SnippetFilter)args.get(0);
-              if (filterArg == null) {
-                throw new NullPointerException("filterArg unexpectedly null.");
+              String languageArg = (String)args.get(0);
+              if (languageArg == null) {
+                throw new NullPointerException("languageArg unexpectedly null.");
               }
-              api.filter(filterArg);
+              Boolean isSelectedArg = (Boolean)args.get(1);
+              if (isSelectedArg == null) {
+                throw new NullPointerException("isSelectedArg unexpectedly null.");
+              }
+              api.filterLanguage(languageArg, isSelectedArg);
               wrapped.put("result", null);
             }
             catch (Error | RuntimeException exception) {

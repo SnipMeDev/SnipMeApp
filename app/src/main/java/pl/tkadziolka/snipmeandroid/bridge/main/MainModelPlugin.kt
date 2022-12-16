@@ -6,6 +6,7 @@ import pl.tkadziolka.snipmeandroid.bridge.Bridge
 import pl.tkadziolka.snipmeandroid.bridge.ModelPlugin
 import pl.tkadziolka.snipmeandroid.bridge.toModelData
 import pl.tkadziolka.snipmeandroid.domain.snippets.Snippet
+import pl.tkadziolka.snipmeandroid.domain.snippets.SnippetFilters
 import pl.tkadziolka.snipmeandroid.ui.main.*
 import pl.tkadziolka.snipmeandroid.util.view.SnippetFilter
 
@@ -33,14 +34,8 @@ class MainModelPlugin : ModelPlugin<Bridge.MainModelBridge>(), Bridge.MainModelB
         model.initState()
     }
 
-    override fun loadNextPage() {
-        model.loadNextPage()
-    }
-
-    override fun filter(filter: Bridge.SnippetFilter) {
-        val type = (filter.type?.name ?: Bridge.SnippetFilterType.ALL.name).uppercase()
-        val snippetFilter = SnippetFilter.valueOf(type)
-        model.filter(snippetFilter)
+    override fun filterLanguage(language: String, isSelected: Boolean) {
+        model.filterLanguage(language, isSelected)
     }
 
     override fun logOut() {
@@ -56,6 +51,7 @@ class MainModelPlugin : ModelPlugin<Bridge.MainModelBridge>(), Bridge.MainModelB
             state = viewState.toModelState()
             is_loading = viewState is Loading
             data = (viewState as? Loaded)?.snippets?.toModelData()
+            filter = (viewState as? Loaded)?.filters?.toModelFilter()
             oldHash = oldState?.hashCode()?.toLong()
             newHash = viewState.hashCode().toLong()
         }.also {
@@ -89,4 +85,12 @@ class MainModelPlugin : ModelPlugin<Bridge.MainModelBridge>(), Bridge.MainModelB
         }
 
     private fun List<Snippet>.toModelData() = map { it.toModelData() }
+
+    private fun SnippetFilters.toModelFilter(): Bridge.SnippetFilter {
+        val it = this
+        return Bridge.SnippetFilter().apply {
+            languages = it.languages
+            selectedLanguages = it.selectedLanguages
+        }
+    }
 }

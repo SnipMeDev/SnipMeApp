@@ -90,7 +90,8 @@ enum SnippetLanguageType {
 enum SnippetFilterType { all, mine, shared }
 
 class SnippetFilter {
-  SnippetFilterType? type;
+  List<String?>? languages;
+  List<String?>? selectedLanguages;
 }
 
 enum UserReaction {
@@ -113,6 +114,7 @@ class MainModelStateData {
   ModelState? state;
   bool? is_loading;
   List<Snippet?>? data;
+  SnippetFilter? filter;
   String? error;
   int? oldHash;
   int? newHash;
@@ -168,10 +170,7 @@ abstract class MainModelBridge {
   void initState();
 
   @TaskQueue(type: TaskQueueType.serialBackgroundThread)
-  void loadNextPage();
-
-  @TaskQueue(type: TaskQueueType.serialBackgroundThread)
-  void filter(SnippetFilter filter);
+  void filterLanguage(String language, bool isSelected);
 
   @TaskQueue(type: TaskQueueType.serialBackgroundThread)
   void logOut();

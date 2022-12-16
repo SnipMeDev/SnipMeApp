@@ -6,4 +6,5 @@ class Dimens {
   static const xxl = 32.0;
 
   static const inputBorderWidth = 1.0;
+  static const filterListHeight = 64.0;
 }

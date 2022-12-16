@@ -274,23 +274,25 @@ class Owner {
 
 class SnippetFilter {
   SnippetFilter({
-    this.type,
+    this.languages,
+    this.selectedLanguages,
   });
 
-  SnippetFilterType? type;
+  List<String?>? languages;
+  List<String?>? selectedLanguages;
 
   Object encode() {
     final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
-    pigeonMap['type'] = type?.index;
+    pigeonMap['languages'] = languages;
+    pigeonMap['selectedLanguages'] = selectedLanguages;
     return pigeonMap;
   }
 
   static SnippetFilter decode(Object message) {
     final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
     return SnippetFilter(
-      type: pigeonMap['type'] != null
-          ? SnippetFilterType.values[pigeonMap['type']! as int]
-          : null,
+      languages: (pigeonMap['languages'] as List<Object?>?)?.cast<String?>(),
+      selectedLanguages: (pigeonMap['selectedLanguages'] as List<Object?>?)?.cast<String?>(),
     );
   }
 }
@@ -300,6 +302,7 @@ class MainModelStateData {
     this.state,
     this.is_loading,
     this.data,
+    this.filter,
     this.error,
     this.oldHash,
     this.newHash,
@@ -308,6 +311,7 @@ class MainModelStateData {
   ModelState? state;
   bool? is_loading;
   List<Snippet?>? data;
+  SnippetFilter? filter;
   String? error;
   int? oldHash;
   int? newHash;
@@ -317,6 +321,7 @@ class MainModelStateData {
     pigeonMap['state'] = state?.index;
     pigeonMap['is_loading'] = is_loading;
     pigeonMap['data'] = data;
+    pigeonMap['filter'] = filter?.encode();
     pigeonMap['error'] = error;
     pigeonMap['oldHash'] = oldHash;
     pigeonMap['newHash'] = newHash;
@@ -331,6 +336,9 @@ class MainModelStateData {
           : null,
       is_loading: pigeonMap['is_loading'] as bool?,
       data: (pigeonMap['data'] as List<Object?>?)?.cast<Snippet?>(),
+      filter: pigeonMap['filter'] != null
+          ? SnippetFilter.decode(pigeonMap['filter']!)
+          : null,
       error: pigeonMap['error'] as String?,
       oldHash: pigeonMap['oldHash'] as int?,
       newHash: pigeonMap['newHash'] as int?,
@@ -700,33 +708,11 @@ class MainModelBridge {
     }
   }
 
-  Future<void> loadNextPage() async {
+  Future<void> filterLanguage(String arg_language, bool arg_isSelected) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.MainModelBridge.loadNextPage', codec, binaryMessenger: _binaryMessenger);
+        'dev.flutter.pigeon.MainModelBridge.filterLanguage', codec, binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
-      throw PlatformException(
-        code: 'channel-error',
-        message: 'Unable to establish connection on channel.',
-      );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error = (replyMap['error'] as Map<Object?, Object?>?)!;
-      throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
-      );
-    } else {
-      return;
-    }
-  }
-
-  Future<void> filter(SnippetFilter arg_filter) async {
-    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.MainModelBridge.filter', codec, binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_filter]) as Map<Object?, Object?>?;
+        await channel.send(<Object?>[arg_language, arg_isSelected]) as Map<Object?, Object?>?;
     if (replyMap == null) {
       throw PlatformException(
         code: 'channel-error',
