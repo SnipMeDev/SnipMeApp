@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_module/model/main_model.dart';
 import 'package:flutter_module/presentation/navigation/details/details_navigator.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_module/presentation/navigation/login/login_navigator.dar
 import 'package:flutter_module/presentation/screens/named_screen.dart';
 import 'package:flutter_module/presentation/styles/color_styles.dart';
 import 'package:flutter_module/presentation/styles/dimens.dart';
+import 'package:flutter_module/presentation/widgets/filter_list_view.dart';
 import 'package:flutter_module/presentation/widgets/snippet_list_item.dart';
 import 'package:flutter_module/presentation/widgets/view_state_wrapper.dart';
 import 'package:flutter_module/utils/extensions/state_extensions.dart';
@@ -86,7 +88,8 @@ class _MainPage extends HookWidget {
       ),
       backgroundColor: ColorStyles.pageBackground(),
       body: ViewStateWrapper<List<Snippet>>(
-        isLoading: state.state == ModelState.loading || state.is_loading == true,
+        isLoading:
+            state.state == ModelState.loading || state.is_loading == true,
         error: state.error,
         data: state.data?.cast(),
         builder: (_, snippets) {
@@ -105,7 +108,7 @@ class _MainPage extends HookWidget {
   }
 }
 
-class _MainPageData extends StatelessWidget {
+class _MainPageData extends HookWidget {
   const _MainPageData({
     Key? key,
     required this.navigator,
@@ -117,23 +120,115 @@ class _MainPageData extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: snippets.length,
-      itemBuilder: (_, index) {
-        final snippet = snippets[index];
-        return Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: Dimens.s,
-            horizontal: Dimens.m,
-          ),
-          child: SnippetListTile(
-            snippet: snippet,
-            onTap: () {
-              navigator.goToDetails(context, snippet.uuid!);
-            },
-          ),
-        );
+    return NestedScrollView(
+      headerSliverBuilder: (_, __) {
+        return [
+          SliverAppBar(
+              floating: true,
+              expandedHeight: 120,
+              flexibleSpace: FlexibleSpaceBar(
+                collapseMode: CollapseMode.parallax,
+                background: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(children: [Text("Language")]),
+                    // FilterListView(
+                    //   filters: ['a', 'b'],
+                    //   selected: ['a'],
+                    // ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [Text("Language2")],
+                    ),
+                    Text("Languag3"),
+                  ],
+                ),
+              ))
+        ];
       },
+      body: CustomScrollView(
+        // scrollBehavior: const ConstantScrollBehavior(),
+        slivers: [
+          SliverList(
+            delegate: SliverChildListDelegate([
+              ...snippets.map(
+                (snippet) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: Dimens.s,
+                      horizontal: Dimens.m,
+                    ),
+                    child: SnippetListTile(
+                      snippet: snippet,
+                      onTap: () {
+                        navigator.goToDetails(context, snippet.uuid!);
+                      },
+                    ),
+                  );
+                },
+              ).toList()
+            ]),
+          ),
+        ],
+      ),
     );
   }
 }
+
+class MySliverPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
+  final Widget child;
+
+  MySliverPersistentHeaderDelegate({required this.child});
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    print("Offset: $shrinkOffset");
+
+    return OverflowBox(
+      maxWidth: double.infinity,
+      alignment: Alignment.center,
+      maxHeight: 150 - shrinkOffset,
+      child: FittedBox(
+        fit: BoxFit.cover,
+        alignment: Alignment.center,
+        child: Container(color: Colors.red, child: child),
+      ),
+    );
+  }
+
+  @override
+  double get maxExtent => 150.0;
+
+  @override
+  double get minExtent => 50.0;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    return true;
+  }
+}
+
+class MyRenderSliverFloatingPersistentHeader
+    extends RenderSliverFloatingPinnedPersistentHeader {
+  MyRenderSliverFloatingPersistentHeader({
+    required super.child,
+  });
+
+  @override
+  double get maxExtent => 250.0;
+
+  @override
+  double get minExtent => 100.0;
+}
+
+// Column(
+// children: [
+// Text("Language"),
+// FilterListView(
+// filters: ['a', 'b'],
+// selected: ['a'],
+// ),
+// Text("Language"),
+// ],
+// ),
