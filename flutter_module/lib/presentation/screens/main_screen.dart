@@ -109,7 +109,7 @@ class _MainPage extends HookWidget {
   }
 }
 
-class _MainPageData extends HookWidget {
+class _MainPageData extends StatelessWidget {
   const _MainPageData({
     Key? key,
     required this.navigator,
@@ -153,8 +153,9 @@ class _MainPageData extends HookWidget {
           ),
           SliverAppBar(
               floating: true,
+              forceElevated: true,
               expandedHeight: 120,
-              elevation: Dimens.m,
+              elevation: Dimens.s / 2,
               backgroundColor: ColorStyles.surfacePrimary(),
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
@@ -165,7 +166,7 @@ class _MainPageData extends HookWidget {
               flexibleSpace: FlexibleSpaceBar(
                 collapseMode: CollapseMode.parallax,
                 background: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Row(children: [const Text("Language")]),
                     SizedBox(

@@ -47,7 +47,6 @@ class SnippetListTile extends HookWidget {
                   child: CodeTextView.preview(
                     code: snippet.code?.raw ?? "",
                     tokens: snippet.code?.tokens,
-                    options: TextSelectionOptions.copyable(),
                   ),
                 ),
               ),
