@@ -10,4 +10,5 @@ class ColorStyles extends Color {
 
   ColorStyles.codeBackground(): super(0xFFF8F8F8);
 
+  ColorStyles.filterBackgroundColor(): super(0xFF212121);
 }

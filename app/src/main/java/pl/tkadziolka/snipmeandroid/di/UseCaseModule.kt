@@ -13,6 +13,9 @@ import pl.tkadziolka.snipmeandroid.domain.share.ShareInteractor
 import pl.tkadziolka.snipmeandroid.domain.share.ShareSnippetCodeUseCase
 import pl.tkadziolka.snipmeandroid.domain.share.ShareSnippetUseCase
 import pl.tkadziolka.snipmeandroid.domain.snippet.*
+import pl.tkadziolka.snipmeandroid.domain.filter.FilterSnippetsByLanguageUseCase
+import pl.tkadziolka.snipmeandroid.domain.filter.GetLanguageFiltersUseCase
+import pl.tkadziolka.snipmeandroid.domain.filter.UpdateSnippetFiltersLanguageUseCase
 import pl.tkadziolka.snipmeandroid.domain.snippets.GetSnippetsUseCase
 import pl.tkadziolka.snipmeandroid.domain.snippets.HasMoreSnippetPagesUseCase
 import pl.tkadziolka.snipmeandroid.domain.user.GetShareUsersUseCase
@@ -52,6 +55,10 @@ internal val useCaseModule = module {
     factory { GetFromClipboardUseCase(get()) }
     // Save
     factory { SaveSnippetUseCase(get()) }
+    // Filter
+    factory { GetLanguageFiltersUseCase() }
+    factory { FilterSnippetsByLanguageUseCase() }
+    factory { UpdateSnippetFiltersLanguageUseCase() }
 }
 
 internal val interactorModule = module {

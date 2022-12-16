@@ -93,11 +93,14 @@ class _MainPage extends HookWidget {
             navigator: detailsNavigator,
             model: model,
             snippets: snippets ?? List.empty(),
+            filter: state.filter ?? SnippetFilter(),
           );
         },
       ),
       floatingActionButton: FloatingActionButton.small(
-        onPressed: () => model.loadNextPage(),
+        onPressed: () {
+          // TODO Scroll to top
+        },
         tooltip: 'Scroll to top',
         backgroundColor: ColorStyles.surfacePrimary(),
         child: const Icon(
@@ -115,11 +118,13 @@ class _MainPageData extends StatelessWidget {
     required this.navigator,
     required this.model,
     required this.snippets,
+    required this.filter,
   }) : super(key: key);
 
   final DetailsNavigator navigator;
   final MainModelBridge model;
   final List<Snippet> snippets;
+  final SnippetFilter filter;
 
   @override
   Widget build(BuildContext context) {
@@ -170,10 +175,13 @@ class _MainPageData extends StatelessWidget {
                   children: [
                     Row(children: [const Text("Language")]),
                     SizedBox(
-                      height: 64,
+                      height: Dimens.filterListHeight,
                       child: FilterListView(
-                        filters: ['a', 'b' * 200],
-                        selected: ['a'],
+                        filters: filter.languages ?? List.empty(),
+                        selected: filter.selectedLanguages ?? List.empty(),
+                        onSelected: (filter, isSelected) {
+                          model.filterLanguage(filter, isSelected);
+                        },
                       ),
                     ),
                   ],

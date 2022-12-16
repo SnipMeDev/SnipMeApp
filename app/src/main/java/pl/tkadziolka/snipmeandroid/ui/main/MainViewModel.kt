@@ -9,10 +9,7 @@ import pl.tkadziolka.snipmeandroid.domain.error.exception.*
 import pl.tkadziolka.snipmeandroid.domain.message.ErrorMessages
 import pl.tkadziolka.snipmeandroid.domain.snippet.ObserveUpdatedSnippetPageUseCase
 import pl.tkadziolka.snipmeandroid.domain.snippet.ResetUpdatedSnippetPageUseCase
-import pl.tkadziolka.snipmeandroid.domain.snippets.GetSnippetsUseCase
-import pl.tkadziolka.snipmeandroid.domain.snippets.HasMoreSnippetPagesUseCase
-import pl.tkadziolka.snipmeandroid.domain.snippets.Snippet
-import pl.tkadziolka.snipmeandroid.domain.snippets.SnippetScope
+import pl.tkadziolka.snipmeandroid.domain.snippets.*
 import pl.tkadziolka.snipmeandroid.domain.user.GetSingleUserUseCase
 import pl.tkadziolka.snipmeandroid.domain.user.User
 import pl.tkadziolka.snipmeandroid.ui.error.ErrorParsable
@@ -102,20 +99,20 @@ class MainViewModel(
     }
 
     fun loadNextPage() {
-        getLoadedState()?.let { state ->
-            hasMore(state.scope, state.pages)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeBy(
-                    onSuccess = { hasMore ->
-                        if (hasMore) loadSnippets(state.user, pages = state.pages + ONE_PAGE)
-                    },
-                    onError = {
-                        Timber.e("Couldn't check next page, error = $it")
-                        mutableEvent.value = Alert(errorMessages.parse(it))
-                    })
-                .also { disposables += it }
-        }
+//        getLoadedState()?.let { state ->
+//            hasMore(state.filters, state.pages)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribeBy(
+//                    onSuccess = { hasMore ->
+//                        if (hasMore) loadSnippets(state.user, pages = state.pages + ONE_PAGE)
+//                    },
+//                    onError = {
+//                        Timber.e("Couldn't check next page, error = $it")
+//                        mutableEvent.value = Alert(errorMessages.parse(it))
+//                    })
+//                .also { disposables += it }
+//        }
     }
 
     fun filter(filter: SnippetFilter) {
@@ -157,7 +154,7 @@ class MainViewModel(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onSuccess = {
-                    setState(Loaded(user, it, pages, scope))
+//                    setState(Loaded(user, it, pages))
                     if (shouldRefresh) {
                         mutableEvent.value = ListRefreshed
                         shouldRefresh = false
@@ -181,7 +178,7 @@ class MainViewModel(
 
     private fun getScope(): SnippetScope {
         getLoadedState()?.let {
-            return it.scope
+//            return it.scope
         }
         return SnippetScope.ALL
     }
@@ -193,7 +190,7 @@ data class Loaded(
     val user: User,
     val snippets: List<Snippet>,
     val pages: Int,
-    val scope: SnippetScope
+    val filters: SnippetFilters
 ) : MainViewState()
 
 data class Error(val message: String?) : MainViewState()
