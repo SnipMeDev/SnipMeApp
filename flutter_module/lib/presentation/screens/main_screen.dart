@@ -9,7 +9,9 @@ import 'package:flutter_module/presentation/navigation/login/login_navigator.dar
 import 'package:flutter_module/presentation/screens/named_screen.dart';
 import 'package:flutter_module/presentation/styles/color_styles.dart';
 import 'package:flutter_module/presentation/styles/dimens.dart';
+import 'package:flutter_module/presentation/styles/padding_styles.dart';
 import 'package:flutter_module/presentation/styles/text_styles.dart';
+import 'package:flutter_module/presentation/widgets/filter_dropdown.dart';
 import 'package:flutter_module/presentation/widgets/filter_list_view.dart';
 import 'package:flutter_module/presentation/widgets/snippet_list_item.dart';
 import 'package:flutter_module/presentation/widgets/view_state_wrapper.dart';
@@ -173,7 +175,28 @@ class _MainPageData extends StatelessWidget {
                 background: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Row(children: [const Text("Language")]),
+                    PaddingStyles.small(
+                      Row(children: const [Text("Scope")]),
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          height: Dimens.filterDropdownHeight,
+                          child: FilterDropdown(
+                            filters: ['a', 'b', 'c'],
+                            selected: 'a',
+                            // filters: filter.scopes,
+                            // selected: filter.selectedScope,
+                            onSelected: (item) {
+
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    PaddingStyles.small(
+                      Row(children: const [Text("Language")]),
+                    ),
                     SizedBox(
                       height: Dimens.filterListHeight,
                       child: FilterListView(
