@@ -9,7 +9,9 @@ import 'package:flutter_module/presentation/navigation/login/login_navigator.dar
 import 'package:flutter_module/presentation/screens/named_screen.dart';
 import 'package:flutter_module/presentation/styles/color_styles.dart';
 import 'package:flutter_module/presentation/styles/dimens.dart';
+import 'package:flutter_module/presentation/styles/padding_styles.dart';
 import 'package:flutter_module/presentation/styles/text_styles.dart';
+import 'package:flutter_module/presentation/widgets/filter_dropdown.dart';
 import 'package:flutter_module/presentation/widgets/filter_list_view.dart';
 import 'package:flutter_module/presentation/widgets/snippet_list_item.dart';
 import 'package:flutter_module/presentation/widgets/view_state_wrapper.dart';
@@ -159,7 +161,7 @@ class _MainPageData extends StatelessWidget {
           SliverAppBar(
               floating: true,
               forceElevated: true,
-              expandedHeight: 120,
+              expandedHeight: Dimens.extendedAppBarHeight,
               elevation: Dimens.s / 2,
               backgroundColor: ColorStyles.surfacePrimary(),
               shape: const RoundedRectangleBorder(
@@ -170,21 +172,50 @@ class _MainPageData extends StatelessWidget {
               ),
               flexibleSpace: FlexibleSpaceBar(
                 collapseMode: CollapseMode.parallax,
-                background: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Row(children: [const Text("Language")]),
-                    SizedBox(
-                      height: Dimens.filterListHeight,
-                      child: FilterListView(
-                        filters: filter.languages ?? List.empty(),
-                        selected: filter.selectedLanguages ?? List.empty(),
-                        onSelected: (filter, isSelected) {
-                          model.filterLanguage(filter, isSelected);
-                        },
+                background: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: Dimens.m),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      PaddingStyles.small(
+                        Row(children: [TextStyles.bold("Scope")]),
                       ),
-                    ),
-                  ],
+                      PaddingStyles.small(
+                        Row(
+                          children: [
+                            Expanded(
+                              child: SizedBox(
+                                height: Dimens.filterDropdownHeight,
+                                child: FilterDropdown(
+                                  filters: const ['All', 'Private', 'Public', 'Others'],
+                                  selected: 'All',
+                                  // filters: filter.scopes,
+                                  // selected: filter.selectedScope,
+                                  onSelected: (item) {
+
+                                  },
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      PaddingStyles.small(
+                        Row(children: [TextStyles.bold("Language")]),
+                      ),
+                      SizedBox(
+                        height: Dimens.filterListHeight,
+                        child: FilterListView(
+                          filters: filter.languages ?? List.empty(),
+                          selected: filter.selectedLanguages ?? List.empty(),
+                          onSelected: (filter, isSelected) {
+                            model.filterLanguage(filter, isSelected);
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: Dimens.m,)
+                    ],
+                  ),
                 ),
               ))
         ];

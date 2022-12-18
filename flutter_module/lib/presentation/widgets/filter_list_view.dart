@@ -18,8 +18,6 @@ class FilterListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("Filters = $filters");
-    print("Selected = $selected");
     return ListView.separated(
       physics: const BouncingScrollPhysics(),
       itemCount: filters.length,
