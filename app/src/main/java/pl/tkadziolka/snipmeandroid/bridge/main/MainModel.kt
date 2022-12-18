@@ -7,10 +7,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.flow.MutableStateFlow
 import pl.tkadziolka.snipmeandroid.bridge.session.SessionModel
 import pl.tkadziolka.snipmeandroid.domain.error.exception.*
-import pl.tkadziolka.snipmeandroid.domain.filter.FilterSnippetsByLanguageUseCase
-import pl.tkadziolka.snipmeandroid.domain.filter.GetLanguageFiltersUseCase
-import pl.tkadziolka.snipmeandroid.domain.filter.SNIPPET_LANGUAGE_FILTER_ALL
-import pl.tkadziolka.snipmeandroid.domain.filter.UpdateSnippetFiltersLanguageUseCase
+import pl.tkadziolka.snipmeandroid.domain.filter.*
 import pl.tkadziolka.snipmeandroid.domain.message.ErrorMessages
 import pl.tkadziolka.snipmeandroid.domain.snippet.ObserveUpdatedSnippetPageUseCase
 import pl.tkadziolka.snipmeandroid.domain.snippet.ResetUpdatedSnippetPageUseCase
@@ -19,7 +16,6 @@ import pl.tkadziolka.snipmeandroid.domain.user.GetSingleUserUseCase
 import pl.tkadziolka.snipmeandroid.domain.user.User
 import pl.tkadziolka.snipmeandroid.ui.error.ErrorParsable
 import pl.tkadziolka.snipmeandroid.ui.main.*
-import pl.tkadziolka.snipmeandroid.util.view.SnippetFilter
 import timber.log.Timber
 
 private const val ONE_PAGE = 1
@@ -33,6 +29,7 @@ class MainModel(
     private val hasMore: HasMoreSnippetPagesUseCase,
     private val getLanguageFilters: GetLanguageFiltersUseCase,
     private val filterSnippetsByLanguage: FilterSnippetsByLanguageUseCase,
+    private val filterSnippetsByScope: FilterSnippetsByScopeUseCase,
     private val updateFilterLanguage: UpdateSnippetFiltersLanguageUseCase,
     private val session: SessionModel
 ) : ErrorParsable {
@@ -47,9 +44,10 @@ class MainModel(
     private var cachedSnippets = emptyList<Snippet>()
     private var shouldRefresh = false
     private var filterState = SnippetFilters(
-        languages = listOf(SNIPPET_LANGUAGE_FILTER_ALL),
-        selectedLanguages = listOf(SNIPPET_LANGUAGE_FILTER_ALL),
-        scope = SnippetScope.ALL
+        languages = listOf(SNIPPET_FILTER_ALL),
+        selectedLanguages = listOf(SNIPPET_FILTER_ALL),
+        scopes = listOf("All", "Private", "Public"),
+        selectedScope = "All"
     )
 
     override fun parseError(throwable: Throwable) {
@@ -89,11 +87,13 @@ class MainModel(
         }
     }
 
-    fun filterScope(filter: SnippetFilter) {
-        val scope = filterToScope(filter)
-        getLoadedState()?.let { state ->
-            loadSnippets(state.user, pages = ONE_PAGE, scope = scope)
-            mutableEvent.value = ListRefreshed
+    fun filterScope(scope: String) {
+        getLoadedState()?.let {
+            filterState = filterState.copy(selectedScope = scope)
+            val filteredSnippets = filterSnippetsByScope(cachedSnippets, scope)
+            state.value = it.copy(snippets = filteredSnippets, filters = filterState)
+//            loadSnippets(state.user, pages = ONE_PAGE, scope = SnippetScope.ALL)
+//            mutableEvent.value = ListRefreshed
         }
     }
 
@@ -118,7 +118,7 @@ class MainModel(
 
     private fun loadNextPage() {
         getLoadedState()?.let { state ->
-            hasMore(state.filters.scope, state.pages)
+            hasMore(SnippetScope.ALL, state.pages)
                 .subscribeOn(Schedulers.io())
                 .subscribeBy(
                     onSuccess = { hasMore ->
@@ -167,17 +167,7 @@ class MainModel(
 
     private fun getLoadedState(): Loaded? = state.value as? Loaded
 
-    private fun filterToScope(filter: SnippetFilter) =
-        when (filter) {
-            SnippetFilter.ALL -> SnippetScope.ALL
-            SnippetFilter.MINE -> SnippetScope.OWNED
-            else -> SnippetScope.SHARED_FOR
-        }
-
     private fun getScope(): SnippetScope {
-        getLoadedState()?.let {
-            return it.filters.scope
-        }
         return SnippetScope.ALL
     }
 }

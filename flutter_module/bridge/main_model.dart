@@ -92,6 +92,8 @@ enum SnippetFilterType { all, mine, shared }
 class SnippetFilter {
   List<String?>? languages;
   List<String?>? selectedLanguages;
+  List<String?>? scopes;
+  String? selectedScope;
 }
 
 enum UserReaction {
@@ -171,6 +173,9 @@ abstract class MainModelBridge {
 
   @TaskQueue(type: TaskQueueType.serialBackgroundThread)
   void filterLanguage(String language, bool isSelected);
+
+  @TaskQueue(type: TaskQueueType.serialBackgroundThread)
+  void filterScope(String scope);
 
   @TaskQueue(type: TaskQueueType.serialBackgroundThread)
   void logOut();

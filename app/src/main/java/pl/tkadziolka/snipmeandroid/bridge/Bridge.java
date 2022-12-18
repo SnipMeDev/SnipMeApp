@@ -575,6 +575,18 @@ public class Bridge {
       this.selectedLanguages = setterArg;
     }
 
+    private @Nullable List<String> scopes;
+    public @Nullable List<String> getScopes() { return scopes; }
+    public void setScopes(@Nullable List<String> setterArg) {
+      this.scopes = setterArg;
+    }
+
+    private @Nullable String selectedScope;
+    public @Nullable String getSelectedScope() { return selectedScope; }
+    public void setSelectedScope(@Nullable String setterArg) {
+      this.selectedScope = setterArg;
+    }
+
     public static final class Builder {
       private @Nullable List<String> languages;
       public @NonNull Builder setLanguages(@Nullable List<String> setterArg) {
@@ -586,10 +598,22 @@ public class Bridge {
         this.selectedLanguages = setterArg;
         return this;
       }
+      private @Nullable List<String> scopes;
+      public @NonNull Builder setScopes(@Nullable List<String> setterArg) {
+        this.scopes = setterArg;
+        return this;
+      }
+      private @Nullable String selectedScope;
+      public @NonNull Builder setSelectedScope(@Nullable String setterArg) {
+        this.selectedScope = setterArg;
+        return this;
+      }
       public @NonNull SnippetFilter build() {
         SnippetFilter pigeonReturn = new SnippetFilter();
         pigeonReturn.setLanguages(languages);
         pigeonReturn.setSelectedLanguages(selectedLanguages);
+        pigeonReturn.setScopes(scopes);
+        pigeonReturn.setSelectedScope(selectedScope);
         return pigeonReturn;
       }
     }
@@ -597,6 +621,8 @@ public class Bridge {
       Map<String, Object> toMapResult = new HashMap<>();
       toMapResult.put("languages", languages);
       toMapResult.put("selectedLanguages", selectedLanguages);
+      toMapResult.put("scopes", scopes);
+      toMapResult.put("selectedScope", selectedScope);
       return toMapResult;
     }
     static @NonNull SnippetFilter fromMap(@NonNull Map<String, Object> map) {
@@ -605,6 +631,10 @@ public class Bridge {
       pigeonResult.setLanguages((List<String>)languages);
       Object selectedLanguages = map.get("selectedLanguages");
       pigeonResult.setSelectedLanguages((List<String>)selectedLanguages);
+      Object scopes = map.get("scopes");
+      pigeonResult.setScopes((List<String>)scopes);
+      Object selectedScope = map.get("selectedScope");
+      pigeonResult.setSelectedScope((String)selectedScope);
       return pigeonResult;
     }
   }
@@ -1218,6 +1248,7 @@ public class Bridge {
     void resetEvent();
     void initState();
     void filterLanguage(@NonNull String language, @NonNull Boolean isSelected);
+    void filterScope(@NonNull String scope);
     void logOut();
     void refreshSnippetUpdates();
 
@@ -1322,6 +1353,32 @@ public class Bridge {
                 throw new NullPointerException("isSelectedArg unexpectedly null.");
               }
               api.filterLanguage(languageArg, isSelectedArg);
+              wrapped.put("result", null);
+            }
+            catch (Error | RuntimeException exception) {
+              wrapped.put("error", wrapError(exception));
+            }
+            reply.reply(wrapped);
+          });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BinaryMessenger.TaskQueue taskQueue = binaryMessenger.makeBackgroundTaskQueue();
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.MainModelBridge.filterScope", getCodec(), taskQueue);
+        if (api != null) {
+          channel.setMessageHandler((message, reply) -> {
+            Map<String, Object> wrapped = new HashMap<>();
+            try {
+              ArrayList<Object> args = (ArrayList<Object>)message;
+              assert args != null;
+              String scopeArg = (String)args.get(0);
+              if (scopeArg == null) {
+                throw new NullPointerException("scopeArg unexpectedly null.");
+              }
+              api.filterScope(scopeArg);
               wrapped.put("result", null);
             }
             catch (Error | RuntimeException exception) {

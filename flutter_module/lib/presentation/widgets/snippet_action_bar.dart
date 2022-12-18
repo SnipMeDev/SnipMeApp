@@ -65,7 +65,7 @@ class SnippetActionBar extends StatelessWidget {
     bool? isSaved,
     GestureTapCallback? onSaveTap,
   ) {
-    if (isSaved == null) return null;
+    if (isSaved == false) return null;
     if (isSaved == true) return null;
     return onSaveTap;
   }

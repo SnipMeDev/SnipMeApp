@@ -276,15 +276,21 @@ class SnippetFilter {
   SnippetFilter({
     this.languages,
     this.selectedLanguages,
+    this.scopes,
+    this.selectedScope,
   });
 
   List<String?>? languages;
   List<String?>? selectedLanguages;
+  List<String?>? scopes;
+  String? selectedScope;
 
   Object encode() {
     final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
     pigeonMap['languages'] = languages;
     pigeonMap['selectedLanguages'] = selectedLanguages;
+    pigeonMap['scopes'] = scopes;
+    pigeonMap['selectedScope'] = selectedScope;
     return pigeonMap;
   }
 
@@ -293,6 +299,8 @@ class SnippetFilter {
     return SnippetFilter(
       languages: (pigeonMap['languages'] as List<Object?>?)?.cast<String?>(),
       selectedLanguages: (pigeonMap['selectedLanguages'] as List<Object?>?)?.cast<String?>(),
+      scopes: (pigeonMap['scopes'] as List<Object?>?)?.cast<String?>(),
+      selectedScope: pigeonMap['selectedScope'] as String?,
     );
   }
 }
@@ -713,6 +721,28 @@ class MainModelBridge {
         'dev.flutter.pigeon.MainModelBridge.filterLanguage', codec, binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
         await channel.send(<Object?>[arg_language, arg_isSelected]) as Map<Object?, Object?>?;
+    if (replyMap == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyMap['error'] != null) {
+      final Map<Object?, Object?> error = (replyMap['error'] as Map<Object?, Object?>?)!;
+      throw PlatformException(
+        code: (error['code'] as String?)!,
+        message: error['message'] as String?,
+        details: error['details'],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<void> filterScope(String arg_scope) async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.MainModelBridge.filterScope', codec, binaryMessenger: _binaryMessenger);
+    final Map<Object?, Object?>? replyMap =
+        await channel.send(<Object?>[arg_scope]) as Map<Object?, Object?>?;
     if (replyMap == null) {
       throw PlatformException(
         code: 'channel-error',

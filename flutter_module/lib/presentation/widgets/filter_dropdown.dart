@@ -26,7 +26,13 @@ class FilterDropdown extends StatelessWidget {
           ...filters.map(
             (filter) => DropdownMenuItem<String>(
               value: filter,
-              child: Center(child: TextStyles.title(filter ?? '')),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(width: 24,),
+                  TextStyles.title(filter ?? ''),
+                ],
+              ),
             ),
           )
         ],

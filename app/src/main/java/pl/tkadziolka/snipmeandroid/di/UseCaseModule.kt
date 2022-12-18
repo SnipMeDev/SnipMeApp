@@ -14,6 +14,7 @@ import pl.tkadziolka.snipmeandroid.domain.share.ShareSnippetCodeUseCase
 import pl.tkadziolka.snipmeandroid.domain.share.ShareSnippetUseCase
 import pl.tkadziolka.snipmeandroid.domain.snippet.*
 import pl.tkadziolka.snipmeandroid.domain.filter.FilterSnippetsByLanguageUseCase
+import pl.tkadziolka.snipmeandroid.domain.filter.FilterSnippetsByScopeUseCase
 import pl.tkadziolka.snipmeandroid.domain.filter.GetLanguageFiltersUseCase
 import pl.tkadziolka.snipmeandroid.domain.filter.UpdateSnippetFiltersLanguageUseCase
 import pl.tkadziolka.snipmeandroid.domain.snippets.GetSnippetsUseCase
@@ -58,6 +59,7 @@ internal val useCaseModule = module {
     // Filter
     factory { GetLanguageFiltersUseCase() }
     factory { FilterSnippetsByLanguageUseCase() }
+    factory { FilterSnippetsByScopeUseCase() }
     factory { UpdateSnippetFiltersLanguageUseCase() }
 }
 

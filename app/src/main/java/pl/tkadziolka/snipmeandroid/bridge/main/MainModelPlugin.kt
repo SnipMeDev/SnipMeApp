@@ -8,7 +8,6 @@ import pl.tkadziolka.snipmeandroid.bridge.toModelData
 import pl.tkadziolka.snipmeandroid.domain.snippets.Snippet
 import pl.tkadziolka.snipmeandroid.domain.snippets.SnippetFilters
 import pl.tkadziolka.snipmeandroid.ui.main.*
-import pl.tkadziolka.snipmeandroid.util.view.SnippetFilter
 
 class MainModelPlugin : ModelPlugin<Bridge.MainModelBridge>(), Bridge.MainModelBridge {
     private val model: MainModel by inject()
@@ -36,6 +35,10 @@ class MainModelPlugin : ModelPlugin<Bridge.MainModelBridge>(), Bridge.MainModelB
 
     override fun filterLanguage(language: String, isSelected: Boolean) {
         model.filterLanguage(language, isSelected)
+    }
+
+    override fun filterScope(scope: String) {
+        model.filterScope(scope)
     }
 
     override fun logOut() {
@@ -91,6 +94,8 @@ class MainModelPlugin : ModelPlugin<Bridge.MainModelBridge>(), Bridge.MainModelB
         return Bridge.SnippetFilter().apply {
             languages = it.languages
             selectedLanguages = it.selectedLanguages
+            scopes = it.scopes
+            selectedScope = it.selectedScope
         }
     }
 }

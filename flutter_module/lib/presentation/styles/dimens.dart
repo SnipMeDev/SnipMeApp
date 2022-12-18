@@ -8,5 +8,5 @@ class Dimens {
   static const inputBorderWidth = 1.0;
   static const filterDropdownHeight = 24.0;
   static const filterListHeight = 48.0;
-  static const extendedAppBarHeight = 128.0;
+  static const extendedAppBarHeight = 144.0;
 }

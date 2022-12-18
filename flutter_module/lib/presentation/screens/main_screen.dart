@@ -187,12 +187,10 @@ class _MainPageData extends StatelessWidget {
                               child: SizedBox(
                                 height: Dimens.filterDropdownHeight,
                                 child: FilterDropdown(
-                                  filters: const ['All', 'Private', 'Public', 'Others'],
-                                  selected: 'All',
-                                  // filters: filter.scopes,
-                                  // selected: filter.selectedScope,
-                                  onSelected: (item) {
-
+                                  filters: filter.scopes ?? List.empty(),
+                                  selected: filter.selectedScope ?? '',
+                                  onSelected: (scope) {
+                                    model.filterScope(scope);
                                   },
                                 ),
                               ),
@@ -208,8 +206,8 @@ class _MainPageData extends StatelessWidget {
                         child: FilterListView(
                           filters: filter.languages ?? List.empty(),
                           selected: filter.selectedLanguages ?? List.empty(),
-                          onSelected: (filter, isSelected) {
-                            model.filterLanguage(filter, isSelected);
+                          onSelected: (language, isSelected) {
+                            model.filterLanguage(language, isSelected);
                           },
                         ),
                       ),
