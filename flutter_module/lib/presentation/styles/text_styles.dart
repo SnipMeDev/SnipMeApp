@@ -28,6 +28,16 @@ class TextStyles extends Text {
           style: TextStyle(color: color),
         );
 
+  TextStyles.bold(this.text, {Key? key, Color? color})
+      : super(
+          text,
+          key: key,
+          style: TextStyle(
+            color: color,
+            fontWeight: FontWeight.w600,
+          ),
+        );
+
   const TextStyles.secondary(this.text, {Key? key})
       : super(
           text,
@@ -72,12 +82,12 @@ class TextStyles extends Text {
 
   TextStyles.appBarLogo(this.text, {Key? key})
       : super(
-    text,
-    key: key,
-    style: const TextStyle(
-      fontFamily: 'Kanit',
-      fontSize: 18.0,
-      color: Colors.black,
-    ),
-  );
+          text,
+          key: key,
+          style: const TextStyle(
+            fontFamily: 'Kanit',
+            fontSize: 18.0,
+            color: Colors.black,
+          ),
+        );
 }
