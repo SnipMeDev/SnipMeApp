@@ -149,6 +149,7 @@ class MainModel(
             .subscribeBy(
                 onSuccess = {
                     cachedSnippets = it
+                    scopedSnippets = cachedSnippets
                     val updatedFilters = getLanguageFilters(cachedSnippets)
                     filterState = filterState.copy(languages = updatedFilters)
                     mutableState.value = Loaded(
