@@ -42,6 +42,7 @@ class MainModel(
     val state = mutableState
 
     private var cachedSnippets = emptyList<Snippet>()
+    private var scopedSnippets = emptyList<Snippet>()
     private var shouldRefresh = false
     private var filterState = SnippetFilters(
         languages = listOf(SNIPPET_FILTER_ALL),
@@ -82,7 +83,8 @@ class MainModel(
     fun filterLanguage(language: String, isSelected: Boolean) {
         getLoadedState()?.let {
             filterState = updateFilterLanguage(filterState, language, isSelected)
-            val filteredSnippets = filterSnippetsByLanguage(cachedSnippets, filterState.selectedLanguages)
+            val filteredSnippets =
+                filterSnippetsByLanguage(scopedSnippets, filterState.selectedLanguages)
             state.value = it.copy(snippets = filteredSnippets, filters = filterState)
         }
     }
@@ -90,10 +92,13 @@ class MainModel(
     fun filterScope(scope: String) {
         getLoadedState()?.let {
             filterState = filterState.copy(selectedScope = scope)
-            val filteredSnippets = filterSnippetsByScope(cachedSnippets, scope)
-            state.value = it.copy(snippets = filteredSnippets, filters = filterState)
-//            loadSnippets(state.user, pages = ONE_PAGE, scope = SnippetScope.ALL)
-//            mutableEvent.value = ListRefreshed
+            scopedSnippets = filterSnippetsByScope(cachedSnippets, scope)
+            val updatedFilters = getLanguageFilters(scopedSnippets)
+            filterState = filterState.copy(
+                languages = updatedFilters,
+                selectedLanguages = listOf(SNIPPET_FILTER_ALL),
+            )
+            state.value = it.copy(snippets = scopedSnippets, filters = filterState)
         }
     }
 

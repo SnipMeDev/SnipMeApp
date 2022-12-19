@@ -6,6 +6,6 @@ class FilterSnippetsByScopeUseCase {
     operator fun invoke(snippets: List<Snippet>, scope: String): List<Snippet> {
         if (scope == SNIPPET_FILTER_ALL) return snippets
 
-        return snippets.filter { it.visibility.name.equals(scope, ignoreCase = true) }
+        return snippets.filter { it.isOwner && it.visibility.name.equals(scope, ignoreCase = true) }
     }
 }
