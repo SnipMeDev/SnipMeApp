@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -59,6 +58,7 @@ class _MainPage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     useNavigator([loginNavigator, detailsNavigator]);
+
     final state = useObservableState(
       MainModelStateData(),
       () => model.getState(),
@@ -71,6 +71,9 @@ class _MainPage extends HookWidget {
       () => model.getEvent(),
       (current, newState) => (current as MainModelEventData).equals(newState),
     ).value;
+
+    final expandedState = useState(true);
+    final controller = useScrollController();
 
     useEffect(() {
       model.initState();
@@ -96,12 +99,19 @@ class _MainPage extends HookWidget {
             model: model,
             snippets: snippets ?? List.empty(),
             filter: state.filter ?? SnippetFilter(),
+            controller: controller,
+            expanded: expandedState.value,
+            onExpandChange: (expanded) => expandedState.value = expanded,
           );
         },
       ),
       floatingActionButton: FloatingActionButton.small(
         onPressed: () {
-          // TODO Scroll to top
+          controller.animateTo(
+            0.0,
+            duration: const Duration(seconds: 1),
+            curve: const ElasticInCurve(),
+          );
         },
         tooltip: 'Scroll to top',
         backgroundColor: ColorStyles.surfacePrimary(),
@@ -114,23 +124,32 @@ class _MainPage extends HookWidget {
   }
 }
 
-class _MainPageData extends StatelessWidget {
-  const _MainPageData({
-    Key? key,
-    required this.navigator,
-    required this.model,
-    required this.snippets,
-    required this.filter,
-  }) : super(key: key);
+typedef ExpandChangeListener = Function(bool);
+
+class _MainPageData extends HookWidget {
+  const _MainPageData(
+      {Key? key,
+      required this.navigator,
+      required this.model,
+      required this.snippets,
+      required this.filter,
+      required this.controller,
+      required this.expanded,
+      required this.onExpandChange})
+      : super(key: key);
 
   final DetailsNavigator navigator;
   final MainModelBridge model;
   final List<Snippet> snippets;
   final SnippetFilter filter;
+  final ScrollController controller;
+  final bool expanded;
+  final ExpandChangeListener onExpandChange;
 
   @override
   Widget build(BuildContext context) {
     return NestedScrollView(
+      controller: controller,
       floatHeaderSlivers: true,
       headerSliverBuilder: (_, __) {
         return [
@@ -138,7 +157,7 @@ class _MainPageData extends StatelessWidget {
             elevation: 0.0,
             centerTitle: true,
             title: Row(mainAxisSize: MainAxisSize.min, children: [
-              Image.asset(Assets.appLogo, width: 18.0),
+              Image.asset(Assets.appLogo, width: Dimens.logoSignetSize),
               const SizedBox(width: Dimens.m),
               TextStyles.appBarLogo('SnipMe'),
             ]),
@@ -150,11 +169,13 @@ class _MainPageData extends StatelessWidget {
             ),
             actions: [
               IconButton(
-                icon: const Icon(Icons.close_fullscreen_outlined),
+                icon: Icon(
+                  expanded
+                      ? Icons.close_fullscreen_outlined
+                      : Icons.open_in_full_outlined,
+                ),
                 color: Colors.black,
-                onPressed: () {
-                  // TODO Handle collapse items
-                },
+                onPressed: () => onExpandChange(!expanded),
               ),
             ],
           ),
@@ -211,7 +232,9 @@ class _MainPageData extends StatelessWidget {
                           },
                         ),
                       ),
-                      const SizedBox(height: Dimens.m,)
+                      const SizedBox(
+                        height: Dimens.m,
+                      )
                     ],
                   ),
                 ),
@@ -233,6 +256,7 @@ class _MainPageData extends StatelessWidget {
                       horizontal: Dimens.m,
                     ),
                     child: SnippetListTile(
+                      isExpanded: expanded,
                       snippet: snippet,
                       onTap: () {
                         navigator.goToDetails(context, snippet.uuid!);
