@@ -13,11 +13,12 @@ class SnippetListTile extends HookWidget {
     Key? key,
     required this.snippet,
     required this.onTap,
+    this.isExpanded = true,
   }) : super(key: key);
 
-  final bool isExpanded = true;
   final Snippet snippet;
   final GestureTapCallback? onTap;
+  final bool isExpanded;
 
   @override
   Widget build(BuildContext context) {
