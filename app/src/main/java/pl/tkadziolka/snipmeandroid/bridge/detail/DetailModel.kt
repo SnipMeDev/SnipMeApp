@@ -13,6 +13,7 @@ import pl.tkadziolka.snipmeandroid.domain.reaction.GetTargetUserReactionUseCase
 import pl.tkadziolka.snipmeandroid.domain.reaction.SetUserReactionUseCase
 import pl.tkadziolka.snipmeandroid.domain.reaction.UserReaction
 import pl.tkadziolka.snipmeandroid.domain.share.ShareSnippetCodeUseCase
+import pl.tkadziolka.snipmeandroid.domain.snippet.DeleteSnippetUseCase
 import pl.tkadziolka.snipmeandroid.domain.snippet.GetSingleSnippetUseCase
 import pl.tkadziolka.snipmeandroid.domain.snippet.SaveSnippetUseCase
 import pl.tkadziolka.snipmeandroid.domain.snippets.Snippet
@@ -28,6 +29,7 @@ class DetailModel(
     private val setUserReaction: SetUserReactionUseCase,
     private val saveSnippet: SaveSnippetUseCase,
     private val shareSnippet: ShareSnippetCodeUseCase,
+    private val deleteSnippet: DeleteSnippetUseCase
     private val session: SessionModel
 ) : ErrorParsable {
     private val disposables = CompositeDisposable()
@@ -87,7 +89,6 @@ class DetailModel(
                     onSuccess = { saved ->
                         setState(Loaded(it))
                         mutableEvent.value = Saved(saved.uuid)
-
                     },
                     onError = { error ->
                         Timber.e("Couldn't save snippet, error = $error")
@@ -100,6 +101,23 @@ class DetailModel(
     fun share() {
         getSnippet()?.let {
             shareSnippet(it)
+        }
+    }
+
+    fun delete() {
+        getSnippet()?.let {
+            setState(Loading)
+            deleteSnippet(it.uuid)
+                .subscribeOn(Schedulers.io())
+                .subscribeBy(
+                    onComplete = {
+                        mutableEvent.value = Deleted
+                    },
+                    onError = { error ->
+                        Timber.e("Couldn't save snippet, error = $error")
+                        parseError(error)
+                    }
+                ).also { disposables += it }
         }
     }
 

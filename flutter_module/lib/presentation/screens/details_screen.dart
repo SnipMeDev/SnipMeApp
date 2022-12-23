@@ -65,14 +65,17 @@ class _DetailsPage extends HookWidget {
     if (event.event == DetailModelEvent.saved) {
       final snippetId = event.value;
       if (snippetId == null) {
-        navigator.back();
-        model.resetEvent();
+        _exit();
         return const SizedBox();
       }
 
-      navigator.back();
+      _exit();
       navigator.goToDetails(context, snippetId);
-      model.resetEvent();
+    }
+
+    if (event.event == DetailModelEvent.deleted) {
+      _exit();
+      return const SizedBox();
     }
 
     useEffect(() {
@@ -106,6 +109,11 @@ class _DetailsPage extends HookWidget {
         ),
       ),
     );
+  }
+
+  void _exit() {
+    navigator.back();
+    model.resetEvent();
   }
 }
 

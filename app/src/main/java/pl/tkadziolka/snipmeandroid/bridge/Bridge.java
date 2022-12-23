@@ -4,21 +4,20 @@
 package pl.tkadziolka.snipmeandroid.bridge;
 
 import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import java.io.ByteArrayOutputStream;
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import io.flutter.plugin.common.BasicMessageChannel;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MessageCodec;
 import io.flutter.plugin.common.StandardMessageCodec;
+import java.io.ByteArrayOutputStream;
+import java.nio.ByteBuffer;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 /**Generated class from Pigeon. */
 @SuppressWarnings({"unused", "unchecked", "CodeBlock2Expr", "RedundantSuppression"})
@@ -123,7 +122,8 @@ public class Bridge {
 
   public enum DetailModelEvent {
     NONE(0),
-    SAVED(1);
+    SAVED(1),
+    DELETED(2);
 
     private int index;
     private DetailModelEvent(final int index) {
@@ -1511,6 +1511,7 @@ public class Bridge {
     void save();
     void copyToClipboard();
     void share();
+    void delete();
 
     /** The codec used by DetailModelBridge. */
     static MessageCodec<Object> getCodec() {
@@ -1683,6 +1684,25 @@ public class Bridge {
             Map<String, Object> wrapped = new HashMap<>();
             try {
               api.share();
+              wrapped.put("result", null);
+            }
+            catch (Error | RuntimeException exception) {
+              wrapped.put("error", wrapError(exception));
+            }
+            reply.reply(wrapped);
+          });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.DetailModelBridge.delete", getCodec());
+        if (api != null) {
+          channel.setMessageHandler((message, reply) -> {
+            Map<String, Object> wrapped = new HashMap<>();
+            try {
+              api.delete();
               wrapped.put("result", null);
             }
             catch (Error | RuntimeException exception) {

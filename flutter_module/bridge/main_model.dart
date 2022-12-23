@@ -108,7 +108,7 @@ enum ModelState { loading, loaded, error }
 
 enum MainModelEvent { none, alert, logout }
 
-enum DetailModelEvent { none, saved }
+enum DetailModelEvent { none, saved, deleted }
 
 enum LoginModelEvent { none, logged }
 
@@ -203,6 +203,8 @@ abstract class DetailModelBridge {
   void copyToClipboard();
 
   void share();
+
+  void delete();
 }
 
 @HostApi()

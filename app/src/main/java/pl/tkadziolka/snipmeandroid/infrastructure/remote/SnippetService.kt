@@ -26,8 +26,14 @@ interface SnippetService {
     fun create(@Body request: CreateSnippetRequest): Single<SnippetResponse>
 
     @PUT("snippet/{$PATH_ID}/")
-    fun update(@Path(PATH_ID) id: String, @Body request: CreateSnippetRequest): Single<SnippetResponse>
+    fun update(
+        @Path(PATH_ID) id: String,
+        @Body request: CreateSnippetRequest
+    ): Single<SnippetResponse>
 
     @POST("snippet-rate/")
     fun rate(@Body request: RateSnippetRequest): Completable
+
+    @DELETE("snippet/{$PATH_ID}/")
+    fun delete(@Path(PATH_ID) id: String): Completable
 }
