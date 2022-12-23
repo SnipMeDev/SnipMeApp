@@ -9,5 +9,5 @@ class DeleteSnippetUseCase(private val repository: SnippetRepository) {
     operator fun invoke(uuid: String): Completable =
         repository
             .delete(uuid)
-//            .doOnComplete { repository.updateListener.onNext(Snippet.EMPTY.copy(uuid)) }
+            .doOnComplete { repository.updateListener.onNext(Snippet.EMPTY.copy(uuid)) }
 }

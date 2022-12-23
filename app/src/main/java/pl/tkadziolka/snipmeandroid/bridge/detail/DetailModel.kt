@@ -110,10 +110,7 @@ class DetailModel(
             deleteSnippet(it.uuid)
                 .subscribeOn(Schedulers.io())
                 .subscribeBy(
-                    onComplete = {
-                        Timber.d("Deleted ${it.uuid}")
-                        mutableEvent.value = Deleted
-                    },
+                    onComplete = { mutableEvent.value = Deleted },
                     onError = { error ->
                         Timber.e("Couldn't delete snippet, error = $error")
                         parseError(error)

@@ -41,6 +41,7 @@ internal val useCaseModule = module {
     factory { CreateSnippetUseCase(get(), get(), get()) }
     factory { UpdateSnippetUseCase(get(), get(), get()) }
     factory { ObserveUpdatedSnippetPageUseCase(get()) }
+    factory { ObserveSnippetUpdatesUseCase(get()) }
     factory { ResetUpdatedSnippetPageUseCase(get()) }
     factory { GetTargetUserReactionUseCase() }
     factory { SetUserReactionUseCase(get(), get(), get()) }
