@@ -45,10 +45,6 @@ class MainModelPlugin : ModelPlugin<Bridge.MainModelBridge>(), Bridge.MainModelB
         model.logOut()
     }
 
-    override fun refreshSnippetUpdates() {
-        model.refreshSnippetUpdates()
-    }
-
     private fun getState(viewState: MainViewState): Bridge.MainModelStateData {
         return Bridge.MainModelStateData().apply {
             state = viewState.toModelState()

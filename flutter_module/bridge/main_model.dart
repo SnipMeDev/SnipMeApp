@@ -16,6 +16,7 @@ class Snippet {
   bool? isLiked;
   bool? isDisliked;
   bool? isSaved;
+  bool? isToDelete;
 }
 
 class SnippetCode {
@@ -179,9 +180,6 @@ abstract class MainModelBridge {
 
   @TaskQueue(type: TaskQueueType.serialBackgroundThread)
   void logOut();
-
-  @TaskQueue(type: TaskQueueType.serialBackgroundThread)
-  void refreshSnippetUpdates();
 }
 
 @HostApi()

@@ -75,7 +75,6 @@ class _DetailsPage extends HookWidget {
 
     if (event.event == DetailModelEvent.deleted) {
       _exit();
-      return const SizedBox();
     }
 
     useEffect(() {
@@ -156,6 +155,7 @@ class _DetailPageData extends StatelessWidget {
               onSaveTap: model.save,
               onCopyTap: model.copyToClipboard,
               onShareTap: model.share,
+              onDeleteTap: model.delete,
             ),
           ),
         ),

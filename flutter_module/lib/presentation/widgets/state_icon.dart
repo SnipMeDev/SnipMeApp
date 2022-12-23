@@ -6,17 +6,19 @@ class StateIcon extends StatelessWidget {
   const StateIcon({
     Key? key,
     required this.icon,
+    this.activeColor = Colors.black,
     this.active,
     this.onTap,
   }) : super(key: key);
 
   final IconData icon;
+  final Color activeColor;
   final bool? active;
   final GestureTapCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    final color = getColorByState(active);
+    final color = getColorByState(active, activeColor);
     return SizedBox(
       width: 24,
       height: 24,
@@ -31,8 +33,8 @@ class StateIcon extends StatelessWidget {
     );
   }
 
-  Color getColorByState(bool? active) {
-    if (active == null) return Colors.black;
+  Color getColorByState(bool? active, Color activeColor) {
+    if (active == null) return activeColor;
     return active ? ColorStyles.accent() : Colors.grey;
   }
 }

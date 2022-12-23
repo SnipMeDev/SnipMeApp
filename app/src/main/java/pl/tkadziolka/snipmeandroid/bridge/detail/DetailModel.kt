@@ -29,7 +29,7 @@ class DetailModel(
     private val setUserReaction: SetUserReactionUseCase,
     private val saveSnippet: SaveSnippetUseCase,
     private val shareSnippet: ShareSnippetCodeUseCase,
-    private val deleteSnippet: DeleteSnippetUseCase
+    private val deleteSnippet: DeleteSnippetUseCase,
     private val session: SessionModel
 ) : ErrorParsable {
     private val disposables = CompositeDisposable()
@@ -116,6 +116,7 @@ class DetailModel(
                     onError = { error ->
                         Timber.e("Couldn't save snippet, error = $error")
                         parseError(error)
+                        mutableEvent.value = Deleted
                     }
                 ).also { disposables += it }
         }

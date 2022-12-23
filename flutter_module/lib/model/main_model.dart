@@ -105,6 +105,7 @@ class Snippet {
     this.isLiked,
     this.isDisliked,
     this.isSaved,
+    this.isToDelete,
   });
 
   String? uuid;
@@ -120,6 +121,7 @@ class Snippet {
   bool? isLiked;
   bool? isDisliked;
   bool? isSaved;
+  bool? isToDelete;
 
   Object encode() {
     final Map<Object?, Object?> pigeonMap = <Object?, Object?>{};
@@ -136,6 +138,7 @@ class Snippet {
     pigeonMap['isLiked'] = isLiked;
     pigeonMap['isDisliked'] = isDisliked;
     pigeonMap['isSaved'] = isSaved;
+    pigeonMap['isToDelete'] = isToDelete;
     return pigeonMap;
   }
 
@@ -163,6 +166,7 @@ class Snippet {
       isLiked: pigeonMap['isLiked'] as bool?,
       isDisliked: pigeonMap['isDisliked'] as bool?,
       isSaved: pigeonMap['isSaved'] as bool?,
+      isToDelete: pigeonMap['isToDelete'] as bool?,
     );
   }
 }
@@ -764,28 +768,6 @@ class MainModelBridge {
   Future<void> logOut() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.MainModelBridge.logOut', codec, binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
-    if (replyMap == null) {
-      throw PlatformException(
-        code: 'channel-error',
-        message: 'Unable to establish connection on channel.',
-      );
-    } else if (replyMap['error'] != null) {
-      final Map<Object?, Object?> error = (replyMap['error'] as Map<Object?, Object?>?)!;
-      throw PlatformException(
-        code: (error['code'] as String?)!,
-        message: error['message'] as String?,
-        details: error['details'],
-      );
-    } else {
-      return;
-    }
-  }
-
-  Future<void> refreshSnippetUpdates() async {
-    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.MainModelBridge.refreshSnippetUpdates', codec, binaryMessenger: _binaryMessenger);
     final Map<Object?, Object?>? replyMap =
         await channel.send(null) as Map<Object?, Object?>?;
     if (replyMap == null) {

@@ -49,6 +49,10 @@ class DetailModelPlugin : ModelPlugin<Bridge.DetailModelBridge>(), Bridge.Detail
         model.share()
     }
 
+    override fun delete() {
+        model.delete()
+    }
+
     private fun getData(viewState: DetailViewState): Bridge.DetailModelStateData {
         return Bridge.DetailModelStateData().apply {
             state = viewState.toModelState()
@@ -82,6 +86,7 @@ class DetailModelPlugin : ModelPlugin<Bridge.DetailModelBridge>(), Bridge.Detail
     private fun DetailEvent.toModelEvent() =
         when (this) {
             is Saved -> Bridge.DetailModelEvent.SAVED
+            is Deleted -> Bridge.DetailModelEvent.DELETED
             else -> Bridge.DetailModelEvent.NONE
         }
 }

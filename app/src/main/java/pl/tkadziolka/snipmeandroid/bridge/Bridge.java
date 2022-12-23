@@ -221,6 +221,12 @@ public class Bridge {
       this.isSaved = setterArg;
     }
 
+    private @Nullable Boolean isToDelete;
+    public @Nullable Boolean getIsToDelete() { return isToDelete; }
+    public void setIsToDelete(@Nullable Boolean setterArg) {
+      this.isToDelete = setterArg;
+    }
+
     public static final class Builder {
       private @Nullable String uuid;
       public @NonNull Builder setUuid(@Nullable String setterArg) {
@@ -287,6 +293,11 @@ public class Bridge {
         this.isSaved = setterArg;
         return this;
       }
+      private @Nullable Boolean isToDelete;
+      public @NonNull Builder setIsToDelete(@Nullable Boolean setterArg) {
+        this.isToDelete = setterArg;
+        return this;
+      }
       public @NonNull Snippet build() {
         Snippet pigeonReturn = new Snippet();
         pigeonReturn.setUuid(uuid);
@@ -302,6 +313,7 @@ public class Bridge {
         pigeonReturn.setIsLiked(isLiked);
         pigeonReturn.setIsDisliked(isDisliked);
         pigeonReturn.setIsSaved(isSaved);
+        pigeonReturn.setIsToDelete(isToDelete);
         return pigeonReturn;
       }
     }
@@ -320,6 +332,7 @@ public class Bridge {
       toMapResult.put("isLiked", isLiked);
       toMapResult.put("isDisliked", isDisliked);
       toMapResult.put("isSaved", isSaved);
+      toMapResult.put("isToDelete", isToDelete);
       return toMapResult;
     }
     static @NonNull Snippet fromMap(@NonNull Map<String, Object> map) {
@@ -350,6 +363,8 @@ public class Bridge {
       pigeonResult.setIsDisliked((Boolean)isDisliked);
       Object isSaved = map.get("isSaved");
       pigeonResult.setIsSaved((Boolean)isSaved);
+      Object isToDelete = map.get("isToDelete");
+      pigeonResult.setIsToDelete((Boolean)isToDelete);
       return pigeonResult;
     }
   }
@@ -1250,7 +1265,6 @@ public class Bridge {
     void filterLanguage(@NonNull String language, @NonNull Boolean isSelected);
     void filterScope(@NonNull String scope);
     void logOut();
-    void refreshSnippetUpdates();
 
     /** The codec used by MainModelBridge. */
     static MessageCodec<Object> getCodec() {
@@ -1399,26 +1413,6 @@ public class Bridge {
             Map<String, Object> wrapped = new HashMap<>();
             try {
               api.logOut();
-              wrapped.put("result", null);
-            }
-            catch (Error | RuntimeException exception) {
-              wrapped.put("error", wrapError(exception));
-            }
-            reply.reply(wrapped);
-          });
-        } else {
-          channel.setMessageHandler(null);
-        }
-      }
-      {
-        BinaryMessenger.TaskQueue taskQueue = binaryMessenger.makeBackgroundTaskQueue();
-        BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.MainModelBridge.refreshSnippetUpdates", getCodec(), taskQueue);
-        if (api != null) {
-          channel.setMessageHandler((message, reply) -> {
-            Map<String, Object> wrapped = new HashMap<>();
-            try {
-              api.refreshSnippetUpdates();
               wrapped.put("result", null);
             }
             catch (Error | RuntimeException exception) {
