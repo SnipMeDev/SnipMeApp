@@ -44,6 +44,7 @@ internal val useCaseModule = module {
     factory { ResetUpdatedSnippetPageUseCase(get()) }
     factory { GetTargetUserReactionUseCase() }
     factory { SetUserReactionUseCase(get(), get(), get()) }
+    factory { DeleteSnippetUseCase(get()) }
     // Language
     factory { GetLanguagesUseCase(get(), get(), get()) }
     // Share

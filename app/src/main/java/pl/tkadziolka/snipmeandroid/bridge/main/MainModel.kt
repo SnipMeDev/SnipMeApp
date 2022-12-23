@@ -25,7 +25,6 @@ class MainModel(
     private val getUser: GetSingleUserUseCase,
     private val getSnippets: GetSnippetsUseCase,
     private val observeUpdatedPage: ObserveUpdatedSnippetPageUseCase,
-    private val resetUpdatedPage: ResetUpdatedSnippetPageUseCase,
     private val hasMore: HasMoreSnippetPagesUseCase,
     private val getLanguageFilters: GetLanguageFiltersUseCase,
     private val filterSnippetsByLanguage: FilterSnippetsByLanguageUseCase,
@@ -44,12 +43,7 @@ class MainModel(
     private var cachedSnippets = emptyList<Snippet>()
     private var scopedSnippets = emptyList<Snippet>()
     private var shouldRefresh = false
-    private var filterState = SnippetFilters(
-        languages = listOf(SNIPPET_FILTER_ALL),
-        selectedLanguages = listOf(SNIPPET_FILTER_ALL),
-        scopes = listOf("All", "Private", "Public"),
-        selectedScope = "All"
-    )
+    private lateinit var filterState: SnippetFilters;
 
     override fun parseError(throwable: Throwable) {
         when (throwable) {
@@ -67,8 +61,25 @@ class MainModel(
         }
     }
 
+    init {
+        observeUpdatedPage(getScope())
+            .subscribeOn(Schedulers.io())
+            .subscribeBy(
+                onNext = { updatedPage ->
+                    initState()
+                },
+                onError = { Timber.e("Couldn't refresh snippet updates, error = $it") }
+            ).also { disposables += it }
+    }
+
     fun initState() {
         mutableState.value = Loading
+        filterState = SnippetFilters(
+            languages = listOf(SNIPPET_FILTER_ALL),
+            selectedLanguages = listOf(SNIPPET_FILTER_ALL),
+            scopes = listOf("All", "Private", "Public"),
+            selectedScope = "All"
+        )
         getUser()
             .subscribeOn(Schedulers.io())
             .subscribeBy(
@@ -104,21 +115,6 @@ class MainModel(
 
     fun logOut() {
         session.logOut { mutableEvent.value = Logout }
-    }
-
-    fun refreshSnippetUpdates() {
-        getLoadedState()?.let {
-            observeUpdatedPage(getScope())
-                .subscribeOn(Schedulers.io())
-                .subscribeBy(
-                    onNext = { updatedPage ->
-                        shouldRefresh = true
-                        loadSnippets(it.user, updatedPage, getScope())
-                        resetUpdatedPage()
-                    },
-                    onError = { Timber.e("Couldn't refresh snippet updates, error = $it") }
-                ).also { disposables += it }
-        }
     }
 
     private fun loadNextPage() {

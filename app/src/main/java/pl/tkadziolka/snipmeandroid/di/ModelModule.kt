@@ -10,5 +10,5 @@ internal val modelModule = module {
     single { SessionModel(get()) }
     single { LoginModel(get(), get(), get()) }
     single { MainModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
-    single { DetailModel(get(), get(), get(), get(), get(), get(), get(), get()) }
+    single { DetailModel(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
 }

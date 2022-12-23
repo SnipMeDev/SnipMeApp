@@ -14,6 +14,7 @@ class SnippetActionBar extends StatelessWidget {
     this.onSaveTap,
     this.onCopyTap,
     this.onShareTap,
+    this.onDeleteTap,
   }) : super(key: key);
 
   final Snippet snippet;
@@ -22,6 +23,7 @@ class SnippetActionBar extends StatelessWidget {
   final GestureTapCallback? onSaveTap;
   final GestureTapCallback? onCopyTap;
   final GestureTapCallback? onShareTap;
+  final GestureTapCallback? onDeleteTap;
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +57,13 @@ class SnippetActionBar extends StatelessWidget {
           StateIcon(
             icon: Icons.share,
             onTap: onShareTap,
+          ),
+          const SizedBox(width: Dimens.l),
+          StateIcon(
+            onTap: snippet.isToDelete == true ? onDeleteTap : null,
+            active: snippet.isToDelete == true ? null : false,
+            activeColor: Colors.redAccent,
+            icon: Icons.delete_outline_outlined,
           ),
         ],
       ),

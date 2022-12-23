@@ -1,5 +1,6 @@
 package pl.tkadziolka.snipmeandroid.domain.repository.snippet
 
+import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
 import pl.tkadziolka.snipmeandroid.domain.error.ErrorHandler
@@ -54,6 +55,8 @@ class SnippetRepositoryReal(
         service.update(uuid, CreateSnippetRequest(title, code, language, visibility.name))
             .mapError { errorHandler.handle(it) }
             .map { mapper(it) }
+
+    override fun delete(uuid: String): Completable = service.delete(uuid)
 
     override fun count(scope: SnippetScope) =
         if (count != null) {

@@ -16,6 +16,7 @@ class Snippet {
   bool? isLiked;
   bool? isDisliked;
   bool? isSaved;
+  bool? isToDelete;
 }
 
 class SnippetCode {
@@ -108,7 +109,7 @@ enum ModelState { loading, loaded, error }
 
 enum MainModelEvent { none, alert, logout }
 
-enum DetailModelEvent { none, saved }
+enum DetailModelEvent { none, saved, deleted }
 
 enum LoginModelEvent { none, logged }
 
@@ -179,9 +180,6 @@ abstract class MainModelBridge {
 
   @TaskQueue(type: TaskQueueType.serialBackgroundThread)
   void logOut();
-
-  @TaskQueue(type: TaskQueueType.serialBackgroundThread)
-  void refreshSnippetUpdates();
 }
 
 @HostApi()
@@ -203,6 +201,8 @@ abstract class DetailModelBridge {
   void copyToClipboard();
 
   void share();
+
+  void delete();
 }
 
 @HostApi()

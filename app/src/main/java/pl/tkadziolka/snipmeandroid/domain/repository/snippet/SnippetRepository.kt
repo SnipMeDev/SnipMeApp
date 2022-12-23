@@ -34,4 +34,6 @@ interface SnippetRepository {
     fun count(scope: SnippetScope): Single<Int>
 
     fun reaction(uuid: String, reaction: UserReaction): Completable
+
+    fun delete(uuid: String): Completable
 }

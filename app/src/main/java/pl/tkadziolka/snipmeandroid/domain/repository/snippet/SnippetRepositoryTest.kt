@@ -91,7 +91,10 @@ class SnippetRepositoryTest(private val errorHandler: ErrorHandler) : SnippetRep
 
     override fun count(scope: SnippetScope): Single<Int> = Single.just(list.size)
 
-    override fun reaction(uuid: String, reaction: UserReaction): Completable = Completable.complete()
+    override fun reaction(uuid: String, reaction: UserReaction): Completable =
+        Completable.complete()
+
+    override fun delete(uuid: String): Completable = Completable.complete()
 
     private fun getPreview(code: String): SpannableString {
         val preview = code.lines(PREVIEW_COUNT).joinToString(separator = newLineChar)
