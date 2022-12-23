@@ -9,6 +9,7 @@ import pl.tkadziolka.snipmeandroid.bridge.session.SessionModel
 import pl.tkadziolka.snipmeandroid.domain.error.exception.*
 import pl.tkadziolka.snipmeandroid.domain.filter.*
 import pl.tkadziolka.snipmeandroid.domain.message.ErrorMessages
+import pl.tkadziolka.snipmeandroid.domain.snippet.ObserveSnippetUpdatesUseCase
 import pl.tkadziolka.snipmeandroid.domain.snippet.ObserveUpdatedSnippetPageUseCase
 import pl.tkadziolka.snipmeandroid.domain.snippet.ResetUpdatedSnippetPageUseCase
 import pl.tkadziolka.snipmeandroid.domain.snippets.*
@@ -24,7 +25,7 @@ class MainModel(
     private val errorMessages: ErrorMessages,
     private val getUser: GetSingleUserUseCase,
     private val getSnippets: GetSnippetsUseCase,
-    private val observeUpdatedPage: ObserveUpdatedSnippetPageUseCase,
+    private val observeUpdates: ObserveSnippetUpdatesUseCase,
     private val hasMore: HasMoreSnippetPagesUseCase,
     private val getLanguageFilters: GetLanguageFiltersUseCase,
     private val filterSnippetsByLanguage: FilterSnippetsByLanguageUseCase,
@@ -42,7 +43,6 @@ class MainModel(
 
     private var cachedSnippets = emptyList<Snippet>()
     private var scopedSnippets = emptyList<Snippet>()
-    private var shouldRefresh = false
     private lateinit var filterState: SnippetFilters;
 
     override fun parseError(throwable: Throwable) {
@@ -62,12 +62,10 @@ class MainModel(
     }
 
     init {
-        observeUpdatedPage(getScope())
+        observeUpdates()
             .subscribeOn(Schedulers.io())
             .subscribeBy(
-                onNext = { updatedPage ->
-                    initState()
-                },
+                onNext = { initState() },
                 onError = { Timber.e("Couldn't refresh snippet updates, error = $it") }
             ).also { disposables += it }
     }
@@ -155,10 +153,6 @@ class MainModel(
                         filterState
                     )
                     loadNextPage()
-                    if (shouldRefresh) {
-                        mutableEvent.value = ListRefreshed
-                        shouldRefresh = false
-                    }
                 },
                 onError = {
                     Timber.e("Couldn't load snippets, error = $it")

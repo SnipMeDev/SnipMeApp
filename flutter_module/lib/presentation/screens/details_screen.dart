@@ -62,20 +62,26 @@ class _DetailsPage extends HookWidget {
       (current, newState) => (current as DetailModelEventData).equals(newState),
     ).value;
 
-    if (event.event == DetailModelEvent.saved) {
-      final snippetId = event.value;
-      if (snippetId == null) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (event.event == DetailModelEvent.saved) {
+        final snippetId = event.value;
+        if (snippetId == null) {
+          _exit();
+          return;
+        }
+
         _exit();
-        return const SizedBox();
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          navigator.goToDetails(context, snippetId);
+        });
       }
+    });
 
-      _exit();
-      navigator.goToDetails(context, snippetId);
-    }
-
-    if (event.event == DetailModelEvent.deleted) {
-      _exit();
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (event.event == DetailModelEvent.deleted) {
+        _exit();
+      }
+    });
 
     useEffect(() {
       model.load(navigator.snippetId ?? '');
@@ -111,8 +117,8 @@ class _DetailsPage extends HookWidget {
   }
 
   void _exit() {
-    navigator.back();
     model.resetEvent();
+    navigator.back();
   }
 }
 

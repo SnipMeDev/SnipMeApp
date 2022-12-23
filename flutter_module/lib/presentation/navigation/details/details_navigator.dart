@@ -13,6 +13,5 @@ class DetailsNavigator extends ScreenNavigator {
   void goToDetails(BuildContext context, String snippetId) {
     _snippetId = snippetId;
     router.push(DetailsScreen.name.route);
-    print("Navigated to $_snippetId");
   }
 }
