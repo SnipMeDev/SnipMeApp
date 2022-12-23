@@ -111,12 +111,12 @@ class DetailModel(
                 .subscribeOn(Schedulers.io())
                 .subscribeBy(
                     onComplete = {
+                        Timber.d("Deleted ${it.uuid}")
                         mutableEvent.value = Deleted
                     },
                     onError = { error ->
-                        Timber.e("Couldn't save snippet, error = $error")
+                        Timber.e("Couldn't delete snippet, error = $error")
                         parseError(error)
-                        mutableEvent.value = Deleted
                     }
                 ).also { disposables += it }
         }

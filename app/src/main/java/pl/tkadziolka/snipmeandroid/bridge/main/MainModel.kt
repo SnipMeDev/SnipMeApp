@@ -42,7 +42,6 @@ class MainModel(
 
     private var cachedSnippets = emptyList<Snippet>()
     private var scopedSnippets = emptyList<Snippet>()
-    private var shouldRefresh = false
     private lateinit var filterState: SnippetFilters;
 
     override fun parseError(throwable: Throwable) {
@@ -66,7 +65,7 @@ class MainModel(
             .subscribeOn(Schedulers.io())
             .subscribeBy(
                 onNext = { updatedPage ->
-                    initState()
+//                    initState()
                 },
                 onError = { Timber.e("Couldn't refresh snippet updates, error = $it") }
             ).also { disposables += it }
@@ -155,10 +154,6 @@ class MainModel(
                         filterState
                     )
                     loadNextPage()
-                    if (shouldRefresh) {
-                        mutableEvent.value = ListRefreshed
-                        shouldRefresh = false
-                    }
                 },
                 onError = {
                     Timber.e("Couldn't load snippets, error = $it")
