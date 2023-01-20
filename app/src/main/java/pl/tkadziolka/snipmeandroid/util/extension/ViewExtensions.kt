@@ -11,15 +11,12 @@ import android.view.ViewGroup.MarginLayoutParams
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.annotation.ColorRes
-import androidx.annotation.DimenRes
 import androidx.annotation.LayoutRes
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
-import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import io.github.kbiakov.codeview.CodeView
-import kotlinx.android.synthetic.main.fragment_preview.*
 import pl.tkadziolka.snipmeandroid.R
 import pl.tkadziolka.snipmeandroid.util.SyntaxWindowTheme
 import pl.tkadziolka.snipmeandroid.util.view.DebouncingOnClickListener
@@ -58,10 +55,6 @@ fun ViewGroup.inflate(@LayoutRes resource: Int, attachToRoot: Boolean = false): 
 
 fun View.visible() {
     isVisible = true
-}
-
-fun View.invisible() {
-    isInvisible = true
 }
 
 fun View.gone() {
@@ -105,26 +98,4 @@ fun ImageView.tint(@ColorRes res: Int) {
         ContextCompat.getColor(context, res),
         android.graphics.PorterDuff.Mode.SRC_IN
     )
-}
-
-fun View.setOnOutsideClick(@DimenRes marginRes: Int, action: () -> Unit) {
-    val marginPx = resources.getDimensionPixelSize(marginRes)
-    setOnTouchListener { view, event ->
-        view.performClick()
-        return@setOnTouchListener when {
-            event.x <= marginPx -> {
-                action(); true
-            }
-            event.y <= marginPx -> {
-                action(); true
-            }
-            view.width - event.x <= marginPx -> {
-                action(); true
-            }
-            view.height - event.y <= marginPx -> {
-                action(); true
-            }
-            else -> false
-        }
-    }
 }

@@ -2,10 +2,7 @@ package pl.tkadziolka.snipmeandroid.di
 
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
-import pl.tkadziolka.snipmeandroid.bridge.main.MainModel
-import pl.tkadziolka.snipmeandroid.bridge.session.SessionModel
 import pl.tkadziolka.snipmeandroid.ui.detail.DetailViewModel
-import pl.tkadziolka.snipmeandroid.ui.edit.EditViewModel
 import pl.tkadziolka.snipmeandroid.ui.login.LoginViewModel
 import pl.tkadziolka.snipmeandroid.ui.main.MainViewModel
 import pl.tkadziolka.snipmeandroid.ui.session.SessionViewModel
@@ -17,5 +14,4 @@ internal val viewModelModule = module {
     viewModel { SessionViewModel(get()) }
     viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { DetailViewModel(get(), get(), get(), get(), get(), get(), get()) }
-    viewModel { EditViewModel(get(), get(), get(), get(), get(), get()) }
 }
