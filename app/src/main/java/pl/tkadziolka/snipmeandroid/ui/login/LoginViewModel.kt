@@ -29,9 +29,7 @@ class LoginViewModel(
     private val errorMessages: ErrorMessages,
     private val messages: ValidationMessages,
     private val interactor: LoginInteractor,
-    private val navigator: LoginNavigator
 ) : StateViewModel<LoginState>(), ErrorParsable {
-    private var identifyDisposable: Disposable? = null
     private var loginDisposable: Disposable? = null
     private var registerDisposable: Disposable? = null
 
@@ -49,52 +47,6 @@ class LoginViewModel(
             is SessionExpiredException -> setEvent(Error(errorMessages.parse(throwable)))
             else -> setEvent(Error(errorMessages.parse(throwable)))
         }
-    }
-
-    fun startup(login: String) {
-        // Don't reset state on configuration changed
-        if (state.value != null) return
-
-        setState(Startup(login, null))
-    }
-
-    fun goToLogin(login: String) {
-        setState(Login(login, "", null))
-    }
-
-    fun goToMain(nav: NavController) {
-        navigator.goToMain(nav)
-    }
-
-    fun goToError(nav: NavController, message: String?) {
-        navigator.goToError(nav, message)
-    }
-
-    fun revokeLogin(login: String) {
-        setState(Startup(login, null))
-    }
-
-    fun validateLogin(login: String) {
-        if (identifyDisposable.inProgress()) return
-        setState(Loading)
-
-        FieldValidator(messages).validate(login).messageOrNull()?.let { message ->
-            setState(Startup(login, message))
-            return
-        }
-
-        identifyDisposable = interactor.identify(login)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeBy(
-                onSuccess = { identified -> publishIdentified(login, identified) },
-                onError = {
-                    val errorMessage = getErrorMessage(it)
-                    Timber.d("Couldn't identify user = $login, error = $it")
-                    setState(Startup(login, errorMessage))
-                    parseError(it)
-                }
-            ).also { disposables += it }
     }
 
     fun login(login: String, password: String) {
@@ -118,47 +70,6 @@ class LoginViewModel(
                     parseError(it)
                 }
             ).also { disposables += it }
-    }
-
-    fun register(login: String, password: String, repeatedPassword: String, email: String) {
-        if (registerDisposable.inProgress()) return
-        setState(Loading)
-
-        SignUpValidator(messages).validate(login, password, repeatedPassword, email).messageOrNull()
-            ?.let { message ->
-                setState(Register(login, password, repeatedPassword, email, message))
-                return
-            }
-
-        registerDisposable = interactor.register(login, password, email)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeBy(
-                onComplete = { setState(Completed(login)) },
-                onError = {
-                    val errorMessage = getErrorMessage(it)
-                    Timber.d("Couldn't register user = $login, error = $it")
-                    setState(Register(login, password, repeatedPassword, email, errorMessage))
-                    parseError(it)
-                }
-            ).also { disposables += it }
-    }
-
-    fun getLogin(): String? = when (state.value) {
-        is Startup -> (state.value as Startup).login
-        is Login -> (state.value as Login).login
-        is Register -> (state.value as Register).login
-        is UserFound -> (state.value as UserFound).login
-        is Completed -> (state.value as Completed).login
-        else -> null
-    }
-
-    private fun publishIdentified(login: String, identified: Boolean) {
-        if (identified) {
-            setState(UserFound(login))
-        } else {
-            setState(Register(login, "", "", "", null))
-        }
     }
 
     private fun setEvent(event: LoginEvent) {

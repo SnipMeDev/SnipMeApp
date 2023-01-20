@@ -10,8 +10,8 @@ import pl.tkadziolka.snipmeandroid.ui.splash.SplashViewModel
 
 internal val viewModelModule = module {
     viewModel { SplashViewModel(get(), get()) }
-    viewModel { LoginViewModel(get(), get(), get(), get()) }
+    viewModel { LoginViewModel(get(), get(), get()) }
     viewModel { SessionViewModel(get()) }
-    viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
-    viewModel { DetailViewModel(get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { DetailViewModel(get(), get(), get(), get(), get(), get()) }
 }

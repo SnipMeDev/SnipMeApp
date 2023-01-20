@@ -1,10 +1,10 @@
 package pl.tkadziolka.snipmeandroid.ui.main
 
-import androidx.navigation.NavController
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
+import pl.tkadziolka.snipmeandroid.bridge.Bridge
 import pl.tkadziolka.snipmeandroid.domain.error.exception.*
 import pl.tkadziolka.snipmeandroid.domain.message.ErrorMessages
 import pl.tkadziolka.snipmeandroid.domain.snippet.ObserveUpdatedSnippetPageUseCase
@@ -16,13 +16,11 @@ import pl.tkadziolka.snipmeandroid.ui.error.ErrorParsable
 import pl.tkadziolka.snipmeandroid.ui.session.SessionViewModel
 import pl.tkadziolka.snipmeandroid.ui.viewmodel.PersistedStateViewModel
 import pl.tkadziolka.snipmeandroid.ui.viewmodel.SingleLiveEvent
-import pl.tkadziolka.snipmeandroid.util.view.SnippetFilter
 import timber.log.Timber
 
 private const val ONE_PAGE = 1
 
 class MainViewModel(
-    private val navigator: MainNavigator,
     private val errorMessages: ErrorMessages,
     private val getUser: GetSingleUserUseCase,
     private val getSnippets: GetSnippetsUseCase,
@@ -64,58 +62,7 @@ class MainViewModel(
             ).also { disposables += it }
     }
 
-    fun goToDetail(navController: NavController, snippetId: String) {
-        navigator.goToDetail(navController, snippetId)
-    }
-
-    fun goToPreview(
-        nav: NavController,
-        title: String,
-        uuid: String,
-        code: String,
-        language: String
-    ) {
-        navigator.goToPreview(nav, title, uuid, code, language)
-    }
-
-    fun goToEdit(nav: NavController) {
-        navigator.goToEdit(nav)
-    }
-
-    fun goToLogin(nav: NavController) {
-        navigator.goToLogin(nav)
-    }
-
-    fun goToError(nav: NavController, message: String?) {
-        navigator.goToError(nav, message)
-    }
-
-    fun goToContact(nav: NavController) {
-        navigator.goToContact(nav)
-    }
-
-    fun goToDonate(nav: NavController) {
-        navigator.goToDonate(nav)
-    }
-
-    fun loadNextPage() {
-//        getLoadedState()?.let { state ->
-//            hasMore(state.filters, state.pages)
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribeBy(
-//                    onSuccess = { hasMore ->
-//                        if (hasMore) loadSnippets(state.user, pages = state.pages + ONE_PAGE)
-//                    },
-//                    onError = {
-//                        Timber.e("Couldn't check next page, error = $it")
-//                        mutableEvent.value = Alert(errorMessages.parse(it))
-//                    })
-//                .also { disposables += it }
-//        }
-    }
-
-    fun filter(filter: SnippetFilter) {
+    fun filter(filter: Bridge.SnippetFilter) {
         val scope = filterToScope(filter)
         getLoadedState()?.let { state ->
             loadSnippets(state.user, pages = ONE_PAGE, scope = scope)
@@ -169,16 +116,16 @@ class MainViewModel(
 
     private fun getLoadedState(): Loaded? = state.value as? Loaded
 
-    private fun filterToScope(filter: SnippetFilter) =
+    private fun filterToScope(filter: Bridge.SnippetFilter) =
         when (filter) {
-            SnippetFilter.ALL -> SnippetScope.ALL
-            SnippetFilter.MINE -> SnippetScope.OWNED
+//            Bridge.SnippetFilter.ALL -> SnippetScope.ALL
+//            Bridge.SnippetFilter.MINE -> SnippetScope.OWNED
             else -> SnippetScope.SHARED_FOR
         }
 
     private fun getScope(): SnippetScope {
         getLoadedState()?.let {
-//            return it.scope
+
         }
         return SnippetScope.ALL
     }
