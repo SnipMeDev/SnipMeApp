@@ -21,7 +21,6 @@ import com.bumptech.glide.Glide
 import io.github.kbiakov.codeview.CodeView
 import kotlinx.android.synthetic.main.fragment_preview.*
 import pl.tkadziolka.snipmeandroid.R
-import pl.tkadziolka.snipmeandroid.ui.preview.toThemeData
 import pl.tkadziolka.snipmeandroid.util.SyntaxWindowTheme
 import pl.tkadziolka.snipmeandroid.util.view.DebouncingOnClickListener
 
@@ -87,8 +86,6 @@ fun CodeView.setCodeWithTheme(code: String, language: String?, theme: SyntaxWind
                 code = code,
                 language = language,
                 animateOnHighlight = false,
-                theme = pl.tkadziolka.snipmeandroid.util.SyntaxTheme()
-                    .toThemeData(theme ?: context.syntaxWindowTheme)
             )
         )
     }

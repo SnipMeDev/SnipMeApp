@@ -31,7 +31,6 @@ class ErrorFragment: Fragment() {
 
         onBackPressed { navigateToPreviousSuccessScreen() }
         errorClose.setOnClick { navigateToPreviousSuccessScreen() }
-        errorContact.setOnClick { requireContext().safeOpenWebsite(BuildConfig.CONTACT_US_PAGE) }
     }
 
     private fun navigateToPreviousSuccessScreen() {
