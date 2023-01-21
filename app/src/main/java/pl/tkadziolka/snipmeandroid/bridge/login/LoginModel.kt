@@ -12,7 +12,6 @@ import pl.tkadziolka.snipmeandroid.domain.error.exception.*
 import pl.tkadziolka.snipmeandroid.domain.message.ErrorMessages
 import pl.tkadziolka.snipmeandroid.ui.error.ErrorParsable
 import pl.tkadziolka.snipmeandroid.ui.login.*
-import pl.tkadziolka.snipmeandroid.ui.splash.NotAuthorized
 import pl.tkadziolka.snipmeandroid.util.extension.inProgress
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
