@@ -17,6 +17,7 @@
         tools:targetApi="n">
         <activity
             android:name="pl.tkadziolka.snipmeandroid.MainActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
