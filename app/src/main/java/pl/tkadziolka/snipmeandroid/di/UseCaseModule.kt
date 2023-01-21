@@ -8,10 +8,7 @@ import pl.tkadziolka.snipmeandroid.domain.language.GetLanguagesUseCase
 import pl.tkadziolka.snipmeandroid.domain.network.CheckNetworkAvailableUseCase
 import pl.tkadziolka.snipmeandroid.domain.reaction.GetTargetUserReactionUseCase
 import pl.tkadziolka.snipmeandroid.domain.reaction.SetUserReactionUseCase
-import pl.tkadziolka.snipmeandroid.domain.share.ClearCachedShareUsersUseCase
-import pl.tkadziolka.snipmeandroid.domain.share.ShareInteractor
 import pl.tkadziolka.snipmeandroid.domain.share.ShareSnippetCodeUseCase
-import pl.tkadziolka.snipmeandroid.domain.share.ShareSnippetUseCase
 import pl.tkadziolka.snipmeandroid.domain.snippet.*
 import pl.tkadziolka.snipmeandroid.domain.filter.FilterSnippetsByLanguageUseCase
 import pl.tkadziolka.snipmeandroid.domain.filter.FilterSnippetsByScopeUseCase
@@ -19,7 +16,6 @@ import pl.tkadziolka.snipmeandroid.domain.filter.GetLanguageFiltersUseCase
 import pl.tkadziolka.snipmeandroid.domain.filter.UpdateSnippetFiltersLanguageUseCase
 import pl.tkadziolka.snipmeandroid.domain.snippets.GetSnippetsUseCase
 import pl.tkadziolka.snipmeandroid.domain.snippets.HasMoreSnippetPagesUseCase
-import pl.tkadziolka.snipmeandroid.domain.user.GetShareUsersUseCase
 import pl.tkadziolka.snipmeandroid.domain.user.GetSingleUserUseCase
 
 internal val useCaseModule = module {
@@ -49,9 +45,6 @@ internal val useCaseModule = module {
     // Language
     factory { GetLanguagesUseCase(get(), get(), get()) }
     // Share
-    factory { GetShareUsersUseCase(get(), get(), get(), get()) }
-    factory { ClearCachedShareUsersUseCase(get()) }
-    factory { ShareSnippetUseCase(get(), get(), get(), get()) }
     factory { ShareSnippetCodeUseCase(get()) }
     // Clipboard
     single { AddToClipboardUseCase(get()) }
@@ -68,5 +61,4 @@ internal val useCaseModule = module {
 internal val interactorModule = module {
     factory { LoginInteractor(get(), get(), get()) }
     factory { EditInteractor(get(), get(), get(), get(), get()) }
-    factory { ShareInteractor(get(), get(), get()) }
 }

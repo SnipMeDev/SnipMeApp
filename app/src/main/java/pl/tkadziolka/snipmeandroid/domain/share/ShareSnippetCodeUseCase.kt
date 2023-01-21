@@ -2,6 +2,7 @@ package pl.tkadziolka.snipmeandroid.domain.share
 
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import androidx.core.content.ContextCompat.startActivity
 import pl.tkadziolka.snipmeandroid.domain.snippets.Snippet
 
@@ -17,6 +18,7 @@ class ShareSnippetCodeUseCase(
         }
 
         val shareIntent = Intent.createChooser(sendIntent, snippet.title)
+        shareIntent.addFlags(FLAG_ACTIVITY_NEW_TASK)
         startActivity(context, shareIntent, null)
     }
 }

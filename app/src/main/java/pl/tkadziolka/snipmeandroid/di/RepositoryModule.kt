@@ -7,8 +7,6 @@ import pl.tkadziolka.snipmeandroid.domain.repository.language.LanguageRepository
 import pl.tkadziolka.snipmeandroid.domain.repository.language.LanguageRepositoryReal
 import pl.tkadziolka.snipmeandroid.domain.repository.networkstate.NetworkStateRepository
 import pl.tkadziolka.snipmeandroid.domain.repository.networkstate.NetworkStateRepositoryReal
-import pl.tkadziolka.snipmeandroid.domain.repository.share.ShareRepository
-import pl.tkadziolka.snipmeandroid.domain.repository.share.ShareRepositoryReal
 import pl.tkadziolka.snipmeandroid.domain.repository.snippet.SnippetRepository
 import pl.tkadziolka.snipmeandroid.domain.repository.snippet.SnippetRepositoryReal
 import pl.tkadziolka.snipmeandroid.domain.repository.user.UserRepository
@@ -20,5 +18,4 @@ internal val repositoryModule = module {
     single<UserRepository> { UserRepositoryReal(get(), get()) }
     single<SnippetRepository> { SnippetRepositoryReal(get(), get(), get()) }
     single<LanguageRepository> { LanguageRepositoryReal(get(), get(), get()) }
-    single<ShareRepository> { ShareRepositoryReal(get(), get()) }
 }
