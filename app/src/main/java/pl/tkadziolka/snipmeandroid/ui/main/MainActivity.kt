@@ -6,8 +6,8 @@ import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.FlutterEngineCache
 import io.flutter.embedding.engine.dart.DartExecutor
-import pl.tkadziolka.snipmeandroid.bridge.main.MainModelPlugin
 import pl.tkadziolka.snipmeandroid.R
+import pl.tkadziolka.snipmeandroid.bridge.main.MainModelPlugin
 import pl.tkadziolka.snipmeandroid.bridge.detail.DetailModelPlugin
 import pl.tkadziolka.snipmeandroid.bridge.login.LoginModelPlugin
 
@@ -18,6 +18,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
         // Instantiate a FlutterEngine.
         flutterEngine = FlutterEngine(this)
