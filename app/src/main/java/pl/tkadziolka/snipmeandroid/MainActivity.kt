@@ -1,4 +1,4 @@
-package pl.tkadziolka.snipmeandroid.ui.main
+package pl.tkadziolka.snipmeandroid
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
