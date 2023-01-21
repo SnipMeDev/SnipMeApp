@@ -17,7 +17,6 @@ import pl.tkadziolka.snipmeandroid.domain.snippet.DeleteSnippetUseCase
 import pl.tkadziolka.snipmeandroid.domain.snippet.GetSingleSnippetUseCase
 import pl.tkadziolka.snipmeandroid.domain.snippet.SaveSnippetUseCase
 import pl.tkadziolka.snipmeandroid.domain.snippets.Snippet
-import pl.tkadziolka.snipmeandroid.ui.detail.*
 import pl.tkadziolka.snipmeandroid.ui.error.ErrorParsable
 import timber.log.Timber
 
@@ -151,3 +150,15 @@ class DetailModel(
         newState?.let { mutableState.value = it }
     }
 }
+
+sealed class DetailViewState
+object Loading : DetailViewState()
+data class Loaded(val snippet: Snippet) : DetailViewState()
+data class Error(val error: String?) : DetailViewState()
+
+sealed class DetailEvent
+object Idle : DetailEvent()
+object Deleted : DetailEvent()
+data class Alert(val message: String) : DetailEvent()
+data class Saved(val snippetId: String) : DetailEvent()
+object Logout : DetailEvent()
