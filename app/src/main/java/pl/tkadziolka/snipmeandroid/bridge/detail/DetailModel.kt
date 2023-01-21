@@ -17,7 +17,7 @@ import pl.tkadziolka.snipmeandroid.domain.snippet.DeleteSnippetUseCase
 import pl.tkadziolka.snipmeandroid.domain.snippet.GetSingleSnippetUseCase
 import pl.tkadziolka.snipmeandroid.domain.snippet.SaveSnippetUseCase
 import pl.tkadziolka.snipmeandroid.domain.snippets.Snippet
-import pl.tkadziolka.snipmeandroid.ui.error.ErrorParsable
+import pl.tkadziolka.snipmeandroid.bridge.error.ErrorParsable
 import timber.log.Timber
 
 class DetailModel(

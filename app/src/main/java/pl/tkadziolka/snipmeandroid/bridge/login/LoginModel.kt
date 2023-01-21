@@ -10,7 +10,7 @@ import pl.tkadziolka.snipmeandroid.domain.auth.InitialLoginUseCase
 import pl.tkadziolka.snipmeandroid.domain.auth.LoginInteractor
 import pl.tkadziolka.snipmeandroid.domain.error.exception.*
 import pl.tkadziolka.snipmeandroid.domain.message.ErrorMessages
-import pl.tkadziolka.snipmeandroid.ui.error.ErrorParsable
+import pl.tkadziolka.snipmeandroid.bridge.error.ErrorParsable
 import pl.tkadziolka.snipmeandroid.util.extension.inProgress
 import timber.log.Timber
 import java.util.concurrent.TimeUnit

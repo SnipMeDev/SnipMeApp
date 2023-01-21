@@ -13,7 +13,7 @@ import pl.tkadziolka.snipmeandroid.domain.snippet.ObserveSnippetUpdatesUseCase
 import pl.tkadziolka.snipmeandroid.domain.snippets.*
 import pl.tkadziolka.snipmeandroid.domain.user.GetSingleUserUseCase
 import pl.tkadziolka.snipmeandroid.domain.user.User
-import pl.tkadziolka.snipmeandroid.ui.error.ErrorParsable
+import pl.tkadziolka.snipmeandroid.bridge.error.ErrorParsable
 import timber.log.Timber
 
 private const val ONE_PAGE = 1
