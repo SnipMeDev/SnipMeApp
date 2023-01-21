@@ -4,7 +4,6 @@ import io.flutter.plugin.common.BinaryMessenger
 import org.koin.core.component.inject
 import pl.tkadziolka.snipmeandroid.bridge.Bridge
 import pl.tkadziolka.snipmeandroid.bridge.ModelPlugin
-import pl.tkadziolka.snipmeandroid.ui.login.*
 
 class LoginModelPlugin : ModelPlugin<Bridge.LoginModelBridge>(), Bridge.LoginModelBridge {
     private var oldEvent: LoginEvent? = null

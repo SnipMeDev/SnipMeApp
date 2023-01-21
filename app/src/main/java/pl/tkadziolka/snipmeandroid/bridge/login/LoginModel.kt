@@ -11,7 +11,6 @@ import pl.tkadziolka.snipmeandroid.domain.auth.LoginInteractor
 import pl.tkadziolka.snipmeandroid.domain.error.exception.*
 import pl.tkadziolka.snipmeandroid.domain.message.ErrorMessages
 import pl.tkadziolka.snipmeandroid.ui.error.ErrorParsable
-import pl.tkadziolka.snipmeandroid.ui.login.*
 import pl.tkadziolka.snipmeandroid.util.extension.inProgress
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -122,3 +121,13 @@ class LoginModel(
         mutableState.value = state
     }
 }
+
+
+sealed class LoginState
+object Loading : LoginState()
+object Loaded : LoginState()
+
+sealed class LoginEvent
+object Idle : LoginEvent()
+object Logged : LoginEvent()
+data class Error(val message: String?) : LoginEvent()
