@@ -7,7 +7,6 @@ import pl.tkadziolka.snipmeandroid.bridge.ModelPlugin
 import pl.tkadziolka.snipmeandroid.bridge.toModelData
 import pl.tkadziolka.snipmeandroid.domain.snippets.Snippet
 import pl.tkadziolka.snipmeandroid.domain.snippets.SnippetFilters
-import pl.tkadziolka.snipmeandroid.ui.main.*
 
 class MainModelPlugin : ModelPlugin<Bridge.MainModelBridge>(), Bridge.MainModelBridge {
     private val model: MainModel by inject()

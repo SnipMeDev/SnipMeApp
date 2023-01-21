@@ -1,69 +1,16 @@
 <resources>
     <!--  General  -->
     <string name="app_name" translatable="false">SnipMe</string>
-    <string name="app_motto" translatable="false">Share your code</string>
-    <string name="facebook" translatable="false">Facebook</string>
-    <string name="instagram" translatable="false">Instagram</string>
-    <string name="github" translatable="false">Github</string>
-    <string name="twitter" translatable="false">Twitter</string>
-    <string name="google_pay" translatable="false">Google Pay</string>
-    <string name="paypal" translatable="false">PayPal</string>
-    <string name="credit_card" translatable="false">Credit card</string>
 
     <!--  Common  -->
-    <string name="snippet">Snippet</string>
-    <string name="okay">OK</string>
-    <string name="cancel">Cancel</string>
-    <string name="loading">Loading</string>
-    <string name="all">All</string>
-    <string name="mine">Mine</string>
-    <string name="shared">Shared</string>
-    <string name="logout">Logout</string>
-    <string name="share">Share</string>
-    <string name="details">Details</string>
-    <string name="save">Save</string>
-    <string name="edit">Edit</string>
-    <string name="create">Create</string>
-    <string name="copy">Copy</string>
-    <string name="oops">Oops!</string>
-    <string name="contact_us">Contact us</string>
-    <string name="try_again">Try again</string>
-    <string name="close">Close</string>
-    <string name="contact">Contact</string>
-    <string name="register_account"><u>Register an account</u></string>
-    <string name="donate">Donate</string>
-    <string name="donate_us">Donate us</string>
-    <string name="payment">Payment</string>
 
     <!-- Messages -->
-    <string name="message_shared">Successfully shared snippet to a %s!</string>
-    <string name="message_copied">Copied %s to clipboard.</string>
-    <string name="message_about">SnipMe is more than an application. We create a space for tech fascinates that are connected by code.</string>
-    <string name="message_where_find">See where you can find us:</string>
-    <string name="message_donate_us_title">Why you should donate us?</string>
-    <string name="message_donate_us_content">Developing a platform where you can easily share and discover the best code is neither easy nor fast, yet we don\'t want access to ever be paid. Unfortunately, our time is not the only resource, and creating a permanent infrastructure costs money, so the support, even with the smallest amount, will allow us to pay for the domain, hosting and space for data. Maybe we\'ll even have coffee :)</string>
 
     <!--  Hints  -->
-    <string name="prompt_name">Enter the name</string>
-    <string name="prompt_code">Place your code here…</string>
-    <string name="prompt_login">Enter your login</string>
-    <string name="prompt_password">Enter your password</string>
-    <string name="prompt_password_repeat">Repeat password</string>
-    <string name="prompt_email">Enter your email</string>
-    <string name="prompt_language">Enter language</string>
-    <string name="prompt_user_login">Start typing to find someone you want to share your snip with.</string>
 
     <!--  Texts  -->
-    <string name="call_hello">Hello</string>
-    <string name="call_login">Log in</string>
-    <string name="call_register">Register</string>
-    <string name="call_paste_from_clipboard">Paste from the clipboard</string>
 
     <!--  Dialogs  -->
-    <string name="no_account_title">Welcome again!</string>
-    <string name="no_account_message">A user with this name is already registered. Do you want to login?</string>
-    <string name="quit_title">Discard changes</string>
-    <string name="quit_message">Do you want to exit and lost all current changes?</string>
 
     <!--  Validation  -->
     <string name="validation_password_wrong">Your password should be at least 8 characters, has upper and lower case letters and at least one digit</string>
@@ -81,7 +28,6 @@
     <string name="validation_phrase_lower_upper">The phrase should have at least one lower and upper letter.</string>
     <string name="validation_phrase_no_ascii">The phrase cannot have letters like ąćĻłćńļĶł†ęŌ.</string>
 
-    <string name="validation_phrases_not_equal">The phrases are not identical.</string>
     <string name="validation_phrases_blank">Please fill in all fields in the form.</string>
 
     <!-- Error -->
@@ -94,9 +40,5 @@
     <string name="error_message_user_already_registered">User with this email is already registered. Please use another email or log in.</string>
 
     <!--  Mock  -->
-    <string name="lorem_one_line" translatable="false">Lorem Ipsum is simply dummy text of the printing and typesetting</string>
-    <string name="lorem_two_lines" translatable="false">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy</string>
-    <string name="lorem_three_lines" translatable="false">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley</string>
-    <string name="mock_code" translatable="false"># To take the input from the user\n#num = float(input(\'Enter a number: \'))\n\nnum_sqrt = num ** 0.5\nprint(\'The square root of %0.3f is %0.3f\'%(num, num_sqrt))</string>
 
 </resources>

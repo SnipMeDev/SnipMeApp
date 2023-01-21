@@ -10,13 +10,10 @@ import pl.tkadziolka.snipmeandroid.domain.error.exception.*
 import pl.tkadziolka.snipmeandroid.domain.filter.*
 import pl.tkadziolka.snipmeandroid.domain.message.ErrorMessages
 import pl.tkadziolka.snipmeandroid.domain.snippet.ObserveSnippetUpdatesUseCase
-import pl.tkadziolka.snipmeandroid.domain.snippet.ObserveUpdatedSnippetPageUseCase
-import pl.tkadziolka.snipmeandroid.domain.snippet.ResetUpdatedSnippetPageUseCase
 import pl.tkadziolka.snipmeandroid.domain.snippets.*
 import pl.tkadziolka.snipmeandroid.domain.user.GetSingleUserUseCase
 import pl.tkadziolka.snipmeandroid.domain.user.User
-import pl.tkadziolka.snipmeandroid.ui.error.ErrorParsable
-import pl.tkadziolka.snipmeandroid.ui.main.*
+import pl.tkadziolka.snipmeandroid.bridge.error.ErrorParsable
 import timber.log.Timber
 
 private const val ONE_PAGE = 1
@@ -43,7 +40,7 @@ class MainModel(
 
     private var cachedSnippets = emptyList<Snippet>()
     private var scopedSnippets = emptyList<Snippet>()
-    private lateinit var filterState: SnippetFilters;
+    private lateinit var filterState: SnippetFilters
 
     override fun parseError(throwable: Throwable) {
         when (throwable) {
@@ -162,8 +159,20 @@ class MainModel(
     }
 
     private fun getLoadedState(): Loaded? = state.value as? Loaded
-
-    private fun getScope(): SnippetScope {
-        return SnippetScope.ALL
-    }
 }
+
+sealed class MainViewState
+object Loading : MainViewState()
+data class Loaded(
+    val user: User,
+    val snippets: List<Snippet>,
+    val pages: Int,
+    val filters: SnippetFilters
+) : MainViewState()
+
+data class Error(val message: String?) : MainViewState()
+
+sealed class MainEvent
+object Startup : MainEvent()
+data class Alert(val message: String) : MainEvent()
+object Logout : MainEvent()

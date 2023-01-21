@@ -10,21 +10,6 @@ plugins {
 def STRING = "String"
 
 android {
-    signingConfigs {
-        release {
-            // NOTE: Create your own keystore.properties file
-            def propsFile = rootProject.file('keystore.properties')
-            if (propsFile.exists()) {
-                def props = new Properties()
-                props.load(new FileInputStream(propsFile))
-                storeFile = file('../snipplog_keystore.jks')
-                storePassword = props['storePassword']
-                keyAlias = props['keyAlias']
-                keyPassword = props['keyPassword']
-            }
-        }
-    }
-
     compileSdk 33
 
     defaultConfig {
@@ -39,60 +24,25 @@ android {
 
     buildTypes {
         def BASE_URL = "BASE_URL"
-        def CONTACT_US_PAGE = "CONTACT_US_PAGE"
-        def FACEBOOK_PAGE = "FACEBOOK_PAGE"
-        def INSTAGRAM_PAGE = "INSTAGRAM_PAGE"
-        def GITHUB_PAGE = "GITHUB_PAGE"
-        def TWITTER_PAGE = "TWITTER_PAGE"
-
-        def PAYPAL_PAGE = "PAYPAL_PAGE"
-        def CARD_PAGE = "CARD_PAGE"
-
         def API_BASE_URL = "\"http://91.195.93.3:8000/snip-api/\"" // Must end with '/'
-        def FACEBOOK_URL = "\"https://www.facebook.com/SnippLog-100576858857140\""
-        def INSTAGRAM_URL = "\"https://www.instagram.com/snipp.log\""
-        def GITHUB_URL = "\"https://github.com/SnippLog\""
-        def TWITTER_URL = "\"https://twitter.com/SnippLog\""
-
-        def PAYPAL_PAY_URL = "\"https://www.paypal.com/donate?hosted_button_id=WZQNYKQFAHAJG\""
-        def CARD_PAY_URL = "\"https://www.paypal.com/biz/fund?id=ACCDJCH2JAHDG\""
 
         debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
             buildConfigField STRING, BASE_URL, API_BASE_URL
-            buildConfigField STRING, CONTACT_US_PAGE, FACEBOOK_URL
-            buildConfigField STRING, FACEBOOK_PAGE, FACEBOOK_URL
-            buildConfigField STRING, INSTAGRAM_PAGE, INSTAGRAM_URL
-            buildConfigField STRING, GITHUB_PAGE, GITHUB_URL
-            buildConfigField STRING, TWITTER_PAGE, TWITTER_URL
-            buildConfigField STRING, PAYPAL_PAGE, PAYPAL_PAY_URL
-            buildConfigField STRING, CARD_PAGE, CARD_PAY_URL
-        }
-
-        release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-
-            buildConfigField STRING, BASE_URL, API_BASE_URL
-            buildConfigField STRING, CONTACT_US_PAGE, FACEBOOK_URL
-            buildConfigField STRING, FACEBOOK_PAGE, FACEBOOK_URL
-            buildConfigField STRING, INSTAGRAM_PAGE, INSTAGRAM_URL
-            buildConfigField STRING, GITHUB_PAGE, GITHUB_URL
-            buildConfigField STRING, TWITTER_PAGE, TWITTER_URL
-            buildConfigField STRING, PAYPAL_PAGE, PAYPAL_PAY_URL
-            buildConfigField STRING, CARD_PAGE, CARD_PAY_URL
-            signingConfig signingConfigs.release
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
+
     kotlinOptions {
         jvmTarget = "11"
     }
+
     lintOptions {
         abortOnError false
     }

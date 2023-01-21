@@ -9,7 +9,5 @@ val koinModules = listOf(
     utilModule,
     useCaseModule,
     interactorModule,
-    navigatorModule,
-    viewModelModule,
     modelModule
 )
