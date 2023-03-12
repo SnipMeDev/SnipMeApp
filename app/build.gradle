@@ -12,6 +12,15 @@ def STRING = "String"
 android {
     compileSdk 33
 
+    signingConfigs {
+        release {
+            storeFile file("../debug.keystore")
+            storePassword "android"
+            keyAlias "androiddebugkey"
+            keyPassword "android"
+        }
+    }
+
     defaultConfig {
         applicationId "pl.tkadziolka.snipmeandroid"
         minSdk 21
@@ -29,6 +38,14 @@ android {
         debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            buildConfigField STRING, BASE_URL, API_BASE_URL
+        }
+
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
 
             buildConfigField STRING, BASE_URL, API_BASE_URL
         }

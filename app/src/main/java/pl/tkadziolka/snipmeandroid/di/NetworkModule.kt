@@ -63,7 +63,7 @@ internal val networkModule = module {
 
     single<Retrofit> {
         Retrofit.Builder()
-            .client(get())
+            .client(get<OkHttpClient>())
             .baseUrl(BuildConfig.BASE_URL)
             .addConverterFactory(MoshiConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
