@@ -19,27 +19,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Instantiate a FlutterEngine.
-        flutterEngine = FlutterEngine(this)
+         FlutterEngine(this).apply {
+             dartExecutor.executeDartEntrypoint(DartExecutor.DartEntrypoint.createDefault())
 
-        // Start executing Dart code to pre-warm the FlutterEngine.
-        flutterEngine.dartExecutor.executeDartEntrypoint(
-            DartExecutor.DartEntrypoint.createDefault()
-        )
+             plugins.add(LoginModelPlugin())
+             plugins.add(MainModelPlugin())
+             plugins.add(DetailModelPlugin())
 
-        flutterEngine.plugins.add(LoginModelPlugin())
-        flutterEngine.plugins.add(MainModelPlugin())
-        flutterEngine.plugins.add(DetailModelPlugin())
+             FlutterEngineCache.getInstance().put(cachedEngineId, this)
 
-        // Cache the FlutterEngine to be used by FlutterActivity.
-        FlutterEngineCache
-            .getInstance()
-            .put(cachedEngineId, flutterEngine)
-
-        startActivity(
-            FlutterActivity
-                .withCachedEngine(cachedEngineId)
-                .build(this)
-        )
+             startActivity(FlutterActivity.withCachedEngine(cachedEngineId).build(baseContext))
+         }
     }
 }

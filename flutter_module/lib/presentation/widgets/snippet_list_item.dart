@@ -24,44 +24,40 @@ class SnippetListTile extends HookWidget {
   Widget build(BuildContext context) {
     return SurfaceStyles.snippetCard(
       onTap: onTap,
-      child: Expanded(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                top: Dimens.l,
-                left: Dimens.l,
-                right: Dimens.l,
-                bottom: Dimens.m,
-              ),
-              child: TextStyles.title(snippet.title ?? ""),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(
+              top: Dimens.l,
+              left: Dimens.l,
+              right: Dimens.l,
+              bottom: Dimens.m,
             ),
-            Ink(
-              color: ColorStyles.codeBackground(),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: Dimens.m,
-                  horizontal: Dimens.l,
-                ),
-                child: Expanded(
-                  child: CodeTextView.preview(
-                    code: snippet.code?.raw ?? "",
-                    tokens: snippet.code?.tokens,
-                  ),
-                ),
+            child: TextStyles.title(snippet.title ?? ""),
+          ),
+          Ink(
+            color: ColorStyles.codeBackground(),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: Dimens.m,
+                horizontal: Dimens.l,
               ),
+              child: CodeTextView.preview(
+                code: snippet.code?.raw ?? "",
+                tokens: snippet.code?.tokens,
+              ),
+            ),
+          ),
+          const SizedBox(height: Dimens.m),
+          if (isExpanded) ...[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: Dimens.l),
+              child: SnippetDetailsBar(snippet: snippet),
             ),
             const SizedBox(height: Dimens.m),
-            if (isExpanded) ...[
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: Dimens.l),
-                child: SnippetDetailsBar(snippet: snippet),
-              ),
-              const SizedBox(height: Dimens.m),
-            ],
           ],
-        ),
+        ],
       ),
     );
   }
