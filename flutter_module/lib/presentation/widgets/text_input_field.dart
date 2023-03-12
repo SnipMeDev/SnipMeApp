@@ -30,13 +30,12 @@ class TextInputField extends HookWidget {
     useEffect(() {
       controller.addListener(() {
         onChanged?.call(controller.text);
+        error.value =
+        controller.text.isNotEmpty ? validator?.call(controller.text) : null;
       });
-    }, []);
 
-    useEffect(() {
-      error.value =
-          controller.text.isNotEmpty ? validator?.call(controller.text) : null;
-    }, [controller.text]);
+      return () => controller.dispose();
+    }, []);
 
     return TextFormField(
       autovalidateMode: AutovalidateMode.onUserInteraction,
