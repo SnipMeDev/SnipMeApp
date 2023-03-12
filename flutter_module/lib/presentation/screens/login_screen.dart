@@ -117,7 +117,7 @@ class _MainPage extends HookWidget {
                         title: 'Login',
                         enabled: validationCorrect.value,
                         onPressed: () {
-                          // model.loginOrRegister(email.value, password.value);
+                          model.loginOrRegister(email.value, password.value);
                         },
                       ),
                     ),
