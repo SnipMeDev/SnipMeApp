@@ -110,7 +110,7 @@ class _MainPage extends HookWidget {
           controller.animateTo(
             0.0,
             duration: const Duration(seconds: 1),
-            curve: const ElasticInCurve(),
+            curve: Curves.easeIn,
           );
         },
         tooltip: 'Scroll to top',

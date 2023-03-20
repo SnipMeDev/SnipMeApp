@@ -9,6 +9,8 @@ import 'package:flutter_module/presentation/widgets/text_input_field.dart';
 import 'package:flutter_module/utils/hooks/use_same_state.dart';
 import 'package:validators/validators.dart';
 
+const _minPasswordLength = 8;
+
 class LoginInputCard extends HookWidget {
   const LoginInputCard({
     Key? key,
@@ -23,18 +25,8 @@ class LoginInputCard extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final emailErrorTextState = useSameState<String?>(null);
-    final passwordErrorTextState = useSameState<String?>(null);
-
-    final emailError = emailErrorTextState.value;
-    final passwordError = passwordErrorTextState.value;
-
-    useEffect(() {
-      // TODO Correct button enabling after validation
-      final isValid = emailError == null && passwordError == null;
-      print("is valid = $isValid");
-      onValidChanged?.call(isValid);
-    }, [emailError, passwordError]);
+    final emailErrorTextState = useSameState<String?>('');
+    final passwordErrorTextState = useSameState<String?>('');
 
     return SurfaceStyles.snippetCard(
       child: PaddingStyles.regular(
@@ -44,30 +36,55 @@ class LoginInputCard extends HookWidget {
             TextInputField(
               label: 'Email',
               onChanged: onEmailChanged,
-              validator: (input) {
-                final error =
-                    isEmail(input ?? '') ? null : 'Provide valid email phrase';
-                emailErrorTextState.value = error;
-                return error;
-              },
+              validator: (input) => _validate(
+                emailErrorTextState,
+                passwordErrorTextState,
+                email: input as String,
+              ),
             ),
             const SizedBox(height: Dimens.xl),
             TextInputField(
               label: 'Password',
               onChanged: onPasswordChanged,
               isPassword: true,
-              validator: (input) {
-                final error = input.length >= 8
-                    ? null
-                    : 'Password must have at least 8 characters';
-                passwordErrorTextState.value = error;
-                return error;
-              },
+              validator: (input) => _validate(
+                emailErrorTextState,
+                passwordErrorTextState,
+                password: input as String,
+              ),
             ),
             const SizedBox(height: Dimens.l),
           ],
         ),
       ),
     );
+  }
+
+  String? _validate(
+    SameValueNotifier<String?> emailErrorTextState,
+    SameValueNotifier<String?> passwordErrorTextState, {
+    String? email,
+    String? password,
+  }) {
+    String? fieldError;
+
+    if (email != null) {
+      fieldError = isEmail(email) ? null : 'Provide valid email phrase';
+      emailErrorTextState.value = fieldError;
+    }
+
+    if (password != null) {
+      fieldError = password.length >= _minPasswordLength
+          ? null
+          : 'Password must have at least $_minPasswordLength characters';
+      passwordErrorTextState.value = fieldError;
+    }
+
+    final emailError = emailErrorTextState.value;
+    final passwordError = passwordErrorTextState.value;
+
+    onValidChanged?.call(emailError == null && passwordError == null);
+
+    return fieldError;
   }
 }
