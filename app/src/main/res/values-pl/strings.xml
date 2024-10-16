@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--  Common  -->
+
+    <!-- Messages -->
+
+    <!--  Hints  -->
+
+    <!--  Texts  -->
+
+    <!--  Dialogs  -->
+
+    <!--  Validation  -->
+    <string name="validation_password_wrong">Twoje hasło powinno mieć co najmniej 8 znaków, zawierać małe i duże litery oraz składać się z co najmniej jednej cyfry.</string>
+    <string name="validation_password_too_short">Minimalna długość hasła powinna składać się z 8 znaków.</string>
+    <string name="validation_password_special_char">Hasło powinno zawierać co najmniej jeden znak specjalny np. !@#$%.</string>
+    <string name="validation_password_lower_upper">Hasło powinno zawierać co najmniej jedną małą i dużą literę.</string>
+    <string name="validation_password_digit">Hasło powinno zawierać co najmniej jedną cyfrę.</string>
+    <string name="validation_password_not_equal">Wpisane hasła różnią się od siebie.</string>
+
+    <string name="validation_email_too_short">Minimalna długość maila powinna składać się z 5 znaków.</string>
+    <string name="validation_email_wrong_structure">Odpowiedni email powinien zawierać przykładową strukturę: abd@def.xyz</string>
+
+    <string name="validation_phrase_too_short">Wpisana fraza jest zbyt krótka.</string>
+    <string name="validation_phrase_too_long">Wpisana fraza jest zbyt długa.</string>
+    <string name="validation_phrase_lower_upper">Fraza powinna zawierać przynajmniej jedną małą i dużą literę.</string>
+    <string name="validation_phrase_no_ascii">Fraza nie może zawierać liter takich jak: ąćĻłćńļĶł†ęŌ.</string>
+
+    <string name="validation_phrases_blank">Proszę wypełnić wszystkie pola formularza.</string>
+
+    <!-- Error -->
+    <string name="error_message_generic">Coś poszło nie tak. Spróbuj jeszcze raz!</string>
+    <string name="error_message_no_connection">Sprawdź swoje połączenie z internetem i spróbuj ponownie.</string>
+    <string name="error_message_unknown_language">Nieznany język programowania. Proszę wybrać język z listy.</string>
+    <string name="error_message_session_expired">Twoja sesja wygasła! Zaloguj się ponownie.</string>
+    <string name="error_message_no_access">Nie masz dostępu do tego zasobu!</string>
+    <string name="error_message_remote_error">Mamy problemy po naszej stronie. Powiadom nas o problemie.</string>
+    <string name="error_message_user_already_registered">Użytkownik z tym adresem email jest już zarejestrowany. Użyj innego adresu.</string>
+</resources>

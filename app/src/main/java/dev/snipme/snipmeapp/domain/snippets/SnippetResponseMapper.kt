@@ -1,0 +1,59 @@
+package dev.snipme.snipmeapp.domain.snippets
+
+import android.text.SpannableString
+import dev.snipme.snipmeapp.domain.reaction.UserReaction
+import dev.snipme.snipmeapp.infrastructure.model.response.SnippetResponse
+import dev.snipme.snipmeapp.util.SyntaxHighlighter.getHighlighted
+import dev.snipme.snipmeapp.util.extension.lines
+import dev.snipme.snipmeapp.util.extension.newLineChar
+import dev.snipme.snipmeapp.util.extension.toDate
+import dev.snipme.snipmeapp.util.extension.toSnippetLanguage
+import java.util.*
+
+const val PREVIEW_COUNT = 5
+
+class SnippetResponseMapper {
+
+    operator fun invoke(response: SnippetResponse) = with(response) {
+        return@with Snippet(
+            uuid = id,
+            title = title.orEmpty(),
+            code = getCode(this),
+            language = getLanguage(language),
+            visibility = getVisibility(visibility),
+            isOwner = is_owner ?: false,
+            owner = Owner(owner?.id ?: 0, owner?.username ?: ""),
+            modifiedAt = modified_at?.toDate() ?: Date(),
+            numberOfLikes = number_of_likes ?: 0,
+            numberOfDislikes = number_of_dislikes ?: 0,
+            userReaction = getUserReaction(user_reaction)
+        )
+    }
+
+    private fun getUserReaction(value: String?) =
+        when {
+            value.equals("like", ignoreCase = true) -> UserReaction.LIKE
+            value.equals("dislike", ignoreCase = true) -> UserReaction.DISLIKE
+            else -> UserReaction.NONE
+        }
+
+    private fun getCode(response: SnippetResponse) = SnippetCode(
+        raw = response.code.orEmpty(),
+        highlighted = getPreview(response.code.orEmpty())
+    )
+
+    private fun getLanguage(language: String?) = SnippetLanguage(
+        raw = language.orEmpty(),
+        type = language.toSnippetLanguage()
+    )
+
+    private fun getPreview(code: String): SpannableString {
+        val preview = code.lines(PREVIEW_COUNT).joinToString(separator = newLineChar)
+        return getHighlighted(preview)
+    }
+
+    private fun getVisibility(visibility: String?): SnippetVisibility {
+        if (visibility == null) return SnippetVisibility.PRIVATE
+        return SnippetVisibility.valueOf(visibility)
+    }
+}

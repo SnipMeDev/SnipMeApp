@@ -1,0 +1,44 @@
+<resources>
+    <!--  General  -->
+    <string name="app_name" translatable="false">SnipMe</string>
+
+    <!--  Common  -->
+
+    <!-- Messages -->
+
+    <!--  Hints  -->
+
+    <!--  Texts  -->
+
+    <!--  Dialogs  -->
+
+    <!--  Validation  -->
+    <string name="validation_password_wrong">Your password should be at least 8 characters, has upper and lower case letters and at least one digit</string>
+    <string name="validation_password_too_short">Min length of the password is 8 characters.</string>
+    <string name="validation_password_special_char">Password should contain at least one special char. e.g. !@#$%.</string>
+    <string name="validation_password_lower_upper">Password should contain at least one lower and upper letter.</string>
+    <string name="validation_password_digit">Password should contain at least one digit.</string>
+    <string name="validation_password_not_equal">The passwords are not identical.</string>
+
+    <string name="validation_email_too_short">Min length of the email is 5 characters.</string>
+    <string name="validation_email_wrong_structure">Proper email should have abd@def.xyz structure.</string>
+
+    <string name="validation_phrase_too_short">The phrase you have input is too short.</string>
+    <string name="validation_phrase_too_long">The phrase you have input is too long.</string>
+    <string name="validation_phrase_lower_upper">The phrase should have at least one lower and upper letter.</string>
+    <string name="validation_phrase_no_ascii">The phrase cannot have letters like ąćĻłćńļĶł†ęŌ.</string>
+
+    <string name="validation_phrases_blank">Please fill in all fields in the form.</string>
+
+    <!-- Error -->
+    <string name="error_message_generic">Something went wrong. Try again!</string>
+    <string name="error_message_no_connection">Please check your connection to the internet and try again.</string>
+    <string name="error_message_unknown_language">This programming language is unknown. Please choose one from list.</string>
+    <string name="error_message_session_expired">Your session has expired! Please log in again.</string>
+    <string name="error_message_no_access">You have no access to this resource!</string>
+    <string name="error_message_remote_error">We have some issues. Please let us know about the problem.</string>
+    <string name="error_message_user_already_registered">User with this email is already registered. Please use another email or log in.</string>
+
+    <!--  Mock  -->
+
+</resources>

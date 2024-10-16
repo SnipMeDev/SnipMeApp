@@ -1,0 +1,24 @@
+package dev.snipme.snipmeapp.domain.filter
+
+import dev.snipme.snipmeapp.domain.snippets.SnippetFilters
+
+class UpdateSnippetFiltersLanguageUseCase {
+
+    operator fun invoke(
+        filter: SnippetFilters,
+        language: String,
+        isSelected: Boolean
+    ): SnippetFilters = when {
+        language == SNIPPET_FILTER_ALL ->
+            filter.copy(selectedLanguages = listOf(SNIPPET_FILTER_ALL))
+        isSelected.not() -> filter.copy(selectedLanguages = filter.selectedLanguages - language)
+        else ->
+            filter.copy(
+                selectedLanguages = (
+                        filter.selectedLanguages
+                                - SNIPPET_FILTER_ALL
+                                + language
+                        ).distinct()
+            )
+    }
+}
