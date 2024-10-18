@@ -30,6 +30,8 @@ dependencies:
   go_router_plus: ^4.1.1
   validators: ^3.0.0
 
+  collection: any
+  logger: ^2.4.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

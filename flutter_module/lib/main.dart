@@ -11,7 +11,7 @@ import 'package:go_router_plus/go_router_plus.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  MyApp({Key? key}) : super(key: key);
+  MyApp({super.key});
 
   final loginModel = LoginModelBridge();
   final mainModel = MainModelBridge();

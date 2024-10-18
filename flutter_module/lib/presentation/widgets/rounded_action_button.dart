@@ -7,12 +7,12 @@ import 'package:flutter_module/presentation/styles/text_styles.dart';
 
 class RoundedActionButton extends StatelessWidget {
   const RoundedActionButton({
-    Key? key,
+    super.key,
     required this.icon,
     required this.title,
     this.enabled = true,
     this.onPressed,
-  }) : super(key: key);
+  });
 
   final IconData icon;
   final String title;

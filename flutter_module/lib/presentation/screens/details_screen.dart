@@ -28,26 +28,20 @@ class DetailsScreen extends NamedScreen {
   final DetailModelBridge model;
 
   @override
-  Widget builder(BuildContext context, GoRouterState state) {
+  Widget build(BuildContext context, GoRouterState state) {
     return _DetailsPage(
       navigator: navigator,
       model: model,
     );
   }
 
-  @override
-  build(BuildContext context, GoRouterState state) {
-    // TODO: implement build
-    throw UnimplementedError();
-  }
 }
 
 class _DetailsPage extends HookWidget {
   const _DetailsPage({
-    Key? key,
     required this.navigator,
     required this.model,
-  }) : super(key: key);
+  });
 
   final DetailsNavigator navigator;
   final DetailModelBridge model;
@@ -130,10 +124,9 @@ class _DetailsPage extends HookWidget {
 
 class _DetailPageData extends StatelessWidget {
   const _DetailPageData({
-    Key? key,
     required this.model,
     required this.snippet,
-  }) : super(key: key);
+  });
 
   final DetailModelBridge model;
   final Snippet? snippet;

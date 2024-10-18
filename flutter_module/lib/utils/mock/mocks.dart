@@ -72,7 +72,7 @@ else:
 r'raw'
 ur'unicode raw'
 'escape\n'
-'\04'  # octal
+'04'  # octal
 '\xFF'  # hex
 '\u1111'  # unicode character
 1  # Integral

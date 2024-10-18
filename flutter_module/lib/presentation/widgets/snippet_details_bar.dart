@@ -7,9 +7,9 @@ import 'package:flutter_module/presentation/styles/text_styles.dart';
 
 class SnippetDetailsBar extends StatelessWidget {
   const SnippetDetailsBar({
-    Key? key,
+    super.key,
     required this.snippet,
-  }) : super(key: key);
+  });
 
   final Snippet snippet;
 
@@ -54,9 +54,8 @@ class SnippetDetailsBar extends StatelessWidget {
 
 class _UserReactionIndicator extends StatelessWidget {
   const _UserReactionIndicator({
-    Key? key,
     this.reaction,
-  }) : super(key: key);
+  });
 
   final UserReaction? reaction;
 

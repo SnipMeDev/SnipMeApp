@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_module/generated/assets.dart';
 import 'package:flutter_module/model/main_model.dart';
@@ -17,8 +16,6 @@ import 'package:flutter_module/presentation/widgets/view_state_wrapper.dart';
 import 'package:flutter_module/utils/extensions/state_extensions.dart';
 import 'package:flutter_module/utils/hooks/use_navigator.dart';
 import 'package:flutter_module/utils/hooks/use_observable_state_hook.dart';
-import 'package:go_router/go_router.dart';
-import 'package:go_router/src/state.dart';
 import 'package:go_router_plus/go_router_plus.dart';
 
 class MainScreen extends NamedScreen implements UserScreen {
@@ -34,7 +31,7 @@ class MainScreen extends NamedScreen implements UserScreen {
   final MainModelBridge model;
 
   @override
-  Widget builder(BuildContext context, GoRouterState state) {
+  Widget build(BuildContext context, GoRouterState state) {
     return _MainPage(
       loginNavigator: loginNavigator,
       detailsNavigator: detailsNavigator,
@@ -42,20 +39,14 @@ class MainScreen extends NamedScreen implements UserScreen {
     );
   }
 
-  @override
-  build(BuildContext context, GoRouterState state) {
-    // TODO: implement build
-    throw UnimplementedError();
-  }
 }
 
 class _MainPage extends HookWidget {
   const _MainPage({
-    Key? key,
     required this.loginNavigator,
     required this.detailsNavigator,
     required this.model,
-  }) : super(key: key);
+  });
 
   final LoginNavigator loginNavigator;
   final DetailsNavigator detailsNavigator;
@@ -83,6 +74,7 @@ class _MainPage extends HookWidget {
 
     useEffect(() {
       model.initState();
+      return null;
     }, []);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -134,15 +126,13 @@ typedef ExpandChangeListener = Function(bool);
 
 class _MainPageData extends HookWidget {
   const _MainPageData(
-      {Key? key,
-      required this.navigator,
+      {required this.navigator,
       required this.model,
       required this.snippets,
       required this.filter,
       required this.controller,
       required this.expanded,
-      required this.onExpandChange})
-      : super(key: key);
+      required this.onExpandChange});
 
   final DetailsNavigator navigator;
   final MainModelBridge model;
@@ -165,7 +155,7 @@ class _MainPageData extends HookWidget {
             title: Row(mainAxisSize: MainAxisSize.min, children: [
               Image.asset(Assets.appLogo, width: Dimens.logoSignetSize),
               const SizedBox(width: Dimens.m),
-              TextStyles.appBarLogo('SnipMe'),
+              const TextStyles.appBarLogo('SnipMe'),
             ]),
             backgroundColor: ColorStyles.surfacePrimary(),
             leading: IconButton(
@@ -271,7 +261,7 @@ class _MainPageData extends HookWidget {
                     ),
                   );
                 },
-              ).toList()
+              )
             ]),
           ),
         ],

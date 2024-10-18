@@ -2,18 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_module/presentation/styles/color_styles.dart';
 import 'package:flutter_module/presentation/styles/dimens.dart';
-import 'package:flutter_module/utils/hooks/use_same_state.dart';
 
 typedef TextInputCallback = Function(String value);
 
 class TextInputField extends HookWidget {
-  TextInputField({
-    Key? key,
+  const TextInputField({
+    super.key,
     required this.label,
     this.isPassword = false,
     this.onChanged,
     this.validator,
-  }) : super(key: key);
+  });
 
   final String label;
   final bool isPassword;

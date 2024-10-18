@@ -10,8 +10,8 @@ import 'package:flutter/services.dart';
 enum SnippetLanguageType {
   c,
   cpp,
-  objective_c,
-  c_sharp,
+  objectiveC,
+  cSharp,
   java,
   bash,
   python,

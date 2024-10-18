@@ -4,12 +4,12 @@ import 'package:flutter_module/presentation/styles/dimens.dart';
 
 class StateIcon extends StatelessWidget {
   const StateIcon({
-    Key? key,
+    super.key,
     required this.icon,
     this.activeColor = Colors.black,
     this.active,
     this.onTap,
-  }) : super(key: key);
+  });
 
   final IconData icon;
   final Color activeColor;

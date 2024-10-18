@@ -11,7 +11,7 @@ extension TextExtensions on String {
     }
 
     if (splitters.any((splitIndex) => splitIndex < 0)) {
-      throw Exception("Index for word must at most ${length}");
+      throw Exception("Index for word must at most $length");
     }
 
     if (splitters.isEmpty) {

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_module/presentation/styles/dimens.dart';
@@ -13,11 +12,11 @@ const _minPasswordLength = 8;
 
 class LoginInputCard extends HookWidget {
   const LoginInputCard({
-    Key? key,
+    super.key,
     required this.onEmailChanged,
     required this.onPasswordChanged,
     this.onValidChanged,
-  }) : super(key: key);
+  });
 
   final TextInputCallback onEmailChanged;
   final TextInputCallback onPasswordChanged;

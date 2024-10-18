@@ -10,11 +10,11 @@ import 'package:flutter_module/presentation/widgets/snippet_details_bar.dart';
 
 class SnippetListTile extends HookWidget {
   const SnippetListTile({
-    Key? key,
+    super.key,
     required this.snippet,
     required this.onTap,
     this.isExpanded = true,
-  }) : super(key: key);
+  });
 
   final Snippet snippet;
   final GestureTapCallback? onTap;

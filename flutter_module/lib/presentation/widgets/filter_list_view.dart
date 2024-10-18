@@ -6,11 +6,11 @@ typedef FilterSelectedListener = Function(String filter, bool selected);
 
 class FilterListView extends StatelessWidget {
   const FilterListView({
-    Key? key,
+    super.key,
     required this.filters,
     required this.selected,
     this.onSelected,
-  }) : super(key: key);
+  });
 
   final List<String?> filters;
   final List<String?> selected;
