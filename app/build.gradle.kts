@@ -113,11 +113,19 @@ dependencies {
     implementation(libs.logging.interceptor)
     implementation(libs.reactivenetwork.rx2)
 
+    //Local Storage
+    implementation(libs.androidx.room.runtime)
+    annotationProcessor(libs.androidx.room.compiler)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.rxjava2)
+
+
     // Utility Libraries
     implementation(libs.timber)
     implementation(libs.glide)
     ksp(libs.compiler)
-//    implementation(libs.codeview)
+
+    //implementation(libs.codeview)
     implementation(libs.kodeview)
 
     // Testing Libraries

@@ -1,32 +1,34 @@
 package dev.snipme.snipmeapp.domain.repository.auth
 
+import android.util.Log
 import io.reactivex.Completable
 import io.reactivex.Maybe
 import dev.snipme.snipmeapp.domain.error.ErrorHandler
 import dev.snipme.snipmeapp.infrastructure.local.AuthPreferences
-import dev.snipme.snipmeapp.infrastructure.model.request.IdentifyUserRequest
-import dev.snipme.snipmeapp.infrastructure.model.request.LoginUserRequest
-import dev.snipme.snipmeapp.infrastructure.model.request.RegisterUserRequest
-import dev.snipme.snipmeapp.infrastructure.remote.AuthService
+import dev.snipme.snipmeapp.infrastructure.local.UserEntry
+import dev.snipme.snipmeapp.infrastructure.local.UserDao
 import dev.snipme.snipmeapp.util.extension.mapError
+import io.reactivex.Single
 
 class AuthRepositoryReal(
     private val errorHandler: ErrorHandler,
-    private val service: AuthService,
+    private val service: UserDao,
     private val prefs: AuthPreferences
 ) : AuthRepository {
 
     override fun identify(login: String) =
-        service.identify(IdentifyUserRequest(login))
+        service.identify(login)
             .mapError { errorHandler.handle(it) }
+            .map { it -> it > 0 }
+
 
     override fun login(login: String, password: String) =
-        service.login(LoginUserRequest(login, password))
+        service.login(login, password)
             .mapError { errorHandler.handle(it) }
-            .map { it.token }
+            .map { it }
 
     override fun register(login: String, password: String, email: String) =
-        service.register(RegisterUserRequest(login, password, email))
+        service.register(UserEntry(email, password))
             .mapError { errorHandler.handle(it) }
 
     override fun saveToken(token: String) = Completable.fromCallable {

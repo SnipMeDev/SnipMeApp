@@ -6,12 +6,10 @@ import dev.snipme.snipmeapp.domain.repository.auth.AuthRepository
 
 class LoginUseCase(
     private val auth: AuthRepository,
-    private val checkNetwork: CheckNetworkAvailableUseCase
 ) {
 
-    operator fun invoke(login: String, password: String): Completable = checkNetwork()
-        .andThen(
-            auth.login(login, password)
-                .flatMapCompletable { token -> auth.saveToken(token) }
-        )
+    operator fun invoke(login: String, password: String): Completable =
+        auth.login(login, password)
+            .flatMapCompletable { token -> auth.saveToken(token) }
 }
+

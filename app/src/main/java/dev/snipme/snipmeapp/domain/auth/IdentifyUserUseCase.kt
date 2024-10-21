@@ -5,8 +5,7 @@ import dev.snipme.snipmeapp.domain.repository.auth.AuthRepository
 
 class IdentifyUserUseCase(
     private val auth: AuthRepository,
-    private val checkNetwork: CheckNetworkAvailableUseCase
 ) {
-    operator fun invoke(login: String) = checkNetwork()
-        .andThen(auth.identify(login))
+    operator fun invoke(login: String) =
+        auth.identify(login)
 }

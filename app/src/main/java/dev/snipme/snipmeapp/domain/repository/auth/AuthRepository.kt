@@ -11,7 +11,7 @@ interface AuthRepository {
 
     fun login(login: String, password: String): Single<String>
 
-    fun register(login: String, password: String, email: String): Single<RegisterUserResponse>
+    fun register(login: String, password: String, email: String): Completable
 
     fun saveToken(token: String): Completable
 

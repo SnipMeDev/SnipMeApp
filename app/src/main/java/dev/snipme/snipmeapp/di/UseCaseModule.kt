@@ -22,9 +22,9 @@ internal val useCaseModule = module {
     // Base
     factory { CheckNetworkAvailableUseCase(get()) }
     // Auth
-    factory { IdentifyUserUseCase(get(), get()) }
+    factory { IdentifyUserUseCase(get()) }
     factory { InitialLoginUseCase(get()) }
-    factory { LoginUseCase(get(), get()) }
+    factory { LoginUseCase(get()) }
     factory { RegisterUseCase(get(), get()) }
     factory { LogoutUserUseCase(get()) }
     factory { AuthorizationUseCase(get()) }
