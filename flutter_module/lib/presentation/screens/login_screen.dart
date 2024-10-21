@@ -49,9 +49,9 @@ class _MainPage extends HookWidget {
   Widget build(BuildContext context) {
     useNavigator([navigator]);
 
-    final email = useState('');
-    final password = useState('');
-    final validationCorrect = useState(false);
+    final email = useState('mail@o2.pl');
+    final password = useState('12345678');
+    final validationCorrect = useState(true);
 
     final state = useObservableState(
       LoginModelStateData(),
@@ -96,6 +96,8 @@ class _MainPage extends HookWidget {
                     const TextStyles.secondary('Snip your favorite code'),
                     PaddingStyles.regular(
                       LoginInputCard(
+                        emailValue: email.value,
+                        passwordValue: password.value,
                         onEmailChanged: (emailValue) {
                           email.value = emailValue;
                         },

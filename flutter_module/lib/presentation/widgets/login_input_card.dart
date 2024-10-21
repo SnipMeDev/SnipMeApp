@@ -16,11 +16,15 @@ class LoginInputCard extends HookWidget {
     required this.onEmailChanged,
     required this.onPasswordChanged,
     this.onValidChanged,
+    this.emailValue,
+    this.passwordValue,
   });
 
   final TextInputCallback onEmailChanged;
   final TextInputCallback onPasswordChanged;
   final Function(bool)? onValidChanged;
+  final String? emailValue;
+  final String? passwordValue;
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +37,7 @@ class LoginInputCard extends HookWidget {
           children: [
             const SizedBox(height: Dimens.l),
             TextInputField(
+              initialValue: emailValue,
               label: 'Email',
               onChanged: onEmailChanged,
               validator: (input) => _validate(
@@ -43,6 +48,7 @@ class LoginInputCard extends HookWidget {
             ),
             const SizedBox(height: Dimens.xl),
             TextInputField(
+              initialValue: passwordValue,
               label: 'Password',
               onChanged: onPasswordChanged,
               isPassword: true,

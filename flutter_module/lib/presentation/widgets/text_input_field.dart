@@ -12,16 +12,18 @@ class TextInputField extends HookWidget {
     this.isPassword = false,
     this.onChanged,
     this.validator,
+    this.initialValue
   });
 
   final String label;
+  final String? initialValue;
   final bool isPassword;
   final TextInputCallback? onChanged;
   final FormFieldValidator? validator;
 
   @override
   Widget build(BuildContext context) {
-    final controller = useTextEditingController();
+    final controller = useTextEditingController(text: initialValue);
     final shouldShow = useState(false);
     final error = useState<String?>(null);
     final passwordVisible = shouldShow.value;
