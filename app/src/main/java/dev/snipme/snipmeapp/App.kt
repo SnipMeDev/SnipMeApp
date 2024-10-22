@@ -1,7 +1,7 @@
 package dev.snipme.snipmeapp
 
 import android.app.Application
-import androidx.multidex.BuildConfig
+import dev.snipme.snipmeapp.BuildConfig.*
 import dev.snipme.snipmeapp.di.koinModules
 import dev.snipme.snipmeapp.util.CrashReportingTree
 import org.koin.android.ext.koin.androidContext
@@ -27,7 +27,7 @@ class App : Application() {
     }
 
     private fun initLogs() {
-        if (BuildConfig.DEBUG) {
+        if (DEBUG) {
             Timber.plant(Timber.DebugTree())
         } else {
             Timber.plant(CrashReportingTree())
