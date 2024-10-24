@@ -28,7 +28,12 @@ class AuthRepositoryReal(
             .map { it }
 
     override fun register(login: String, password: String, email: String) =
-        service.register(UserEntry(email, password))
+        service.register(UserEntry(
+            email = email,
+            password = password,
+            login = email.substring(0, email.indexOf('@')),
+            photo = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrRHyzylz9-x3vO04G9qyWdOwOjtfsmtaubQ&s"
+        ))
             .mapError { errorHandler.handle(it) }
 
     override fun saveToken(token: String) = Completable.fromCallable {

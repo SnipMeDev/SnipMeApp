@@ -10,6 +10,6 @@ class LoginUseCase(
 
     operator fun invoke(login: String, password: String): Completable =
         auth.login(login, password)
-            .flatMapCompletable { token -> auth.saveToken(token) }
+            .flatMapCompletable { token -> auth.saveToken(token.toString()) }
 }
 

@@ -29,7 +29,7 @@ internal val useCaseModule = module {
     factory { LogoutUserUseCase(get()) }
     factory { AuthorizationUseCase(get()) }
     // User
-    factory { GetSingleUserUseCase(get(), get(), get()) }
+    factory { GetSingleUserUseCase(get(), get(), get(), get()) }
     // Snippet
     factory { GetSnippetsUseCase(get(), get(), get()) }
     factory { GetSingleSnippetUseCase(get(), get(), get()) }

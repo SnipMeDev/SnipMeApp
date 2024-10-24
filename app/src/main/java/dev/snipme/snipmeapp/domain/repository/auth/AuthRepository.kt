@@ -9,7 +9,7 @@ interface AuthRepository {
 
     fun identify(login: String): Single<Boolean>
 
-    fun login(login: String, password: String): Single<String>
+    fun login(login: String, password: String): Single<Int>
 
     fun register(login: String, password: String, email: String): Completable
 

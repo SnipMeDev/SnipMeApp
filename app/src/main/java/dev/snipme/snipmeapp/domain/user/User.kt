@@ -1,6 +1,7 @@
 package dev.snipme.snipmeapp.domain.user
 
 import androidx.annotation.VisibleForTesting
+import dev.snipme.snipmeapp.infrastructure.local.UserEntry
 import dev.snipme.snipmeapp.infrastructure.model.response.PersonResponse
 
 data class User(val id: Int, val login: String, val email: String, val photo: String) {
@@ -15,4 +16,11 @@ fun PersonResponse.toUser() = User(
     login = username ?: throw IllegalArgumentException("User must have a login!"),
     email = email ?: "",
     photo = photo ?: ""
+)
+
+fun UserEntry.toUser() = User(
+    id = id,
+    login = login,
+    email = email,
+    photo = photo
 )

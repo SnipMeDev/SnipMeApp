@@ -75,6 +75,7 @@ class MainModel(
             scopes = listOf("All", "Private", "Public"),
             selectedScope = "All"
         )
+
         getUser()
             .subscribeOn(Schedulers.io())
             .subscribeBy(
@@ -162,7 +163,7 @@ class MainModel(
 }
 
 sealed class MainViewState
-object Loading : MainViewState()
+data object Loading : MainViewState()
 data class Loaded(
     val user: User,
     val snippets: List<Snippet>,
@@ -173,6 +174,6 @@ data class Loaded(
 data class Error(val message: String?) : MainViewState()
 
 sealed class MainEvent
-object Startup : MainEvent()
+data object Startup : MainEvent()
 data class Alert(val message: String) : MainEvent()
-object Logout : MainEvent()
+data object Logout : MainEvent()

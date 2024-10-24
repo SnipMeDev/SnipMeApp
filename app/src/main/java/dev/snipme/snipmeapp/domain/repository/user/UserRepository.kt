@@ -4,5 +4,5 @@ import io.reactivex.Single
 import dev.snipme.snipmeapp.domain.user.User
 
 interface UserRepository {
-    fun user(): Single<User>
+    fun user(id: Int): Single<User>
 }
