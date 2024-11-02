@@ -105,7 +105,7 @@ class _DetailsPage extends HookWidget {
       ),
       body: ViewStateWrapper<Snippet>(
         isLoading:
-            state.state == ModelState.loading || state.is_loading == true,
+            state.state == ModelState.loading || state.isLoading == true,
         error: state.error,
         data: state.data,
         builder: (_, snippet) => _DetailPageData(

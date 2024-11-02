@@ -15,7 +15,7 @@ import java.util.*
  flutter pub run pigeon \
   --input bridge/main_model.dart \
   --dart_out lib/model/main_model.dart \
-  --java_out ../app/src/main/java/pl/tkadziolka/snipmeandroid/bridge/Bridge.java \
+  --java_out ../app/src/main/java/dev/snipme/snipmeapp/bridge/Bridge.java \
   --java_package "dev.snipme.snipmeapp.bridge"
  */
 

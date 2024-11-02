@@ -6,11 +6,12 @@ import dev.snipme.snipmeapp.domain.network.CheckNetworkAvailableUseCase
 import dev.snipme.snipmeapp.domain.repository.snippet.SnippetRepository
 import dev.snipme.snipmeapp.domain.snippets.Snippet
 import dev.snipme.snipmeapp.domain.snippets.SnippetVisibility
+import dev.snipme.snipmeapp.domain.user.GetSingleUserUseCase
 
 class CreateSnippetUseCase(
     private val auth: AuthorizationUseCase,
-    private val networkAvailable: CheckNetworkAvailableUseCase,
-    private val snippetRepository: SnippetRepository
+    private val snippetRepository: SnippetRepository,
+    private val getSingleUser: GetSingleUserUseCase
 ) {
     operator fun invoke(
         title: String,
@@ -18,10 +19,17 @@ class CreateSnippetUseCase(
         language: String,
         visibility: SnippetVisibility = SnippetVisibility.PUBLIC
     ): Single<Snippet> = auth()
-        .andThen(networkAvailable())
-        .andThen(snippetRepository.create(title, code, language, visibility))
-        .flatMap {
-            snippetRepository.updateListener.onNext(it)
-            Single.just(it)
+        .andThen(getSingleUser())
+        .flatMap { user ->
+            snippetRepository.create(
+                title = title,
+                code = code,
+                language = language,
+                visibility = visibility,
+                userId = user.id
+            )
+        }
+        .doOnSuccess { snippet ->
+            snippetRepository.updateListener.onNext(snippet)
         }
 }

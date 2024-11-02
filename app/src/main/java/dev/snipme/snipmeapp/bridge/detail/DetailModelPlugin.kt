@@ -20,7 +20,7 @@ class DetailModelPlugin : ModelPlugin<Bridge.DetailModelBridge>(), Bridge.Detail
     }
 
     override fun onSetup(messenger: BinaryMessenger, bridge: Bridge.DetailModelBridge?) {
-        Bridge.DetailModelBridge.setup(messenger, bridge)
+        Bridge.DetailModelBridge.setUp(messenger, bridge)
     }
 
     override fun load(uuid: String) {
@@ -54,7 +54,7 @@ class DetailModelPlugin : ModelPlugin<Bridge.DetailModelBridge>(), Bridge.Detail
     private fun getData(viewState: DetailViewState): Bridge.DetailModelStateData {
         return Bridge.DetailModelStateData().apply {
             state = viewState.toModelState()
-            is_loading = viewState is Loading
+            isLoading = viewState is Loading
             data = (viewState as? Loaded)?.snippet?.toModelData()
             oldHash = oldState?.hashCode()?.toLong()
             newHash = viewState.hashCode().toLong()
@@ -66,7 +66,7 @@ class DetailModelPlugin : ModelPlugin<Bridge.DetailModelBridge>(), Bridge.Detail
     private fun getEvent(detailEvent: DetailEvent): Bridge.DetailModelEventData {
         return Bridge.DetailModelEventData().apply {
             event = detailEvent.toModelEvent()
-            value = (detailEvent as? Saved)?.snippetId
+            value = (detailEvent as? Saved)?.snippetId.toString()
             oldHash = oldEvent?.hashCode()?.toLong()
             newHash = detailEvent.hashCode().toLong()
         }.also {

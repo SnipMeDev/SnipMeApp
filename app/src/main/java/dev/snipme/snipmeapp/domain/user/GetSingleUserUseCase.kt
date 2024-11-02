@@ -18,7 +18,7 @@ class GetSingleUserUseCase(
         var token: Int = 0
         authRepository.getToken().subscribe { value -> token = value.toInt() }
         return auth()
-            .andThen(networkAvailable())
+//            .andThen(networkAvailable())
             .andThen(repository.user(token))
     }
 }

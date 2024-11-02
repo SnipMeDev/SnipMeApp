@@ -17,7 +17,7 @@ class MainModelPlugin : ModelPlugin<Bridge.MainModelBridge>(), Bridge.MainModelB
         messenger: BinaryMessenger,
         bridge: Bridge.MainModelBridge?
     ) {
-        Bridge.MainModelBridge.setup(messenger, bridge)
+        Bridge.MainModelBridge.setUp(messenger, bridge)
     }
 
     override fun getState(): Bridge.MainModelStateData = getState(model.state.value)
@@ -47,7 +47,7 @@ class MainModelPlugin : ModelPlugin<Bridge.MainModelBridge>(), Bridge.MainModelB
     private fun getState(viewState: MainViewState): Bridge.MainModelStateData {
         return Bridge.MainModelStateData().apply {
             state = viewState.toModelState()
-            is_loading = viewState is Loading
+            isLoading = viewState is Loading
             data = (viewState as? Loaded)?.snippets?.toModelData()
             filter = (viewState as? Loaded)?.filters?.toModelFilter()
             oldHash = oldState?.hashCode()?.toLong()

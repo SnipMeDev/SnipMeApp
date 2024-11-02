@@ -2,7 +2,7 @@ package dev.snipme.snipmeapp.domain.snippets
 
 import android.text.SpannableString
 import dev.snipme.snipmeapp.domain.reaction.UserReaction
-import dev.snipme.snipmeapp.infrastructure.model.response.SnippetResponse
+import dev.snipme.snipmeapp.infrastructure.local.SnippetWithOwner
 import dev.snipme.snipmeapp.util.SyntaxHighlighter.getHighlighted
 import dev.snipme.snipmeapp.util.extension.lines
 import dev.snipme.snipmeapp.util.extension.newLineChar
@@ -14,19 +14,19 @@ const val PREVIEW_COUNT = 5
 
 class SnippetResponseMapper {
 
-    operator fun invoke(response: SnippetResponse) = with(response) {
+    operator fun invoke(response: SnippetWithOwner) = with(response.snippet) {
         return@with Snippet(
-            uuid = id,
-            title = title.orEmpty(),
-            code = getCode(this),
+            uuid = id.toString(),
+            title = title,
+            code = getCode(code),
             language = getLanguage(language),
             visibility = getVisibility(visibility),
-            isOwner = is_owner ?: false,
-            owner = Owner(owner?.id ?: 0, owner?.username ?: ""),
-            modifiedAt = modified_at?.toDate() ?: Date(),
-            numberOfLikes = number_of_likes ?: 0,
-            numberOfDislikes = number_of_dislikes ?: 0,
-            userReaction = getUserReaction(user_reaction)
+            isOwner = response.isOwner,
+            owner = Owner(ownerId , response.ownerName),
+            modifiedAt = modifiedAt.toDate(),
+            numberOfLikes = numberOfLikes,
+            numberOfDislikes = numberOfDislikes,
+            userReaction = getUserReaction(userReaction)
         )
     }
 
@@ -37,9 +37,9 @@ class SnippetResponseMapper {
             else -> UserReaction.NONE
         }
 
-    private fun getCode(response: SnippetResponse) = SnippetCode(
-        raw = response.code.orEmpty(),
-        highlighted = getPreview(response.code.orEmpty())
+    private fun getCode(code: String) = SnippetCode(
+        raw = code.orEmpty(),
+        highlighted = getPreview(code)
     )
 
     private fun getLanguage(language: String?) = SnippetLanguage(

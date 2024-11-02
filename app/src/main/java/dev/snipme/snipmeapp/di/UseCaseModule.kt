@@ -39,7 +39,7 @@ internal val useCaseModule = module {
     factory { ObserveUpdatedSnippetPageUseCase(get()) }
     factory { ObserveSnippetUpdatesUseCase(get()) }
     factory { GetTargetUserReactionUseCase() }
-    factory { SetUserReactionUseCase(get(), get(), get()) }
+    factory { SetUserReactionUseCase(get(), get(), get(), get()) }
     factory { DeleteSnippetUseCase(get()) }
     // Language
     factory { GetLanguagesUseCase(get(), get(), get()) }

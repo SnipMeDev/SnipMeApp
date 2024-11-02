@@ -17,7 +17,7 @@ class HasMoreSnippetPagesUseCase(
     operator fun invoke(scope: SnippetScope, page: Int): Single<Boolean> =
         auth()
             .andThen(networkAvailable())
-            .andThen(repository.count(scope).map { count -> page < pageCountFromOverall(count) })
+            .andThen(repository.count().map { count -> page < pageCountFromOverall(count) })
 
     private fun pageCountFromOverall(count: Int): Int {
         val nextPageOffset = count % SNIPPET_PAGE_SIZE

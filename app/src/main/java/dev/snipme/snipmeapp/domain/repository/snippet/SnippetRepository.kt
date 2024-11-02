@@ -12,15 +12,16 @@ interface SnippetRepository {
 
     val updateListener: BehaviorSubject<Snippet>
 
-    fun snippets(scope: SnippetScope, page: Int): Single<List<Snippet>>
+    fun snippets(userId: Int): Single<List<Snippet>>
 
-    fun snippet(id: String): Single<Snippet>
+    fun snippet(uuid: String, userId: Int): Single<Snippet>
 
     fun create(
         title: String,
         code: String,
         language: String,
-        visibility: SnippetVisibility
+        visibility: SnippetVisibility,
+        userId: Int
     ): Single<Snippet>
 
     fun update(
@@ -28,10 +29,11 @@ interface SnippetRepository {
         title: String,
         code: String,
         language: String,
-        visibility: SnippetVisibility
+        visibility: SnippetVisibility,
+        userId: Int
     ): Single<Snippet>
 
-    fun count(scope: SnippetScope): Single<Int>
+    fun count(): Single<Int>
 
     fun reaction(uuid: String, reaction: UserReaction): Completable
 

@@ -19,7 +19,7 @@ class LoginModelPlugin : ModelPlugin<Bridge.LoginModelBridge>(), Bridge.LoginMod
     }
 
     override fun onSetup(messenger: BinaryMessenger, bridge: Bridge.LoginModelBridge?) {
-        Bridge.LoginModelBridge.setup(messenger, bridge)
+        Bridge.LoginModelBridge.setUp(messenger, bridge)
     }
 
     override fun checkLoginState() {

@@ -4,9 +4,10 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import android.content.Context
 
-@Database(entities = [UserEntry::class], version = 1)
+@Database(entities = [UserEntry::class, SnippetEntry::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
+    abstract fun snippetDao(): SnippetDao
 
     companion object {
         @Volatile

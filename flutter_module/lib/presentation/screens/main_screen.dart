@@ -88,7 +88,7 @@ class _MainPage extends HookWidget {
       backgroundColor: ColorStyles.pageBackground(),
       body: ViewStateWrapper<List<Snippet>>(
         isLoading:
-            state.state == ModelState.loading || state.is_loading == true,
+            state.state == ModelState.loading || state.isLoading == true,
         error: state.error,
         data: state.data?.cast(),
         builder: (_, snippets) {
