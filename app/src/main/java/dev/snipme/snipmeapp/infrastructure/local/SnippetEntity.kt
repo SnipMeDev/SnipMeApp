@@ -15,14 +15,14 @@ data class SnippetEntry(
     val visibility: String,
     val ownerId: Int,
     val language: String,
-    val numberOfLikes: Int,
-    val numberOfDislikes: Int,
-    val userReaction: String
 )
 
 
-data class SnippetWithOwner(
+data class SnippetExtended(
     @Embedded val snippet: SnippetEntry,
     val ownerName: String,
-    val isOwner: Boolean
+    val isOwner: Boolean,
+    val userReaction: String,
+    val numberOfLikes: Int,
+    val numberOfDislikes: Int,
 )

@@ -15,9 +15,11 @@ class SetUserReactionUseCase(
     operator fun invoke(snippet: Snippet, reaction: UserReaction): Single<Snippet> {
         val targetReaction = getTargetReaction(snippet, reaction)
         return auth()
-            .andThen(repository.reaction(snippet.uuid, targetReaction))
             .andThen(getSingleUser())
-            .flatMap { repository.snippet(snippet.uuid, it.id) }
-            .doOnSuccess { repository.updateListener.onNext(it) }
+            .flatMap { user ->
+                repository.reaction(snippet.uuid, user.id, targetReaction)
+                    .andThen(repository.snippet(snippet.uuid, user.id))
+                    .doOnSuccess { repository.updateListener.onNext(it) }
+            }
     }
 }

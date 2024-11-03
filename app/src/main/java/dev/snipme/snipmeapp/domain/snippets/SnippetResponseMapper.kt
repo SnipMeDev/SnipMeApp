@@ -2,7 +2,7 @@ package dev.snipme.snipmeapp.domain.snippets
 
 import android.text.SpannableString
 import dev.snipme.snipmeapp.domain.reaction.UserReaction
-import dev.snipme.snipmeapp.infrastructure.local.SnippetWithOwner
+import dev.snipme.snipmeapp.infrastructure.local.SnippetExtended
 import dev.snipme.snipmeapp.util.SyntaxHighlighter.getHighlighted
 import dev.snipme.snipmeapp.util.extension.lines
 import dev.snipme.snipmeapp.util.extension.newLineChar
@@ -14,7 +14,7 @@ const val PREVIEW_COUNT = 5
 
 class SnippetResponseMapper {
 
-    operator fun invoke(response: SnippetWithOwner) = with(response.snippet) {
+    operator fun invoke(response: SnippetExtended) = with(response.snippet) {
         return@with Snippet(
             uuid = id.toString(),
             title = title,
@@ -24,9 +24,9 @@ class SnippetResponseMapper {
             isOwner = response.isOwner,
             owner = Owner(ownerId , response.ownerName),
             modifiedAt = modifiedAt.toDate(),
-            numberOfLikes = numberOfLikes,
-            numberOfDislikes = numberOfDislikes,
-            userReaction = getUserReaction(userReaction)
+            numberOfLikes = response.numberOfLikes,
+            numberOfDislikes = response.numberOfDislikes,
+            userReaction = getUserReaction(response.userReaction)
         )
     }
 

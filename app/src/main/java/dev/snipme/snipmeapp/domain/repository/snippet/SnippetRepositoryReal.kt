@@ -5,6 +5,7 @@ import dev.snipme.snipmeapp.domain.reaction.UserReaction
 import dev.snipme.snipmeapp.domain.snippets.Snippet
 import dev.snipme.snipmeapp.domain.snippets.SnippetResponseMapper
 import dev.snipme.snipmeapp.domain.snippets.SnippetVisibility
+import dev.snipme.snipmeapp.infrastructure.local.ReactionEntry
 import dev.snipme.snipmeapp.infrastructure.local.SnippetDao
 import dev.snipme.snipmeapp.infrastructure.local.SnippetEntry
 import dev.snipme.snipmeapp.util.extension.mapError
@@ -50,9 +51,6 @@ class SnippetRepositoryReal(
                 visibility = visibility.name,
                 ownerId = userId,
                 language = language,
-                numberOfLikes = 0,
-                numberOfDislikes = 0,
-                userReaction = ""
             )
         )
             .mapError { errorHandler.handle(it) }
@@ -71,7 +69,7 @@ class SnippetRepositoryReal(
         visibility: SnippetVisibility,
         userId: Int
     ): Single<Snippet> =
-         service.update(uuid.toInt(), title, code, language, visibility.name)
+        service.update(uuid.toInt(), title, code, language, visibility.name)
             .mapError { errorHandler.handle(it) }
             .andThen(
                 service.snippet(uuid.toInt(), userId)
@@ -79,18 +77,15 @@ class SnippetRepositoryReal(
                     .map { mapper(it) }
             )
 
-    override fun delete(uuid: String): Completable = service.delete(uuid.toInt())
+    override fun delete(uuid: String): Completable =
+        service.delete(uuid.toInt()).mapError { errorHandler.handle(it) }
 
     override fun count() =
-            service.count()
-                .mapError { errorHandler.handle(it) }
-                .map{it}
+        service.count()
+            .mapError { errorHandler.handle(it) }
+            .map { it }
 
-    override fun reaction(uuid: String, reaction: UserReaction): Completable {
-        TODO("Not yet implemented")
-    }
-
-//    override fun reaction(uuid: String, reaction: UserReaction) = throw NotImplementedError()
-//        service.rate(RateSnippetRequest(uuid, reaction.name))
-//            .mapError { errorHandler.handle(it) }
+    override fun reaction(uuid: String, userId: Int, reaction: UserReaction): Completable =
+        service.reaction(ReactionEntry(snippetId = uuid.toInt(), userId = userId, reaction = reaction.ordinal.toShort()))
+            .mapError { errorHandler.handle(it) }
 }
