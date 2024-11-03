@@ -43,7 +43,7 @@ dev_dependencies:
 # following screens: https://dart.dev/tools/pub/pubspec
 
 flutter_assets_generator:
-  named_with_parent: false # Don't add folder to icon's name
+  named_with_parent: false # Don't add folder to icons's name
 
 flutter:
   plugin:
@@ -59,9 +59,9 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/illustrations/app_logo.png
-#    - assets/images/icons/reaction_undefined.png
-#    - assets/images/icons/reaction_like.png
-#    - assets/images/icons/reaction_dislike.png
+    - assets/images/icons/reaction_undefined.jpeg
+    - assets/images/icons/reaction_like.jpeg
+    - assets/images/icons/reaction_dislike.jpeg
   fonts:
     - family: Kanit
       fonts:

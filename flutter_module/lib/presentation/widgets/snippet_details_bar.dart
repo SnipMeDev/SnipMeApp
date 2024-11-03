@@ -58,17 +58,24 @@ class _UserReactionIndicator extends StatelessWidget {
   });
 
   final UserReaction? reaction;
+  final _scale = 2.0;
 
   @override
   Widget build(BuildContext context) {
     if (reaction == UserReaction.like) {
-      return Image.asset(Assets.reactionLike);
+      return Image.asset(
+        Assets.reactionLike,
+        scale: _scale,
+      );
     }
 
     if (reaction == UserReaction.dislike) {
-      return Image.asset(Assets.reactionDislike);
+      return Image.asset(
+        Assets.reactionDislike,
+        scale: _scale,
+      );
     }
 
-    return Image.asset(Assets.reactionUndefined);
+    return Image.asset(Assets.reactionUndefined, scale: _scale);
   }
 }
