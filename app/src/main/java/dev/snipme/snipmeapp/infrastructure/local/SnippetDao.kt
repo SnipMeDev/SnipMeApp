@@ -14,8 +14,8 @@ interface SnippetDao {
     SELECT s.*, u.login as ownerName,
     CASE WHEN s.ownerId = :userId THEN 1 ELSE 0 END as isOwner,
     CASE WHEN r.reaction = 0 THEN 'DISLIKE' ELSE CASE WHEN r.reaction = 2 THEN 'LIKE' ELSE 'NONE' END END as userReaction,
-    (Select Count(*) FROM reactions as r where r.userId = :userId and r.snippetId = :uuid and reaction = 2) as numberOfLikes,
-    (Select Count(*) FROM reactions as r where r.userId = :userId and r.snippetId = :uuid and reaction = 0) as numberOfDislikes
+    (Select Count(*) FROM reactions as r where r.snippetId = :uuid and reaction = 2) as numberOfLikes,
+    (Select Count(*) FROM reactions as r where r.snippetId = :uuid and reaction = 0) as numberOfDislikes
     FROM snippets as s 
     INNER JOIN users as u ON s.ownerId = u.id 
     LEFT JOIN reactions as r ON r.userId = :userId and r.snippetId = :uuid
@@ -29,8 +29,8 @@ interface SnippetDao {
             SELECT s.*, u.login as ownerName,
             CASE WHEN s.ownerId = :userId THEN 1 ELSE 0 END as isOwner,
             CASE WHEN r.reaction = -1 THEN "DISLIKE" ELSE CASE WHEN r.reaction = 1 THEN "LIKE" ELSE "NONE" END END as userReaction,
-            (Select Count(*) FROM reactions as r where r.userId = :userId and r.snippetId = s.id and reaction = 1) as numberOfLikes,
-            (Select Count(*) FROM reactions as r where r.userId = :userId and r.snippetId = s.id and reaction = -1) as numberOfDislikes
+            (Select Count(*) FROM reactions as r where r.snippetId = s.id and reaction = 2) as numberOfLikes,
+            (Select Count(*) FROM reactions as r where r.snippetId = s.id and reaction = 0) as numberOfDislikes
             FROM snippets as s
             INNER JOIN users as u ON s.ownerId = u.id
             LEFT JOIN reactions as r ON r.userId = :userId
