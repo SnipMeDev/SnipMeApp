@@ -33,7 +33,7 @@ interface SnippetDao {
             (Select Count(*) FROM reactions as r where r.snippetId = s.id and reaction = 0) as numberOfDislikes
             FROM snippets as s
             INNER JOIN users as u ON s.ownerId = u.id
-            LEFT JOIN reactions as r ON r.userId = :userId
+            LEFT JOIN reactions as r ON r.userId = :userId and r.snippetId = s.id
         """
     )
     fun snippets(userId: Int): Single<List<SnippetExtended>>
