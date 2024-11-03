@@ -19,7 +19,7 @@ internal val serviceModule = module {
     single<AppDatabase> {
         Room.databaseBuilder(
             get(), AppDatabase::class.java, "app_database"
-        ).build()
+        ).createFromAsset("app_database.db").build()
     }
 
     single<UserDao> { get<AppDatabase>().userDao() }
