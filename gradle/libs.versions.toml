@@ -1,0 +1,93 @@
+[versions]
+adapterRxjava2 = "2.9.0"
+agp = "8.6.1"
+annotation = "1.8.2"
+appcompat = "1.7.0"
+codeview = "1.3.2"
+compiler = "4.16.0"
+constraintlayout = "2.1.4"
+firebaseAnalyticsKtx = "22.1.2"
+firebaseBom = "33.4.0"
+fragmentKtx = "1.8.4"
+glide = "4.12.0"
+kodeview = "0.8.0"
+kotlin = "2.0.21"
+coreKtx = "1.13.1"
+junit = "4.13.2"
+junitVersion = "1.2.1"
+espressoCore = "3.6.1"
+lifecycleRuntimeKtx = "2.8.6"
+activityCompose = "1.9.2"
+composeBom = "2024.09.03"
+loggingInterceptor = "4.9.0"
+material = "1.12.0"
+mockk = "1.10.6"
+moshiKotlin = "2.9.0"
+moshiKotlinCodegen = "1.13.0"
+moshiKotlinVersion = "1.13.0"
+navigationRuntimeKtx = "2.8.2"
+reactivenetworkRx2 = "3.0.8"
+recyclerview = "1.3.2"
+retrofit = "2.9.0"
+roomRuntime = "2.6.1"
+rxandroid = "2.1.1"
+rxkotlin = "2.4.0"
+koinBom = "4.0.0"
+timber = "4.7.1"
+
+[libraries]
+adapter-rxjava2 = { module = "com.squareup.retrofit2:adapter-rxjava2", version.ref = "adapterRxjava2" }
+androidx-annotation = { module = "androidx.annotation:annotation", version.ref = "annotation" }
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
+androidx-lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycleRuntimeKtx" }
+androidx-lifecycle-reactivestreams-ktx = { module = "androidx.lifecycle:lifecycle-reactivestreams-ktx", version.ref = "lifecycleRuntimeKtx" }
+androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleRuntimeKtx" }
+androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigationRuntimeKtx" }
+androidx-navigation-runtime-ktx = { module = "androidx.navigation:navigation-runtime-ktx", version.ref = "navigationRuntimeKtx" }
+androidx-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigationRuntimeKtx" }
+androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomRuntime" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
+androidx-room-rxjava2 = { module = "androidx.room:room-rxjava2", version.ref = "roomRuntime" }
+codeview = { module = "com.github.kbiakov:CodeView-Android", version.ref = "codeview" }
+compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "compiler" }
+converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "moshiKotlin" }
+firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics-ktx", version.ref = "firebaseAnalyticsKtx" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+androidx-ui = { group = "androidx.compose.ui", name = "ui" }
+androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+kodeview = { module = "dev.snipme:kodeview", version.ref = "kodeview" }
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinBom" }
+koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koinBom" }
+koin-core = { module = "io.insert-koin:koin-core" }
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
+logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "loggingInterceptor" }
+material = { module = "com.google.android.material:material", version.ref = "material" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+moshi-kotlin = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshiKotlinVersion" }
+moshi-kotlin-codegen = { module = "com.squareup.moshi:moshi-kotlin-codegen", version.ref = "moshiKotlinCodegen" }
+reactivenetwork-rx2 = { module = "com.github.pwittchen:reactivenetwork-rx2", version.ref = "reactivenetworkRx2" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+rxandroid = { module = "io.reactivex.rxjava2:rxandroid", version.ref = "rxandroid" }
+rxkotlin = { module = "io.reactivex.rxjava2:rxkotlin", version.ref = "rxkotlin" }
+timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
