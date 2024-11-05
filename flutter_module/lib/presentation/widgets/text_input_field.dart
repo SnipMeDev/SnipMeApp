@@ -6,14 +6,13 @@ import 'package:flutter_module/presentation/styles/dimens.dart';
 typedef TextInputCallback = Function(String value);
 
 class TextInputField extends HookWidget {
-  const TextInputField({
-    super.key,
-    required this.label,
-    this.isPassword = false,
-    this.onChanged,
-    this.validator,
-    this.initialValue
-  });
+  const TextInputField(
+      {super.key,
+      required this.label,
+      this.isPassword = false,
+      this.onChanged,
+      this.validator,
+      this.initialValue});
 
   final String label;
   final String? initialValue;
@@ -31,11 +30,11 @@ class TextInputField extends HookWidget {
     useEffect(() {
       controller.addListener(() {
         onChanged?.call(controller.text);
-        error.value =
-        controller.text.isNotEmpty ? validator?.call(controller.text) : null;
+        error.value = controller.text.isNotEmpty
+            ? validator?.call(controller.text)
+            : null;
       });
-
-      return () => controller.dispose();
+      return null;
     }, []);
 
     return TextFormField(

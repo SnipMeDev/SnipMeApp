@@ -38,7 +38,6 @@ class MainScreen extends NamedScreen implements UserScreen {
       model: model,
     );
   }
-
 }
 
 class _MainPage extends HookWidget {
@@ -87,8 +86,7 @@ class _MainPage extends HookWidget {
     return Scaffold(
       backgroundColor: ColorStyles.pageBackground(),
       body: ViewStateWrapper<List<Snippet>>(
-        isLoading:
-            state.state == ModelState.loading || state.isLoading == true,
+        isLoading: state.state == ModelState.loading || state.isLoading == true,
         error: state.error,
         data: state.data?.cast(),
         builder: (_, snippets) {
@@ -238,10 +236,7 @@ class _MainPageData extends HookWidget {
         ];
       },
       body: CustomScrollView(
-        scrollBehavior: const ScrollBehavior(
-          //TODO: change line below
-          // androidOverscrollIndicator: AndroidOverscrollIndicator.stretch,
-        ),
+        scrollBehavior: const ScrollBehavior(),
         slivers: [
           SliverList(
             delegate: SliverChildListDelegate([

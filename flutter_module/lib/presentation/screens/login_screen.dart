@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_module/generated/assets.dart';
@@ -84,44 +83,42 @@ class _MainPage extends HookWidget {
           data: state.state,
           builder: (BuildContext context, _) {
             return NoOverscrollSingleChildScrollView(
-              child: Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: Dimens.xxl),
-                    TextStyles.appLogo('SnipMe'),
-                    const SizedBox(height: Dimens.xxl),
-                    Image.asset(Assets.appLogo),
-                    const SizedBox(height: Dimens.xxl),
-                    const TextStyles.secondary('Snip your favorite code'),
-                    PaddingStyles.regular(
-                      LoginInputCard(
-                        emailValue: email.value,
-                        passwordValue: password.value,
-                        onEmailChanged: (emailValue) {
-                          email.value = emailValue;
-                        },
-                        onPasswordChanged: (passwordValue) {
-                          password.value = passwordValue;
-                        },
-                        onValidChanged: (isValid) {
-                          validationCorrect.value = isValid;
-                        },
-                      ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(height: Dimens.xxl),
+                  TextStyles.appLogo('SnipMe'),
+                  const SizedBox(height: Dimens.xxl),
+                  Image.asset(Assets.appLogo),
+                  const SizedBox(height: Dimens.xxl),
+                  const TextStyles.secondary('Snip your favorite code'),
+                  PaddingStyles.regular(
+                    LoginInputCard(
+                      emailValue: email.value,
+                      passwordValue: password.value,
+                      onEmailChanged: (emailValue) {
+                        email.value = emailValue;
+                      },
+                      onPasswordChanged: (passwordValue) {
+                        password.value = passwordValue;
+                      },
+                      onValidChanged: (isValid) {
+                        validationCorrect.value = isValid;
+                      },
                     ),
-                    Center(
-                      child: RoundedActionButton(
-                        icon: Icons.check_circle,
-                        title: 'Login',
-                        enabled: validationCorrect.value,
-                        onPressed: () {
-                          model.loginOrRegister(email.value, password.value);
-                        },
-                      ),
+                  ),
+                  Center(
+                    child: RoundedActionButton(
+                      icon: Icons.check_circle,
+                      title: 'Login',
+                      enabled: validationCorrect.value,
+                      onPressed: () {
+                        model.loginOrRegister(email.value, password.value);
+                      },
                     ),
-                    const SizedBox(height: Dimens.xxl),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: Dimens.xxl),
+                ],
               ),
             );
           },
