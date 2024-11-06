@@ -4,12 +4,12 @@ typedef DataWidgetBuilder<T> = Widget Function(BuildContext context, T? data);
 
 class ViewStateWrapper<T> extends StatelessWidget {
   const ViewStateWrapper({
-    Key? key,
+    super.key,
     required this.builder,
     this.isLoading = false,
     this.data,
     this.error,
-  }) : super(key: key);
+  });
 
   final bool isLoading;
   final T? data;

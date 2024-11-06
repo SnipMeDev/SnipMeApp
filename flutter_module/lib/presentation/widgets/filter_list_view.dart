@@ -6,11 +6,11 @@ typedef FilterSelectedListener = Function(String filter, bool selected);
 
 class FilterListView extends StatelessWidget {
   const FilterListView({
-    Key? key,
+    super.key,
     required this.filters,
     required this.selected,
     this.onSelected,
-  }) : super(key: key);
+  });
 
   final List<String?> filters;
   final List<String?> selected;
@@ -22,15 +22,26 @@ class FilterListView extends StatelessWidget {
       physics: const BouncingScrollPhysics(),
       itemCount: filters.length,
       scrollDirection: Axis.horizontal,
-      separatorBuilder: (_, __) => const SizedBox(width: Dimens.m,),
+      separatorBuilder: (_, __) => const SizedBox(
+        width: Dimens.m,
+      ),
       itemBuilder: (BuildContext context, int index) {
         final filter = filters[index];
-        return ChoiceChip(
-          disabledColor: ColorStyles.filterBackgroundColor().withOpacity(0.08),
-          selectedColor: ColorStyles.filterBackgroundColor().withOpacity(0.25),
-          label: Text(filter ?? ''),
-          selected: selected.contains(filter),
-          onSelected: (isSelected) => onSelected?.call(filter ?? '', isSelected),
+        return ChipTheme(
+          data: ChipThemeData(
+            side: BorderSide.none,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          ),
+          child: ChoiceChip(
+              backgroundColor:
+                  ColorStyles.filterBackgroundColor().withOpacity(0.13),
+              selectedColor:
+                  ColorStyles.filterBackgroundColor().withOpacity(0.25),
+              label: Text(filter ?? ''),
+              selected: selected.contains(filter),
+              onSelected: (isSelected) =>
+                  onSelected?.call(filter ?? '', isSelected)),
         );
       },
     );

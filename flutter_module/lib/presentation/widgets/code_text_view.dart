@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_module/model/main_model.dart';
 import 'package:flutter_module/presentation/styles/text_styles.dart';
 import 'package:flutter_module/utils/extensions/collection_extensions.dart';
@@ -27,13 +26,13 @@ class TextSelectionOptions {
 
 class CodeTextView extends StatelessWidget {
   const CodeTextView({
-    Key? key,
+    super.key,
     required this.code,
     this.maxLines,
     this.tokens,
     this.options,
     this.onTap,
-  }) : super(key: key);
+  });
 
   final splitter = const LineSplitter();
   final String code;

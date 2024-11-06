@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_module/model/main_model.dart';
 import 'package:flutter_module/presentation/styles/dimens.dart';
 import 'package:flutter_module/presentation/styles/surface_styles.dart';
@@ -7,7 +6,7 @@ import 'package:flutter_module/presentation/widgets/state_icon.dart';
 
 class SnippetActionBar extends StatelessWidget {
   const SnippetActionBar({
-    Key? key,
+    super.key,
     required this.snippet,
     this.onLikeTap,
     this.onDislikeTap,
@@ -15,7 +14,7 @@ class SnippetActionBar extends StatelessWidget {
     this.onCopyTap,
     this.onShareTap,
     this.onDeleteTap,
-  }) : super(key: key);
+  });
 
   final Snippet snippet;
   final GestureTapCallback? onLikeTap;

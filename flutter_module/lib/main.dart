@@ -11,7 +11,7 @@ import 'package:go_router_plus/go_router_plus.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  MyApp({Key? key}) : super(key: key);
+  MyApp({super.key});
 
   final loginModel = LoginModelBridge();
   final mainModel = MainModelBridge();
@@ -50,7 +50,10 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp.router(
       title: 'SnipMe',
-      theme: ThemeData(primarySwatch: Colors.blue),
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        useMaterial3: false,
+      ),
       // TODO Use theme tailor
       routeInformationProvider: router.routeInformationProvider,
       routeInformationParser: router.routeInformationParser,

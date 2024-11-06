@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_module/presentation/styles/dimens.dart';
@@ -13,15 +12,19 @@ const _minPasswordLength = 8;
 
 class LoginInputCard extends HookWidget {
   const LoginInputCard({
-    Key? key,
+    super.key,
     required this.onEmailChanged,
     required this.onPasswordChanged,
     this.onValidChanged,
-  }) : super(key: key);
+    this.emailValue,
+    this.passwordValue,
+  });
 
   final TextInputCallback onEmailChanged;
   final TextInputCallback onPasswordChanged;
   final Function(bool)? onValidChanged;
+  final String? emailValue;
+  final String? passwordValue;
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +37,7 @@ class LoginInputCard extends HookWidget {
           children: [
             const SizedBox(height: Dimens.l),
             TextInputField(
+              initialValue: emailValue,
               label: 'Email',
               onChanged: onEmailChanged,
               validator: (input) => _validate(
@@ -44,6 +48,7 @@ class LoginInputCard extends HookWidget {
             ),
             const SizedBox(height: Dimens.xl),
             TextInputField(
+              initialValue: passwordValue,
               label: 'Password',
               onChanged: onPasswordChanged,
               isPassword: true,

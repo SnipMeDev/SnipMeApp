@@ -24,30 +24,32 @@ dependencies:
   flutter:
     sdk: flutter
   equatable: ^2.0.5
-  flutter_hooks: ^0.18.5+1
+  flutter_hooks: ^0.20.5
   test: ^1.21.4
-  go_router: ^5.1.5
-  go_router_plus: ^2.0.0
+  go_router: ^6.5.9
+  go_router_plus: ^4.1.1
   validators: ^3.0.0
 
+  collection: any
+  logger: ^2.4.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
   build_runner: ^2.2.1
-  flutter_lints: ^2.0.1
-  pigeon: ^4.2.2
+  flutter_lints: ^4.0.0
+  pigeon: ^22.5.0
 
 # For information on the generic Dart part of this file, see the
 # following screens: https://dart.dev/tools/pub/pubspec
 
 flutter_assets_generator:
-  named_with_parent: false # Don't add folder to icon's name
+  named_with_parent: false # Don't add folder to icons's name
 
 flutter:
   plugin:
     platforms:
       android:
-        package: pl.tkadziolka.snipmeandroid
+        package: dev.snipme.snipmeapp
         pluginClass: PigeonPlugin
       ios:
         pluginClass: PigeonPlugin
@@ -57,9 +59,9 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/illustrations/app_logo.png
-    - assets/images/icons/reaction_undefined.png
-    - assets/images/icons/reaction_like.png
-    - assets/images/icons/reaction_dislike.png
+    - assets/images/icons/reaction_undefined.jpeg
+    - assets/images/icons/reaction_like.jpeg
+    - assets/images/icons/reaction_dislike.jpeg
   fonts:
     - family: Kanit
       fonts:
@@ -101,5 +103,5 @@ flutter:
   # identifiers, which may be completely independent or the same as these.
   module:
     androidX: true
-    androidPackage: pl.tkadziolka.snipmeandroid.flutter.flutter_module
-    iosBundleIdentifier: pl.tkadziolka.snipmeandroid.flutter.flutterModule
+    androidPackage: dev.snipme.flutter_module
+    iosBundleIdentifier: dev.snipme.flutterModule

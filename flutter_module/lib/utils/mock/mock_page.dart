@@ -3,9 +3,9 @@ import 'package:flutter_module/presentation/styles/padding_styles.dart';
 
 class MockPage extends StatelessWidget {
   const MockPage({
-    Key? key,
+    super.key,
     required this.children,
-  }) : super(key: key);
+  });
 
   final List<Widget> children;
 

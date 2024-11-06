@@ -7,9 +7,9 @@ import 'package:flutter_module/presentation/styles/text_styles.dart';
 
 class SnippetDetailsBar extends StatelessWidget {
   const SnippetDetailsBar({
-    Key? key,
+    super.key,
     required this.snippet,
-  }) : super(key: key);
+  });
 
   final Snippet snippet;
 
@@ -54,22 +54,28 @@ class SnippetDetailsBar extends StatelessWidget {
 
 class _UserReactionIndicator extends StatelessWidget {
   const _UserReactionIndicator({
-    Key? key,
     this.reaction,
-  }) : super(key: key);
+  });
 
   final UserReaction? reaction;
+  final _scale = 2.0;
 
   @override
   Widget build(BuildContext context) {
     if (reaction == UserReaction.like) {
-      return Image.asset(Assets.reactionLike);
+      return Image.asset(
+        Assets.reactionLike,
+        scale: _scale,
+      );
     }
 
     if (reaction == UserReaction.dislike) {
-      return Image.asset(Assets.reactionDislike);
+      return Image.asset(
+        Assets.reactionDislike,
+        scale: _scale,
+      );
     }
 
-    return Image.asset(Assets.reactionUndefined);
+    return Image.asset(Assets.reactionUndefined, scale: _scale);
   }
 }

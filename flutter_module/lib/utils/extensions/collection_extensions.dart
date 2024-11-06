@@ -25,7 +25,6 @@ class TokenSpan with EquatableMixin {
 
 extension SyntaxSpanExtension on List<SyntaxToken?>? {
   Future<List<TextSpan>> toSpans(String text, TextStyle baseStyle) {
-    print("toSpans");
     return Future.microtask(() {
       if (this == null) return [TextSpan(text: text, style: baseStyle)];
       if (this!.isEmpty) return [TextSpan(text: text, style: baseStyle)];

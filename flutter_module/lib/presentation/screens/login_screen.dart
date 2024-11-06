@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_module/generated/assets.dart';
@@ -12,13 +10,10 @@ import 'package:flutter_module/presentation/styles/text_styles.dart';
 import 'package:flutter_module/presentation/widgets/login_input_card.dart';
 import 'package:flutter_module/presentation/widgets/no_overscroll_single_child_scroll_view.dart';
 import 'package:flutter_module/presentation/widgets/rounded_action_button.dart';
-import 'package:flutter_module/presentation/widgets/text_input_field.dart';
 import 'package:flutter_module/presentation/widgets/view_state_wrapper.dart';
 import 'package:flutter_module/utils/extensions/state_extensions.dart';
 import 'package:flutter_module/utils/hooks/use_navigator.dart';
 import 'package:flutter_module/utils/hooks/use_observable_state_hook.dart';
-import 'package:flutter_module/utils/hooks/use_same_state.dart';
-import 'package:go_router/go_router.dart';
 import 'package:go_router_plus/go_router_plus.dart';
 
 class LoginScreen extends NamedScreen implements InitialScreen, GuestScreen {
@@ -32,7 +27,7 @@ class LoginScreen extends NamedScreen implements InitialScreen, GuestScreen {
   final LoginModelBridge model;
 
   @override
-  Widget builder(BuildContext context, GoRouterState state) {
+  Widget build(BuildContext context, GoRouterState state) {
     return _MainPage(
       navigator: navigator,
       model: model,
@@ -42,10 +37,9 @@ class LoginScreen extends NamedScreen implements InitialScreen, GuestScreen {
 
 class _MainPage extends HookWidget {
   const _MainPage({
-    Key? key,
     required this.navigator,
     required this.model,
-  }) : super(key: key);
+  });
 
   final LoginNavigator navigator;
   final LoginModelBridge model;
@@ -54,9 +48,9 @@ class _MainPage extends HookWidget {
   Widget build(BuildContext context) {
     useNavigator([navigator]);
 
-    final email = useState('');
-    final password = useState('');
-    final validationCorrect = useState(false);
+    final email = useState('mail@o2.pl');
+    final password = useState('12345678');
+    final validationCorrect = useState(true);
 
     final state = useObservableState(
       LoginModelStateData(),
@@ -72,6 +66,7 @@ class _MainPage extends HookWidget {
 
     useEffect(() {
       model.checkLoginState();
+      return null;
     }, []);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -88,42 +83,42 @@ class _MainPage extends HookWidget {
           data: state.state,
           builder: (BuildContext context, _) {
             return NoOverscrollSingleChildScrollView(
-              child: Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: Dimens.xxl),
-                    TextStyles.appLogo('SnipMe'),
-                    const SizedBox(height: Dimens.xxl),
-                    Image.asset(Assets.appLogo),
-                    const SizedBox(height: Dimens.xxl),
-                    const TextStyles.secondary('Snip your favorite code'),
-                    PaddingStyles.regular(
-                      LoginInputCard(
-                        onEmailChanged: (emailValue) {
-                          email.value = emailValue;
-                        },
-                        onPasswordChanged: (passwordValue) {
-                          password.value = passwordValue;
-                        },
-                        onValidChanged: (isValid) {
-                          validationCorrect.value = isValid;
-                        },
-                      ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(height: Dimens.xxl),
+                  TextStyles.appLogo('SnipMe'),
+                  const SizedBox(height: Dimens.xxl),
+                  Image.asset(Assets.appLogo),
+                  const SizedBox(height: Dimens.xxl),
+                  const TextStyles.secondary('Snip your favorite code'),
+                  PaddingStyles.regular(
+                    LoginInputCard(
+                      emailValue: email.value,
+                      passwordValue: password.value,
+                      onEmailChanged: (emailValue) {
+                        email.value = emailValue;
+                      },
+                      onPasswordChanged: (passwordValue) {
+                        password.value = passwordValue;
+                      },
+                      onValidChanged: (isValid) {
+                        validationCorrect.value = isValid;
+                      },
                     ),
-                    Center(
-                      child: RoundedActionButton(
-                        icon: Icons.check_circle,
-                        title: 'Login',
-                        enabled: validationCorrect.value,
-                        onPressed: () {
-                          model.loginOrRegister(email.value, password.value);
-                        },
-                      ),
+                  ),
+                  Center(
+                    child: RoundedActionButton(
+                      icon: Icons.check_circle,
+                      title: 'Login',
+                      enabled: validationCorrect.value,
+                      onPressed: () {
+                        model.loginOrRegister(email.value, password.value);
+                      },
                     ),
-                    const SizedBox(height: Dimens.xxl),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: Dimens.xxl),
+                ],
               ),
             );
           },

@@ -43,8 +43,8 @@ class Owner {
 enum SnippetLanguageType {
   c,
   cpp,
-  objective_c,
-  c_sharp,
+  objectiveC,
+  cSharp,
   java,
   bash,
   python,
@@ -115,7 +115,7 @@ enum LoginModelEvent { none, logged }
 
 class MainModelStateData {
   ModelState? state;
-  bool? is_loading;
+  bool? isLoading;
   List<Snippet?>? data;
   SnippetFilter? filter;
   String? error;
@@ -132,7 +132,7 @@ class MainModelEventData {
 
 class DetailModelStateData {
   ModelState? state;
-  bool? is_loading;
+  bool? isLoading;
   Snippet? data;
   String? error;
   int? oldHash;
@@ -148,7 +148,7 @@ class DetailModelEventData {
 
 class LoginModelStateData {
   ModelState? state;
-  bool? is_loading;
+  bool? isLoading;
   int? oldHash;
   int? newHash;
 }

@@ -80,7 +80,7 @@ class TextStyles extends Text {
           ),
         );
 
-  TextStyles.appBarLogo(this.text, {Key? key})
+  const TextStyles.appBarLogo(this.text, {Key? key})
       : super(
           text,
           key: key,

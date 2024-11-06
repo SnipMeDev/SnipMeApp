@@ -5,11 +5,11 @@ typedef FilterSelectedItemListener = Function(String);
 
 class FilterDropdown extends StatelessWidget {
   const FilterDropdown({
-    Key? key,
+    super.key,
     required this.filters,
     required this.selected,
     this.onSelected,
-  }) : super(key: key);
+  });
 
   final List<String?> filters;
   final String selected;
