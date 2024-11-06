@@ -50,7 +50,10 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp.router(
       title: 'SnipMe',
-      theme: ThemeData(primarySwatch: Colors.blue),
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        useMaterial3: false,
+      ),
       // TODO Use theme tailor
       routeInformationProvider: router.routeInformationProvider,
       routeInformationParser: router.routeInformationParser,
