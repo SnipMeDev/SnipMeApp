@@ -18,7 +18,7 @@ description: A new flutter module project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.18.2 <3.0.0"
+  sdk: ">=3.5.0 <4.0.0"
 
 dependencies:
   flutter:
@@ -29,9 +29,10 @@ dependencies:
   go_router: ^6.5.9
   go_router_plus: ^4.1.1
   validators: ^3.0.0
-
   collection: any
   logger: ^2.4.0
+  flutter_riverpod: ^2.6.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -13,9 +13,11 @@ import 'package:flutter_module/presentation/widgets/filter_dropdown.dart';
 import 'package:flutter_module/presentation/widgets/filter_list_view.dart';
 import 'package:flutter_module/presentation/widgets/snippet_list_item.dart';
 import 'package:flutter_module/presentation/widgets/view_state_wrapper.dart';
+import 'package:flutter_module/providers/snippet_provider.dart';
 import 'package:flutter_module/utils/extensions/state_extensions.dart';
 import 'package:flutter_module/utils/hooks/use_navigator.dart';
 import 'package:flutter_module/utils/hooks/use_observable_state_hook.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router_plus/go_router_plus.dart';
 
 class MainScreen extends NamedScreen implements UserScreen {
@@ -85,19 +87,27 @@ class _MainPage extends HookWidget {
 
     return Scaffold(
       backgroundColor: ColorStyles.pageBackground(),
-      body: ViewStateWrapper<List<Snippet>>(
-        isLoading: state.state == ModelState.loading || state.isLoading == true,
-        error: state.error,
-        data: state.data?.cast(),
-        builder: (_, snippets) {
-          return _MainPageData(
-            navigator: detailsNavigator,
-            model: model,
-            snippets: snippets ?? List.empty(),
-            filter: state.filter ?? SnippetFilter(),
-            controller: controller,
-            expanded: expandedState.value,
-            onExpandChange: (expanded) => expandedState.value = expanded,
+      body: Consumer(
+        builder: (context, ref, widget) {
+          final value = ref.watch(mainStateProvider);
+          // ref.read(mainStateProvider.notifier).init();
+          print('value: $value');
+          return ViewStateWrapper<List<Snippet>>(
+            isLoading:
+                state.state == ModelState.loading || state.isLoading == true,
+            error: state.error,
+            data: state.data?.cast(),
+            builder: (_, snippets) {
+              return _MainPageData(
+                navigator: detailsNavigator,
+                model: model,
+                snippets: snippets ?? List.empty(),
+                filter: state.filter ?? SnippetFilter(),
+                controller: controller,
+                expanded: expandedState.value,
+                onExpandChange: (expanded) => expandedState.value = expanded,
+              );
+            },
           );
         },
       ),
