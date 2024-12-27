@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_module/messages.dart';
 import 'package:flutter_module/utils/extensions/collection_extensions.dart';
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   const style = TextStyle(color: Colors.black);
