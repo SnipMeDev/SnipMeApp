@@ -17,6 +17,11 @@ class MainModelPlugin : ModelPlugin<Bridge.MainModelBridge>(), Bridge.MainModelB
         messenger: BinaryMessenger,
         bridge: Bridge.MainModelBridge?
     ) {
+        // TODO Create a separate example of new pigeon with riverpod
+        Bridge.ObserveMainStateStreamHandler.register(
+
+        )
+
         Bridge.MainModelBridge.setUp(messenger, bridge)
     }
 

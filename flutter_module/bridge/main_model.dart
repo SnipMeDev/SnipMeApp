@@ -1,6 +1,17 @@
 import 'package:pigeon/pigeon.dart';
 
 // General
+// dart run pigeon --input bridge/main_model.dart
+@ConfigurePigeon(PigeonOptions(
+  dartOut: 'lib/model/main_model.g.dart',
+  kotlinOut:
+  '../app/src/main/java/dev/snipme/snipmeapp/bridge/Bridge.kt',
+  kotlinOptions: KotlinOptions(
+    package: 'dev.snipme.snipmeapp.bridge',
+    fileSpecificClassNameComponent: 'Bridge',
+  ),
+  dartPackageName: 'pigeon_example_package',
+))
 
 class Snippet {
   String? uuid;
@@ -159,8 +170,12 @@ class LoginModelEventData {
   int? newHash;
 }
 
-// Api
+@EventChannelApi()
+abstract class EventChannelBridge {
+  MainModelStateData observeMainState();
+}
 
+// Api
 @HostApi()
 abstract class MainModelBridge {
   MainModelStateData getState();

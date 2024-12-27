@@ -17,8 +17,6 @@ class App : Application() {
             Timber.e(ex)
         }
         initLogs()
-        // train classifier on app start
-//        CodeProcessor.init(this)
         startKoin {
             androidLogger()
             androidContext(this@App)
