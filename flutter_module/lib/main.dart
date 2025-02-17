@@ -6,9 +6,10 @@ import 'package:flutter_module/presentation/screens//main_screen.dart';
 import 'package:flutter_module/presentation/screens/details_screen.dart';
 import 'package:flutter_module/presentation/screens/login_screen.dart';
 import 'package:flutter_module/utils/extensions/text_extensions.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router_plus/go_router_plus.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(ProviderScope(child: MyApp()));
 
 class MyApp extends StatelessWidget {
   MyApp({super.key});
