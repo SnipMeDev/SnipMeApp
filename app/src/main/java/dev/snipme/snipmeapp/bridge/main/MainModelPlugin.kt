@@ -2,7 +2,6 @@ package dev.snipme.snipmeapp.bridge.main
 
 import io.flutter.plugin.common.BinaryMessenger
 import org.koin.core.component.inject
-import dev.snipme.snipmeapp.bridge.Bridge
 import dev.snipme.snipmeapp.bridge.ModelPlugin
 import dev.snipme.snipmeapp.bridge.toModelData
 import dev.snipme.snipmeapp.domain.snippets.Snippet

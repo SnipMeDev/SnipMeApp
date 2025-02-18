@@ -2,7 +2,6 @@ package dev.snipme.snipmeapp.bridge.login
 
 import io.flutter.plugin.common.BinaryMessenger
 import org.koin.core.component.inject
-import dev.snipme.snipmeapp.bridge.Bridge
 import dev.snipme.snipmeapp.bridge.ModelPlugin
 
 class LoginModelPlugin : ModelPlugin<Bridge.LoginModelBridge>(), Bridge.LoginModelBridge {

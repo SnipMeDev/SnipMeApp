@@ -4,7 +4,6 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import dev.snipme.snipmeapp.bridge.Bridge.Snippet
 
 @Entity(
     tableName = "reactions",

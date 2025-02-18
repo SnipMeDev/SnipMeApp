@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_module/model/main_model.dart';
+import 'package:flutter_module/generated/data_model.g.dart';
 import 'package:flutter_module/presentation/navigation/details/details_navigator.dart';
 import 'package:flutter_module/presentation/providers/details_page_state_provider.dart';
-import 'package:flutter_module/presentation/providers/model_bridge_provider.dart';
 import 'package:flutter_module/presentation/screens/named_screen.dart';
 import 'package:flutter_module/presentation/styles/color_styles.dart';
 import 'package:flutter_module/presentation/styles/dimens.dart';
@@ -13,9 +12,7 @@ import 'package:flutter_module/presentation/widgets/no_overscroll_single_child_s
 import 'package:flutter_module/presentation/widgets/snippet_action_bar.dart';
 import 'package:flutter_module/presentation/widgets/snippet_details_bar.dart';
 import 'package:flutter_module/presentation/widgets/view_state_wrapper.dart';
-import 'package:flutter_module/utils/extensions/state_extensions.dart';
 import 'package:flutter_module/utils/hooks/use_navigator.dart';
-import 'package:flutter_module/utils/hooks/use_observable_state_hook.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 

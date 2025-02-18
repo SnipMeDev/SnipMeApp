@@ -1,7 +1,15 @@
 import 'package:pigeon/pigeon.dart';
 
+@ConfigurePigeon(
+  PigeonOptions(
+    dartOut: 'lib/generated/data_model.g.dart',
+    // Generate in parent android module
+    kotlinOut:
+        '../app/src/main/java/dev/snipme/snipmeapp/channel/DataModel.g.kt',
+    kotlinOptions: KotlinOptions(package: 'dev.snipme.snipmeapp.channel'),
+  ),
+)
 // General
-
 class Snippet {
   String? uuid;
   String? title;
@@ -97,11 +105,7 @@ class SnippetFilter {
   String? selectedScope;
 }
 
-enum UserReaction {
-  none,
-  like,
-  dislike
-}
+enum UserReaction { none, like, dislike }
 
 // State
 

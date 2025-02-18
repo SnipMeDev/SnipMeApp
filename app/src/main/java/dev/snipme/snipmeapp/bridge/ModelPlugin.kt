@@ -10,14 +10,13 @@ import org.koin.core.component.KoinComponent
 import dev.snipme.snipmeapp.domain.reaction.UserReaction
 import dev.snipme.snipmeapp.domain.snippets.*
 import java.util.*
-
-/*
- flutter pub run pigeon \
-  --input bridge/main_model.dart \
-  --dart_out lib/model/main_model.dart \
-  --java_out ../app/src/main/java/dev/snipme/snipmeapp/bridge/Bridge.java \
-  --java_package "dev.snipme.snipmeapp.bridge"
- */
+import dev.snipme.snipmeapp.channel.Snippet as ChannelSnippet
+import dev.snipme.snipmeapp.channel.SnippetCode as ChannelSnippetCode
+import dev.snipme.snipmeapp.channel.SnippetLanguage as ChannelSnippetLanguage
+import dev.snipme.snipmeapp.channel.SnippetLanguageType as ChannelSnippetLanguageType
+import dev.snipme.snipmeapp.channel.UserReaction as ChannelUserReaction
+import dev.snipme.snipmeapp.channel.SyntaxToken as ChannelSyntaxToken
+import dev.snipme.snipmeapp.channel.Owner as ChannelOwner
 
 abstract class ModelPlugin<T> : FlutterPlugin, KoinComponent {
 
@@ -32,58 +31,49 @@ abstract class ModelPlugin<T> : FlutterPlugin, KoinComponent {
     }
 }
 
-fun Snippet.toModelData(): Bridge.Snippet {
-    val it = this
-    return Bridge.Snippet().apply {
-        uuid = it.uuid
-        title = it.title
-        code = it.code.toModelSnippetCode()
-        language = it.language.toModelSnippetLanguage()
-        owner = it.owner.toModelOwner()
-        isOwner = it.isOwner
-        voteResult = (it.numberOfLikes - it.numberOfDislikes).toLong()
-        userReaction = it.userReaction.toModelUserReaction()
-        isLiked = it.userReaction.toModelReactionState(UserReaction.LIKE)
-        isDisliked = it.userReaction.toModelReactionState(UserReaction.DISLIKE)
-        isPrivate = it.visibility == SnippetVisibility.PRIVATE
-        isSaved = calculateSavedState(it.isOwner, it.visibility)
-        isToDelete = it.isOwner
+fun Snippet.toModelData(): ChannelSnippet =
+    ChannelSnippet(
+        uuid = uuid,
+        title = title,
+        code = code.toModelSnippetCode(),
+        language = language.toModelSnippetLanguage(),
+        owner = owner.toModelOwner(),
+        isOwner = isOwner,
+        voteResult = (numberOfLikes - numberOfDislikes).toLong(),
+        userReaction = userReaction.toModelUserReaction(),
+        isLiked = userReaction.toModelReactionState(UserReaction.LIKE),
+        isDisliked = userReaction.toModelReactionState(UserReaction.DISLIKE),
+        isPrivate = visibility == SnippetVisibility.PRIVATE,
+        isSaved = calculateSavedState(isOwner, visibility),
+        isToDelete = isOwner,
         timeAgo = DateUtils.getRelativeTimeSpanString(
-            it.modifiedAt.time,
+            modifiedAt.time,
             Date().time,
             DateUtils.SECOND_IN_MILLIS
         ).toString()
-    }
-}
+    )
 
-private fun Owner.toModelOwner() =
-    Bridge.Owner().let {
-        it.id = id.toLong()
-        it.login = login
-        it
-    }
+private fun Owner.toModelOwner() = ChannelOwner(id = id.toLong(), login = login)
 
 private fun SnippetCode.toModelSnippetCode() =
-    Bridge.SnippetCode().let {
-        it.raw = raw
-        it.tokens = highlighted.getSpans<ForegroundColorSpan>().map { span ->
+    ChannelSnippetCode(
+        raw = raw,
+        tokens = highlighted.getSpans<ForegroundColorSpan>().map { span ->
             span.toSyntaxToken(highlighted)
-        }
-        it
-    }
+        },
+    )
 
 private fun SnippetLanguage.toModelSnippetLanguage() =
-    Bridge.SnippetLanguage().let {
-        it.raw = raw
-        it.type = Bridge.SnippetLanguageType.valueOf(type.name)
-        it
-    }
+    ChannelSnippetLanguage(
+        raw = raw,
+        type = ChannelSnippetLanguageType.valueOf(type.name),
+    )
 
-private fun UserReaction.toModelUserReaction(): Bridge.UserReaction =
+private fun UserReaction.toModelUserReaction(): ChannelUserReaction =
     when (this) {
-        UserReaction.LIKE -> Bridge.UserReaction.LIKE
-        UserReaction.DISLIKE -> Bridge.UserReaction.DISLIKE
-        else -> Bridge.UserReaction.NONE
+        UserReaction.LIKE -> ChannelUserReaction.LIKE
+        UserReaction.DISLIKE -> ChannelUserReaction.DISLIKE
+        else -> ChannelUserReaction.NONE
     }
 
 private fun UserReaction.toModelReactionState(reaction: UserReaction) =
@@ -98,9 +88,8 @@ private fun calculateSavedState(
 }
 
 private fun ForegroundColorSpan.toSyntaxToken(spannable: Spanned) =
-    Bridge.SyntaxToken().let {
-        it.start = spannable.getSpanStart(this).toLong()
-        it.end = spannable.getSpanEnd(this).toLong()
-        it.color = foregroundColor.toLong()
-        it
-    }
+    ChannelSyntaxToken(
+        start = spannable.getSpanStart(this).toLong(),
+        end = spannable.getSpanEnd(this).toLong(),
+        color = foregroundColor.toLong(),
+    )
