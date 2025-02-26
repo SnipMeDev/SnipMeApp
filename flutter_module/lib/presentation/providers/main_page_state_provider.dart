@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter_module/generated/data_model.g.dart';
 import 'package:flutter_module/presentation/providers/model_bridge_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

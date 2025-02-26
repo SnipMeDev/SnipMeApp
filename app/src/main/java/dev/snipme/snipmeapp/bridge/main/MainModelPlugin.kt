@@ -8,7 +8,7 @@ import dev.snipme.snipmeapp.bridge.toModelData
 import dev.snipme.snipmeapp.channel.ChannelMainModel
 import dev.snipme.snipmeapp.domain.snippets.Snippet
 import dev.snipme.snipmeapp.domain.snippets.SnippetFilters
-import kotlinx.coroutines.flow.zip
+import kotlinx.coroutines.flow.map
 import dev.snipme.snipmeapp.channel.MainModelStateData as ChannelMainModelStateData
 import dev.snipme.snipmeapp.channel.MainModelEventData as ChannelMainModelEventData
 import dev.snipme.snipmeapp.channel.MainModelEvent as ChannelMainModelEvent
@@ -28,7 +28,7 @@ class MainModelPlugin : ModelPlugin<ChannelMainModel>(), ChannelMainModel {
         channelModel: ChannelMainModel?
     ) {
         ChannelMainModel.setUp(messenger, channelModel)
-        channelStateFlow.zip(model.state)
+        channelStateFlow.zip(model.state.map { getState(it) })
     }
 
     override fun resetEvent() {

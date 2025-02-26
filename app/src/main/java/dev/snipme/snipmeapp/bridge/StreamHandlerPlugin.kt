@@ -1,40 +1,43 @@
 package dev.snipme.snipmeapp.bridge
 
-import dev.snipme.snipmeapp.bridge.main.MainViewState
 import dev.snipme.snipmeapp.channel.ChannelStateStreamHandler
 import dev.snipme.snipmeapp.channel.ModelStateData
 import dev.snipme.snipmeapp.channel.PigeonEventSink
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.FlutterPlugin.FlutterPluginBinding
 import io.flutter.plugin.common.BinaryMessenger
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.zip
+import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class FlowChannelStateStreamHandler : ChannelStateStreamHandler() {
-    private val state = MutableStateFlow<ModelStateData>()
+    private val scope = CoroutineScope(Dispatchers.Main)
+    private val sinkFlow = MutableSharedFlow<ModelStateData>()
 
     fun onSetup(messenger: BinaryMessenger) {
         register(messenger, this)
     }
 
     override fun onListen(p0: Any?, sink: PigeonEventSink<ModelStateData>) {
-
+        scope.launch { sinkFlow.collect { sink.success(it) } }
     }
 
     override fun onCancel(p0: Any?) {
-
     }
 
-    fun zip(state: StateFlow<MainViewState>) {
-        TODO("Not yet implemented")
+    fun zip(flow: Flow<ModelStateData>) {
+        sinkFlow.zip(flow) { _, data -> data }
     }
 }
 
 class StreamHandlerPlugin : FlutterPlugin, KoinComponent {
     private val stateStream by inject<FlowChannelStateStreamHandler>()
-    
 
     override fun onAttachedToEngine(binding: FlutterPluginBinding) {
         stateStream.onSetup(binding.binaryMessenger)
