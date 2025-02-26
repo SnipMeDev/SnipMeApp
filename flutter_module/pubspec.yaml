@@ -20,6 +20,13 @@ version: 1.0.0+1
 environment:
   sdk: ">=3.0.0 <4.0.0"
 
+scripts:
+  # run is a default script. To use it, simply type " in the command line: "rps" - that's all!
+  add: "fvm flutter pub add"
+  get: "fvm flutter pub get"
+  gen: "fvm flutter pub run build_runner build --delete-conflicting-outputs"
+  run: "fvm flutter run"
+
 dependencies:
   flutter:
     sdk: flutter
@@ -32,6 +39,8 @@ dependencies:
 
   collection: any
   logger: ^2.4.0
+  flutter_riverpod: ^2.6.1
+  hooks_riverpod: ^2.6.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_module/generated/assets.dart';
 import 'package:flutter_module/model/main_model.dart';
 import 'package:flutter_module/presentation/navigation/login/login_navigator.dart';
+import 'package:flutter_module/presentation/providers/login_page_state_provider.dart';
 import 'package:flutter_module/presentation/screens/named_screen.dart';
 import 'package:flutter_module/presentation/styles/dimens.dart';
 import 'package:flutter_module/presentation/styles/padding_styles.dart';
@@ -11,10 +12,9 @@ import 'package:flutter_module/presentation/widgets/login_input_card.dart';
 import 'package:flutter_module/presentation/widgets/no_overscroll_single_child_scroll_view.dart';
 import 'package:flutter_module/presentation/widgets/rounded_action_button.dart';
 import 'package:flutter_module/presentation/widgets/view_state_wrapper.dart';
-import 'package:flutter_module/utils/extensions/state_extensions.dart';
 import 'package:flutter_module/utils/hooks/use_navigator.dart';
-import 'package:flutter_module/utils/hooks/use_observable_state_hook.dart';
 import 'package:go_router_plus/go_router_plus.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class LoginScreen extends NamedScreen implements InitialScreen, GuestScreen {
   LoginScreen({
@@ -35,7 +35,7 @@ class LoginScreen extends NamedScreen implements InitialScreen, GuestScreen {
   }
 }
 
-class _MainPage extends HookWidget {
+class _MainPage extends HookConsumerWidget {
   const _MainPage({
     required this.navigator,
     required this.model,
@@ -45,24 +45,16 @@ class _MainPage extends HookWidget {
   final LoginModelBridge model;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     useNavigator([navigator]);
 
     final email = useState('mail@o2.pl');
     final password = useState('12345678');
     final validationCorrect = useState(true);
 
-    final state = useObservableState(
-      LoginModelStateData(),
-      () => model.getState(),
-      (current, newState) => (current as LoginModelStateData).equals(newState),
-    ).value;
-
-    final event = useObservableState(
-      LoginModelEventData(),
-      () => model.getEvent(),
-      (current, newState) => (current as LoginModelEventData).equals(newState),
-    ).value;
+    final stateNotification = ref.watch(loginPageStateProvider);
+    final eventNotification = ref.watch(loginPageEventProvider);
+    final event = eventNotification.event;
 
     useEffect(() {
       model.checkLoginState();
@@ -70,7 +62,7 @@ class _MainPage extends HookWidget {
     }, []);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (event.event == LoginModelEvent.logged) {
+      if (event == LoginModelEvent.logged) {
         model.resetEvent();
         navigator.login();
       }
@@ -79,8 +71,8 @@ class _MainPage extends HookWidget {
     return Scaffold(
       body: SafeArea(
         child: ViewStateWrapper(
-          isLoading: state.state == ModelState.loading,
-          data: state.state,
+          isLoading: stateNotification.state == ModelState.loading,
+          data: stateNotification,
           builder: (BuildContext context, _) {
             return NoOverscrollSingleChildScrollView(
               child: Column(
