@@ -15,7 +15,6 @@ import dev.snipme.snipmeapp.channel.MainModelEvent as ChannelMainModelEvent
 import dev.snipme.snipmeapp.channel.ModelState as ChannelModelState
 import dev.snipme.snipmeapp.channel.SnippetFilter as ChannelSnippetFilter
 
-
 class MainModelPlugin : ModelPlugin<ChannelMainModel>(), ChannelMainModel {
     private val model: MainModel by inject()
     private val channelStateFlow by inject<FlowChannelStateStreamHandler>()
