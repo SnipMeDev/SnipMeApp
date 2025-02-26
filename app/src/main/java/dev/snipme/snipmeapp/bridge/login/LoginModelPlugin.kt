@@ -3,13 +3,13 @@ package dev.snipme.snipmeapp.bridge.login
 import io.flutter.plugin.common.BinaryMessenger
 import org.koin.core.component.inject
 import dev.snipme.snipmeapp.bridge.ModelPlugin
-import dev.snipme.snipmeapp.channel.LoginModelBridge as ChannelLoginModelBridge
+import dev.snipme.snipmeapp.channel.ChannelLoginModel
 import dev.snipme.snipmeapp.channel.ModelState as ChannelModelState
 import dev.snipme.snipmeapp.channel.LoginModelStateData as ChannelLoginModelStateData
 import dev.snipme.snipmeapp.channel.LoginModelEvent as ChannelLoginModelEvent
 import dev.snipme.snipmeapp.channel.LoginModelEventData as ChannelLoginModelEventData
 
-class LoginModelPlugin : ModelPlugin<ChannelLoginModelBridge>(), ChannelLoginModelBridge {
+class LoginModelPlugin : ModelPlugin<ChannelLoginModel>(), ChannelLoginModel {
     private var oldEvent: LoginEvent? = null
     private var oldState: LoginState? = null
     private val model: LoginModel by inject()
@@ -22,8 +22,8 @@ class LoginModelPlugin : ModelPlugin<ChannelLoginModelBridge>(), ChannelLoginMod
         model.event.value = Idle
     }
 
-    override fun onSetup(messenger: BinaryMessenger, bridge: ChannelLoginModelBridge?) {
-        ChannelLoginModelBridge.setUp(messenger, bridge)
+    override fun onSetup(messenger: BinaryMessenger, channelModel: ChannelLoginModel?) {
+        ChannelLoginModel.setUp(messenger, channelModel)
     }
 
     override fun checkLoginState() {

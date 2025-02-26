@@ -14,9 +14,9 @@ void main() => runApp(ProviderScope(child: MyApp()));
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
-  final loginModel = LoginModelBridge();
-  final mainModel = MainModelBridge();
-  final detailModel = DetailModelBridge();
+  final loginModel = ChannelLoginModel();
+  final mainModel = ChannelMainModel();
+  final detailModel = ChannelDetailModel();
 
   @override
   Widget build(BuildContext context) {

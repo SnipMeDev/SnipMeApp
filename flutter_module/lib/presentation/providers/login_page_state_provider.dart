@@ -4,11 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final loginPageStateProvider =
     StateNotifierProvider<_LoginPageStateNotifier, LoginModelStateData>(
-  (ref) => _LoginPageStateNotifier(loginBridge: ref.read(loginBridge)),
+  (ref) => _LoginPageStateNotifier(loginBridge: ref.read(loginChannelModel)),
 );
 
 final loginPageEventProvider = StateNotifierProvider<_LoginPageEventNotifier, LoginModelEventData>(
-  (ref) => _LoginPageEventNotifier(loginBridge: ref.read(loginBridge)),
+  (ref) => _LoginPageEventNotifier(loginBridge: ref.read(loginChannelModel)),
 );
 
 class _LoginPageStateNotifier extends StateNotifier<LoginModelStateData> {
@@ -22,7 +22,7 @@ class _LoginPageStateNotifier extends StateNotifier<LoginModelStateData> {
     ).listen((newState) async => state = await newState);
   }
 
-  final LoginModelBridge loginBridge;
+  final ChannelLoginModel loginBridge;
 }
 
 class _LoginPageEventNotifier extends StateNotifier<LoginModelEventData> {
@@ -36,5 +36,5 @@ class _LoginPageEventNotifier extends StateNotifier<LoginModelEventData> {
     ).listen((newEvent) async => state = await newEvent);
   }
 
-  final LoginModelBridge loginBridge;
+  final ChannelLoginModel loginBridge;
 }

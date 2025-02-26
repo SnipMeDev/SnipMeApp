@@ -24,25 +24,25 @@ class LoginScreen extends NamedScreen implements InitialScreen, GuestScreen {
 
   static String name = 'login';
   final LoginNavigator navigator;
-  final LoginModelBridge model;
+  final ChannelLoginModel model;
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return _MainPage(
+    return _LoginPage(
       navigator: navigator,
       model: model,
     );
   }
 }
 
-class _MainPage extends HookConsumerWidget {
-  const _MainPage({
+class _LoginPage extends HookConsumerWidget {
+  const _LoginPage({
     required this.navigator,
     required this.model,
   });
 
   final LoginNavigator navigator;
-  final LoginModelBridge model;
+  final ChannelLoginModel model;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

@@ -329,7 +329,13 @@ class SnippetFilter {
   }
 }
 
-class MainModelStateData {
+sealed class ModelStateData {
+}
+
+sealed class ModelEventData {
+}
+
+class MainModelStateData extends ModelStateData {
   MainModelStateData({
     this.state,
     this.isLoading,
@@ -380,7 +386,7 @@ class MainModelStateData {
   }
 }
 
-class MainModelEventData {
+class MainModelEventData extends ModelEventData {
   MainModelEventData({
     this.event,
     this.message,
@@ -416,7 +422,7 @@ class MainModelEventData {
   }
 }
 
-class DetailModelStateData {
+class DetailModelStateData extends ModelStateData {
   DetailModelStateData({
     this.state,
     this.isLoading,
@@ -462,7 +468,7 @@ class DetailModelStateData {
   }
 }
 
-class DetailModelEventData {
+class DetailModelEventData extends ModelEventData {
   DetailModelEventData({
     this.event,
     this.value,
@@ -498,7 +504,7 @@ class DetailModelEventData {
   }
 }
 
-class LoginModelStateData {
+class LoginModelStateData extends ModelStateData {
   LoginModelStateData({
     this.state,
     this.isLoading,
@@ -534,7 +540,7 @@ class LoginModelStateData {
   }
 }
 
-class LoginModelEventData {
+class LoginModelEventData extends ModelEventData {
   LoginModelEventData({
     this.event,
     this.oldHash,
@@ -689,11 +695,36 @@ class _PigeonCodec extends StandardMessageCodec {
   }
 }
 
-class MainModelBridge {
-  /// Constructor for [MainModelBridge].  The [binaryMessenger] named argument is
+const StandardMethodCodec pigeonMethodCodec = StandardMethodCodec(_PigeonCodec());
+
+Stream<ModelStateData> channelState( {String instanceName = ''}) {
+  if (instanceName.isNotEmpty) {
+    instanceName = '.$instanceName';
+  }
+  final EventChannel channelStateChannel =
+      EventChannel('dev.flutter.pigeon.flutter_module.ChannelModelEventApi.channelState$instanceName', pigeonMethodCodec);
+  return channelStateChannel.receiveBroadcastStream().map((dynamic event) {
+    return event as ModelStateData;
+  });
+}
+    
+Stream<ModelEventData> channelEvent( {String instanceName = ''}) {
+  if (instanceName.isNotEmpty) {
+    instanceName = '.$instanceName';
+  }
+  final EventChannel channelEventChannel =
+      EventChannel('dev.flutter.pigeon.flutter_module.ChannelModelEventApi.channelEvent$instanceName', pigeonMethodCodec);
+  return channelEventChannel.receiveBroadcastStream().map((dynamic event) {
+    return event as ModelEventData;
+  });
+}
+    
+
+class ChannelMainModel {
+  /// Constructor for [ChannelMainModel].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  MainModelBridge({BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
+  ChannelMainModel({BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
       : pigeonVar_binaryMessenger = binaryMessenger,
         pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
@@ -702,62 +733,8 @@ class MainModelBridge {
 
   final String pigeonVar_messageChannelSuffix;
 
-  Future<MainModelStateData> getState() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.MainModelBridge.getState$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(null) as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else if (pigeonVar_replyList[0] == null) {
-      throw PlatformException(
-        code: 'null-error',
-        message: 'Host platform returned null value for non-null return value.',
-      );
-    } else {
-      return (pigeonVar_replyList[0] as MainModelStateData?)!;
-    }
-  }
-
-  Future<MainModelEventData> getEvent() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.MainModelBridge.getEvent$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(null) as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else if (pigeonVar_replyList[0] == null) {
-      throw PlatformException(
-        code: 'null-error',
-        message: 'Host platform returned null value for non-null return value.',
-      );
-    } else {
-      return (pigeonVar_replyList[0] as MainModelEventData?)!;
-    }
-  }
-
   Future<void> resetEvent() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.MainModelBridge.resetEvent$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelMainModel.resetEvent$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -779,7 +756,7 @@ class MainModelBridge {
   }
 
   Future<void> initState() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.MainModelBridge.initState$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelMainModel.initState$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -801,7 +778,7 @@ class MainModelBridge {
   }
 
   Future<void> filterLanguage(String language, bool isSelected) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.MainModelBridge.filterLanguage$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelMainModel.filterLanguage$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -823,7 +800,7 @@ class MainModelBridge {
   }
 
   Future<void> filterScope(String scope) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.MainModelBridge.filterScope$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelMainModel.filterScope$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -845,7 +822,7 @@ class MainModelBridge {
   }
 
   Future<void> logOut() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.MainModelBridge.logOut$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelMainModel.logOut$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -867,11 +844,11 @@ class MainModelBridge {
   }
 }
 
-class DetailModelBridge {
-  /// Constructor for [DetailModelBridge].  The [binaryMessenger] named argument is
+class ChannelDetailModel {
+  /// Constructor for [ChannelDetailModel].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  DetailModelBridge({BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
+  ChannelDetailModel({BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
       : pigeonVar_binaryMessenger = binaryMessenger,
         pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
@@ -881,7 +858,7 @@ class DetailModelBridge {
   final String pigeonVar_messageChannelSuffix;
 
   Future<DetailModelStateData> getState() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.DetailModelBridge.getState$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelDetailModel.getState$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -908,7 +885,7 @@ class DetailModelBridge {
   }
 
   Future<DetailModelEventData> getEvent() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.DetailModelBridge.getEvent$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelDetailModel.getEvent$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -935,7 +912,7 @@ class DetailModelBridge {
   }
 
   Future<void> resetEvent() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.DetailModelBridge.resetEvent$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelDetailModel.resetEvent$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -957,7 +934,7 @@ class DetailModelBridge {
   }
 
   Future<void> load(String uuid) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.DetailModelBridge.load$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelDetailModel.load$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -979,7 +956,7 @@ class DetailModelBridge {
   }
 
   Future<void> like() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.DetailModelBridge.like$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelDetailModel.like$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -1001,7 +978,7 @@ class DetailModelBridge {
   }
 
   Future<void> dislike() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.DetailModelBridge.dislike$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelDetailModel.dislike$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -1023,7 +1000,7 @@ class DetailModelBridge {
   }
 
   Future<void> save() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.DetailModelBridge.save$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelDetailModel.save$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -1045,7 +1022,7 @@ class DetailModelBridge {
   }
 
   Future<void> copyToClipboard() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.DetailModelBridge.copyToClipboard$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelDetailModel.copyToClipboard$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -1067,7 +1044,7 @@ class DetailModelBridge {
   }
 
   Future<void> share() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.DetailModelBridge.share$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelDetailModel.share$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -1089,7 +1066,7 @@ class DetailModelBridge {
   }
 
   Future<void> delete() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.DetailModelBridge.delete$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelDetailModel.delete$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -1111,11 +1088,11 @@ class DetailModelBridge {
   }
 }
 
-class LoginModelBridge {
-  /// Constructor for [LoginModelBridge].  The [binaryMessenger] named argument is
+class ChannelLoginModel {
+  /// Constructor for [ChannelLoginModel].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  LoginModelBridge({BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
+  ChannelLoginModel({BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
       : pigeonVar_binaryMessenger = binaryMessenger,
         pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
@@ -1125,7 +1102,7 @@ class LoginModelBridge {
   final String pigeonVar_messageChannelSuffix;
 
   Future<LoginModelStateData> getState() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.LoginModelBridge.getState$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelLoginModel.getState$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -1152,7 +1129,7 @@ class LoginModelBridge {
   }
 
   Future<LoginModelEventData> getEvent() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.LoginModelBridge.getEvent$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelLoginModel.getEvent$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -1179,7 +1156,7 @@ class LoginModelBridge {
   }
 
   Future<void> loginOrRegister(String email, String password) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.LoginModelBridge.loginOrRegister$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelLoginModel.loginOrRegister$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -1201,7 +1178,7 @@ class LoginModelBridge {
   }
 
   Future<void> checkLoginState() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.LoginModelBridge.checkLoginState$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelLoginModel.checkLoginState$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -1223,7 +1200,7 @@ class LoginModelBridge {
   }
 
   Future<void> resetEvent() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.LoginModelBridge.resetEvent$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelLoginModel.resetEvent$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,

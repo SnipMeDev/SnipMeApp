@@ -20,7 +20,7 @@ import dev.snipme.snipmeapp.channel.Owner as ChannelOwner
 
 abstract class ModelPlugin<T> : FlutterPlugin, KoinComponent {
 
-    abstract fun onSetup(messenger: BinaryMessenger, bridge: T?)
+    abstract fun onSetup(messenger: BinaryMessenger, channelModel: T?)
 
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         onSetup(binding.binaryMessenger, this as T)

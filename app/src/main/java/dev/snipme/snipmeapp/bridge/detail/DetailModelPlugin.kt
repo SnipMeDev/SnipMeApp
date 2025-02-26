@@ -4,13 +4,13 @@ import io.flutter.plugin.common.BinaryMessenger
 import org.koin.core.component.inject
 import dev.snipme.snipmeapp.bridge.ModelPlugin
 import dev.snipme.snipmeapp.bridge.toModelData
-import dev.snipme.snipmeapp.channel.DetailModelBridge as ChannelDetailModelBridge
+import dev.snipme.snipmeapp.channel.ChannelDetailModel
 import dev.snipme.snipmeapp.channel.ModelState as ChannelModelState
 import dev.snipme.snipmeapp.channel.DetailModelStateData as ChannelDetailModelStateData
 import dev.snipme.snipmeapp.channel.DetailModelEvent as ChannelDetailModelEvent
 import dev.snipme.snipmeapp.channel.DetailModelEventData as ChannelDetailModelEventData
 
-class DetailModelPlugin : ModelPlugin<ChannelDetailModelBridge>(), ChannelDetailModelBridge {
+class DetailModelPlugin : ModelPlugin<ChannelDetailModel>(), ChannelDetailModel {
     private val model: DetailModel by inject()
     private var oldEvent: DetailEvent? = null
     private var oldState: DetailViewState? = null
@@ -23,8 +23,8 @@ class DetailModelPlugin : ModelPlugin<ChannelDetailModelBridge>(), ChannelDetail
         model.event.value = Idle
     }
 
-    override fun onSetup(messenger: BinaryMessenger, bridge: ChannelDetailModelBridge?) {
-        ChannelDetailModelBridge.setUp(messenger, bridge)
+    override fun onSetup(messenger: BinaryMessenger, channelModel: ChannelDetailModel?) {
+        ChannelDetailModel.setUp(messenger, channelModel)
     }
 
     override fun load(uuid: String) {

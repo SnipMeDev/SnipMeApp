@@ -1,12 +1,14 @@
 package dev.snipme.snipmeapp.bridge.main
 
+import dev.snipme.snipmeapp.bridge.FlowChannelStateStreamHandler
 import io.flutter.plugin.common.BinaryMessenger
 import org.koin.core.component.inject
 import dev.snipme.snipmeapp.bridge.ModelPlugin
 import dev.snipme.snipmeapp.bridge.toModelData
+import dev.snipme.snipmeapp.channel.ChannelMainModel
 import dev.snipme.snipmeapp.domain.snippets.Snippet
 import dev.snipme.snipmeapp.domain.snippets.SnippetFilters
-import dev.snipme.snipmeapp.channel.MainModelBridge as ChannelMainModelBridge
+import kotlinx.coroutines.flow.zip
 import dev.snipme.snipmeapp.channel.MainModelStateData as ChannelMainModelStateData
 import dev.snipme.snipmeapp.channel.MainModelEventData as ChannelMainModelEventData
 import dev.snipme.snipmeapp.channel.MainModelEvent as ChannelMainModelEvent
@@ -14,21 +16,20 @@ import dev.snipme.snipmeapp.channel.ModelState as ChannelModelState
 import dev.snipme.snipmeapp.channel.SnippetFilter as ChannelSnippetFilter
 
 
-class MainModelPlugin : ModelPlugin<ChannelMainModelBridge>(), ChannelMainModelBridge {
+class MainModelPlugin : ModelPlugin<ChannelMainModel>(), ChannelMainModel {
     private val model: MainModel by inject()
+    private val channelStateFlow by inject<FlowChannelStateStreamHandler>()
+    // TODO Think about deleting compare
     private var oldEvent: MainEvent? = null
     private var oldState: MainViewState? = null
 
     override fun onSetup(
         messenger: BinaryMessenger,
-        bridge: ChannelMainModelBridge?
+        channelModel: ChannelMainModel?
     ) {
-        ChannelMainModelBridge.setUp(messenger, bridge)
+        ChannelMainModel.setUp(messenger, channelModel)
+        channelStateFlow.zip(model.state)
     }
-
-    override fun getState(): ChannelMainModelStateData = getState(model.state.value)
-
-    override fun getEvent(): ChannelMainModelEventData = getEvent(model.event.value)
 
     override fun resetEvent() {
         model.event.value = Startup

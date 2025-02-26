@@ -2,6 +2,7 @@ package dev.snipme.snipmeapp
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import dev.snipme.snipmeapp.bridge.StreamHandlerPlugin
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.FlutterEngineCache
@@ -11,7 +12,8 @@ import dev.snipme.snipmeapp.bridge.login.LoginModelPlugin
 import dev.snipme.snipmeapp.bridge.main.MainModelPlugin
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var flutterEngine : FlutterEngine
+    // TODO Improve flutter enginge management or remove
+    private lateinit var flutterEngine: FlutterEngine
 
     private val cachedEngineId = "ID_CACHED_FLUTTER_ENGINE"
 
@@ -19,16 +21,23 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-         FlutterEngine(this).apply {
-             dartExecutor.executeDartEntrypoint(DartExecutor.DartEntrypoint.createDefault())
+        FlutterEngine(this).apply {
+            dartExecutor.executeDartEntrypoint(DartExecutor.DartEntrypoint.createDefault())
 
-             plugins.add(LoginModelPlugin())
-             plugins.add(MainModelPlugin())
-             plugins.add(DetailModelPlugin())
+            plugins.add(
+                setOf(
+                    StreamHandlerPlugin(),
+                    LoginModelPlugin(),
+                    MainModelPlugin(),
+                    DetailModelPlugin()
+                )
+            )
+            FlutterEngineCache.getInstance().put(cachedEngineId, this)
 
-             FlutterEngineCache.getInstance().put(cachedEngineId, this)
-
-             startActivity(FlutterActivity.withCachedEngine(cachedEngineId).build(baseContext))
-         }
+            startActivity(
+                FlutterActivity.withCachedEngine(cachedEngineId)
+                    .build(baseContext)
+            )
+        }
     }
 }

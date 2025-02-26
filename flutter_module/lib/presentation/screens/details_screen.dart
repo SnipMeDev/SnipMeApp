@@ -25,7 +25,7 @@ class DetailsScreen extends NamedScreen {
   static String name = 'details';
 
   final DetailsNavigator navigator;
-  final DetailModelBridge model;
+  final ChannelDetailModel model;
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
@@ -43,7 +43,7 @@ class _DetailsPage extends HookConsumerWidget {
   });
 
   final DetailsNavigator navigator;
-  final DetailModelBridge model;
+  final ChannelDetailModel model;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -120,7 +120,7 @@ class _DetailPageData extends StatelessWidget {
     required this.snippet,
   });
 
-  final DetailModelBridge model;
+  final ChannelDetailModel model;
   final Snippet? snippet;
 
   @override

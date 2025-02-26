@@ -28,7 +28,7 @@ class MainScreen extends NamedScreen implements UserScreen {
   static String name = 'main';
   final LoginNavigator loginNavigator;
   final DetailsNavigator detailsNavigator;
-  final MainModelBridge model;
+  final ChannelMainModel model;
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
@@ -49,7 +49,7 @@ class _MainPage extends HookConsumerWidget {
 
   final LoginNavigator loginNavigator;
   final DetailsNavigator detailsNavigator;
-  final MainModelBridge model;
+  final ChannelMainModel model;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -124,7 +124,7 @@ class _MainPageData extends HookWidget {
       required this.onExpandChange});
 
   final DetailsNavigator navigator;
-  final MainModelBridge model;
+  final ChannelMainModel model;
   final List<Snippet> snippets;
   final SnippetFilter filter;
   final ScrollController controller;

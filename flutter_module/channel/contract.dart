@@ -117,7 +117,11 @@ enum DetailModelEvent { none, saved, deleted }
 
 enum LoginModelEvent { none, logged }
 
-class MainModelStateData {
+sealed class ModelStateData {}
+
+sealed class ModelEventData {}
+
+class MainModelStateData extends ModelStateData {
   ModelState? state;
   bool? isLoading;
   List<Snippet?>? data;
@@ -127,14 +131,14 @@ class MainModelStateData {
   int? newHash;
 }
 
-class MainModelEventData {
+class MainModelEventData extends ModelEventData {
   MainModelEvent? event;
   String? message;
   int? oldHash;
   int? newHash;
 }
 
-class DetailModelStateData {
+class DetailModelStateData extends ModelStateData {
   ModelState? state;
   bool? isLoading;
   Snippet? data;
@@ -143,21 +147,21 @@ class DetailModelStateData {
   int? newHash;
 }
 
-class DetailModelEventData {
+class DetailModelEventData extends ModelEventData {
   DetailModelEvent? event;
   String? value;
   int? oldHash;
   int? newHash;
 }
 
-class LoginModelStateData {
+class LoginModelStateData extends ModelStateData {
   ModelState? state;
   bool? isLoading;
   int? oldHash;
   int? newHash;
 }
 
-class LoginModelEventData {
+class LoginModelEventData extends ModelEventData {
   LoginModelEvent? event;
   int? oldHash;
   int? newHash;
@@ -165,12 +169,15 @@ class LoginModelEventData {
 
 // Api
 
+@EventChannelApi()
+abstract class ChannelModelEventApi {
+  ModelStateData channelState();
+
+  ModelEventData channelEvent();
+}
+
 @HostApi()
-abstract class MainModelBridge {
-  MainModelStateData getState();
-
-  MainModelEventData getEvent();
-
+abstract class ChannelMainModel {
   void resetEvent();
 
   @TaskQueue(type: TaskQueueType.serialBackgroundThread)
@@ -187,7 +194,7 @@ abstract class MainModelBridge {
 }
 
 @HostApi()
-abstract class DetailModelBridge {
+abstract class ChannelDetailModel {
   DetailModelStateData getState();
 
   DetailModelEventData getEvent();
@@ -210,7 +217,7 @@ abstract class DetailModelBridge {
 }
 
 @HostApi()
-abstract class LoginModelBridge {
+abstract class ChannelLoginModel {
   LoginModelStateData getState();
 
   LoginModelEventData getEvent();
