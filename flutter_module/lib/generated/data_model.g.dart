@@ -87,7 +87,7 @@ enum MainModelEvent {
   logout,
 }
 
-enum DetailModelEvent {
+enum DetailsModelEvent {
   none,
   saved,
   deleted,
@@ -342,8 +342,6 @@ class MainModelStateData extends ModelStateData {
     this.data,
     this.filter,
     this.error,
-    this.oldHash,
-    this.newHash,
   });
 
   ModelState? state;
@@ -356,10 +354,6 @@ class MainModelStateData extends ModelStateData {
 
   String? error;
 
-  int? oldHash;
-
-  int? newHash;
-
   Object encode() {
     return <Object?>[
       state,
@@ -367,8 +361,6 @@ class MainModelStateData extends ModelStateData {
       data,
       filter,
       error,
-      oldHash,
-      newHash,
     ];
   }
 
@@ -380,8 +372,6 @@ class MainModelStateData extends ModelStateData {
       data: (result[2] as List<Object?>?)?.cast<Snippet?>(),
       filter: result[3] as SnippetFilter?,
       error: result[4] as String?,
-      oldHash: result[5] as int?,
-      newHash: result[6] as int?,
     );
   }
 }
@@ -390,24 +380,16 @@ class MainModelEventData extends ModelEventData {
   MainModelEventData({
     this.event,
     this.message,
-    this.oldHash,
-    this.newHash,
   });
 
   MainModelEvent? event;
 
   String? message;
 
-  int? oldHash;
-
-  int? newHash;
-
   Object encode() {
     return <Object?>[
       event,
       message,
-      oldHash,
-      newHash,
     ];
   }
 
@@ -416,20 +398,16 @@ class MainModelEventData extends ModelEventData {
     return MainModelEventData(
       event: result[0] as MainModelEvent?,
       message: result[1] as String?,
-      oldHash: result[2] as int?,
-      newHash: result[3] as int?,
     );
   }
 }
 
-class DetailModelStateData extends ModelStateData {
-  DetailModelStateData({
+class DetailsModelStateData extends ModelStateData {
+  DetailsModelStateData({
     this.state,
     this.isLoading,
     this.data,
     this.error,
-    this.oldHash,
-    this.newHash,
   });
 
   ModelState? state;
@@ -440,66 +418,48 @@ class DetailModelStateData extends ModelStateData {
 
   String? error;
 
-  int? oldHash;
-
-  int? newHash;
-
   Object encode() {
     return <Object?>[
       state,
       isLoading,
       data,
       error,
-      oldHash,
-      newHash,
     ];
   }
 
-  static DetailModelStateData decode(Object result) {
+  static DetailsModelStateData decode(Object result) {
     result as List<Object?>;
-    return DetailModelStateData(
+    return DetailsModelStateData(
       state: result[0] as ModelState?,
       isLoading: result[1] as bool?,
       data: result[2] as Snippet?,
       error: result[3] as String?,
-      oldHash: result[4] as int?,
-      newHash: result[5] as int?,
     );
   }
 }
 
-class DetailModelEventData extends ModelEventData {
-  DetailModelEventData({
+class DetailsModelEventData extends ModelEventData {
+  DetailsModelEventData({
     this.event,
     this.value,
-    this.oldHash,
-    this.newHash,
   });
 
-  DetailModelEvent? event;
+  DetailsModelEvent? event;
 
   String? value;
-
-  int? oldHash;
-
-  int? newHash;
 
   Object encode() {
     return <Object?>[
       event,
       value,
-      oldHash,
-      newHash,
     ];
   }
 
-  static DetailModelEventData decode(Object result) {
+  static DetailsModelEventData decode(Object result) {
     result as List<Object?>;
-    return DetailModelEventData(
-      event: result[0] as DetailModelEvent?,
+    return DetailsModelEventData(
+      event: result[0] as DetailsModelEvent?,
       value: result[1] as String?,
-      oldHash: result[2] as int?,
-      newHash: result[3] as int?,
     );
   }
 }
@@ -508,24 +468,16 @@ class LoginModelStateData extends ModelStateData {
   LoginModelStateData({
     this.state,
     this.isLoading,
-    this.oldHash,
-    this.newHash,
   });
 
   ModelState? state;
 
   bool? isLoading;
 
-  int? oldHash;
-
-  int? newHash;
-
   Object encode() {
     return <Object?>[
       state,
       isLoading,
-      oldHash,
-      newHash,
     ];
   }
 
@@ -534,8 +486,6 @@ class LoginModelStateData extends ModelStateData {
     return LoginModelStateData(
       state: result[0] as ModelState?,
       isLoading: result[1] as bool?,
-      oldHash: result[2] as int?,
-      newHash: result[3] as int?,
     );
   }
 }
@@ -543,21 +493,13 @@ class LoginModelStateData extends ModelStateData {
 class LoginModelEventData extends ModelEventData {
   LoginModelEventData({
     this.event,
-    this.oldHash,
-    this.newHash,
   });
 
   LoginModelEvent? event;
 
-  int? oldHash;
-
-  int? newHash;
-
   Object encode() {
     return <Object?>[
       event,
-      oldHash,
-      newHash,
     ];
   }
 
@@ -565,8 +507,6 @@ class LoginModelEventData extends ModelEventData {
     result as List<Object?>;
     return LoginModelEventData(
       event: result[0] as LoginModelEvent?,
-      oldHash: result[1] as int?,
-      newHash: result[2] as int?,
     );
   }
 }
@@ -594,7 +534,7 @@ class _PigeonCodec extends StandardMessageCodec {
     }    else if (value is MainModelEvent) {
       buffer.putUint8(133);
       writeValue(buffer, value.index);
-    }    else if (value is DetailModelEvent) {
+    }    else if (value is DetailsModelEvent) {
       buffer.putUint8(134);
       writeValue(buffer, value.index);
     }    else if (value is LoginModelEvent) {
@@ -624,10 +564,10 @@ class _PigeonCodec extends StandardMessageCodec {
     }    else if (value is MainModelEventData) {
       buffer.putUint8(143);
       writeValue(buffer, value.encode());
-    }    else if (value is DetailModelStateData) {
+    }    else if (value is DetailsModelStateData) {
       buffer.putUint8(144);
       writeValue(buffer, value.encode());
-    }    else if (value is DetailModelEventData) {
+    }    else if (value is DetailsModelEventData) {
       buffer.putUint8(145);
       writeValue(buffer, value.encode());
     }    else if (value is LoginModelStateData) {
@@ -661,7 +601,7 @@ class _PigeonCodec extends StandardMessageCodec {
         return value == null ? null : MainModelEvent.values[value];
       case 134: 
         final int? value = readValue(buffer) as int?;
-        return value == null ? null : DetailModelEvent.values[value];
+        return value == null ? null : DetailsModelEvent.values[value];
       case 135: 
         final int? value = readValue(buffer) as int?;
         return value == null ? null : LoginModelEvent.values[value];
@@ -682,9 +622,9 @@ class _PigeonCodec extends StandardMessageCodec {
       case 143: 
         return MainModelEventData.decode(readValue(buffer)!);
       case 144: 
-        return DetailModelStateData.decode(readValue(buffer)!);
+        return DetailsModelStateData.decode(readValue(buffer)!);
       case 145: 
-        return DetailModelEventData.decode(readValue(buffer)!);
+        return DetailsModelEventData.decode(readValue(buffer)!);
       case 146: 
         return LoginModelStateData.decode(readValue(buffer)!);
       case 147: 
@@ -844,11 +784,11 @@ class ChannelMainModel {
   }
 }
 
-class ChannelDetailModel {
-  /// Constructor for [ChannelDetailModel].  The [binaryMessenger] named argument is
+class ChannelDetailsModel {
+  /// Constructor for [ChannelDetailsModel].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  ChannelDetailModel({BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
+  ChannelDetailsModel({BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
       : pigeonVar_binaryMessenger = binaryMessenger,
         pigeonVar_messageChannelSuffix = messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
@@ -857,62 +797,8 @@ class ChannelDetailModel {
 
   final String pigeonVar_messageChannelSuffix;
 
-  Future<DetailModelStateData> getState() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelDetailModel.getState$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(null) as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else if (pigeonVar_replyList[0] == null) {
-      throw PlatformException(
-        code: 'null-error',
-        message: 'Host platform returned null value for non-null return value.',
-      );
-    } else {
-      return (pigeonVar_replyList[0] as DetailModelStateData?)!;
-    }
-  }
-
-  Future<DetailModelEventData> getEvent() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelDetailModel.getEvent$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(null) as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else if (pigeonVar_replyList[0] == null) {
-      throw PlatformException(
-        code: 'null-error',
-        message: 'Host platform returned null value for non-null return value.',
-      );
-    } else {
-      return (pigeonVar_replyList[0] as DetailModelEventData?)!;
-    }
-  }
-
   Future<void> resetEvent() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelDetailModel.resetEvent$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelDetailsModel.resetEvent$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -934,7 +820,7 @@ class ChannelDetailModel {
   }
 
   Future<void> load(String uuid) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelDetailModel.load$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelDetailsModel.load$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -956,7 +842,7 @@ class ChannelDetailModel {
   }
 
   Future<void> like() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelDetailModel.like$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelDetailsModel.like$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -978,7 +864,7 @@ class ChannelDetailModel {
   }
 
   Future<void> dislike() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelDetailModel.dislike$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelDetailsModel.dislike$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -1000,7 +886,7 @@ class ChannelDetailModel {
   }
 
   Future<void> save() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelDetailModel.save$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelDetailsModel.save$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -1022,7 +908,7 @@ class ChannelDetailModel {
   }
 
   Future<void> copyToClipboard() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelDetailModel.copyToClipboard$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelDetailsModel.copyToClipboard$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -1044,7 +930,7 @@ class ChannelDetailModel {
   }
 
   Future<void> share() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelDetailModel.share$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelDetailsModel.share$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -1066,7 +952,7 @@ class ChannelDetailModel {
   }
 
   Future<void> delete() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelDetailModel.delete$pigeonVar_messageChannelSuffix';
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelDetailsModel.delete$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -1100,60 +986,6 @@ class ChannelLoginModel {
   static const MessageCodec<Object?> pigeonChannelCodec = _PigeonCodec();
 
   final String pigeonVar_messageChannelSuffix;
-
-  Future<LoginModelStateData> getState() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelLoginModel.getState$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(null) as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else if (pigeonVar_replyList[0] == null) {
-      throw PlatformException(
-        code: 'null-error',
-        message: 'Host platform returned null value for non-null return value.',
-      );
-    } else {
-      return (pigeonVar_replyList[0] as LoginModelStateData?)!;
-    }
-  }
-
-  Future<LoginModelEventData> getEvent() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelLoginModel.getEvent$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(null) as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else if (pigeonVar_replyList[0] == null) {
-      throw PlatformException(
-        code: 'null-error',
-        message: 'Host platform returned null value for non-null return value.',
-      );
-    } else {
-      return (pigeonVar_replyList[0] as LoginModelEventData?)!;
-    }
-  }
 
   Future<void> loginOrRegister(String email, String password) async {
     final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelLoginModel.loginOrRegister$pigeonVar_messageChannelSuffix';

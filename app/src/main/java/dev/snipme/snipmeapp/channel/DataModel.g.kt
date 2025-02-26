@@ -148,13 +148,13 @@ enum class MainModelEvent(val raw: Int) {
   }
 }
 
-enum class DetailModelEvent(val raw: Int) {
+enum class DetailsModelEvent(val raw: Int) {
   NONE(0),
   SAVED(1),
   DELETED(2);
 
   companion object {
-    fun ofRaw(raw: Int): DetailModelEvent? {
+    fun ofRaw(raw: Int): DetailsModelEvent? {
       return values().firstOrNull { it.raw == raw }
     }
   }
@@ -358,9 +358,7 @@ data class MainModelStateData (
   val isLoading: Boolean? = null,
   val data: List<Snippet?>? = null,
   val filter: SnippetFilter? = null,
-  val error: String? = null,
-  val oldHash: Long? = null,
-  val newHash: Long? = null
+  val error: String? = null
 ) : ModelStateData()
  {
   companion object {
@@ -370,9 +368,7 @@ data class MainModelStateData (
       val data = pigeonVar_list[2] as List<Snippet?>?
       val filter = pigeonVar_list[3] as SnippetFilter?
       val error = pigeonVar_list[4] as String?
-      val oldHash = pigeonVar_list[5] as Long?
-      val newHash = pigeonVar_list[6] as Long?
-      return MainModelStateData(state, isLoading, data, filter, error, oldHash, newHash)
+      return MainModelStateData(state, isLoading, data, filter, error)
     }
   }
   fun toList(): List<Any?> {
@@ -382,8 +378,6 @@ data class MainModelStateData (
       data,
       filter,
       error,
-      oldHash,
-      newHash,
     )
   }
 }
@@ -391,49 +385,39 @@ data class MainModelStateData (
 /** Generated class from Pigeon that represents data sent in messages. */
 data class MainModelEventData (
   val event: MainModelEvent? = null,
-  val message: String? = null,
-  val oldHash: Long? = null,
-  val newHash: Long? = null
+  val message: String? = null
 ) : ModelEventData()
  {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): MainModelEventData {
       val event = pigeonVar_list[0] as MainModelEvent?
       val message = pigeonVar_list[1] as String?
-      val oldHash = pigeonVar_list[2] as Long?
-      val newHash = pigeonVar_list[3] as Long?
-      return MainModelEventData(event, message, oldHash, newHash)
+      return MainModelEventData(event, message)
     }
   }
   fun toList(): List<Any?> {
     return listOf(
       event,
       message,
-      oldHash,
-      newHash,
     )
   }
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class DetailModelStateData (
+data class DetailsModelStateData (
   val state: ModelState? = null,
   val isLoading: Boolean? = null,
   val data: Snippet? = null,
-  val error: String? = null,
-  val oldHash: Long? = null,
-  val newHash: Long? = null
+  val error: String? = null
 ) : ModelStateData()
  {
   companion object {
-    fun fromList(pigeonVar_list: List<Any?>): DetailModelStateData {
+    fun fromList(pigeonVar_list: List<Any?>): DetailsModelStateData {
       val state = pigeonVar_list[0] as ModelState?
       val isLoading = pigeonVar_list[1] as Boolean?
       val data = pigeonVar_list[2] as Snippet?
       val error = pigeonVar_list[3] as String?
-      val oldHash = pigeonVar_list[4] as Long?
-      val newHash = pigeonVar_list[5] as Long?
-      return DetailModelStateData(state, isLoading, data, error, oldHash, newHash)
+      return DetailsModelStateData(state, isLoading, data, error)
     }
   }
   fun toList(): List<Any?> {
@@ -442,35 +426,27 @@ data class DetailModelStateData (
       isLoading,
       data,
       error,
-      oldHash,
-      newHash,
     )
   }
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class DetailModelEventData (
-  val event: DetailModelEvent? = null,
-  val value: String? = null,
-  val oldHash: Long? = null,
-  val newHash: Long? = null
+data class DetailsModelEventData (
+  val event: DetailsModelEvent? = null,
+  val value: String? = null
 ) : ModelEventData()
  {
   companion object {
-    fun fromList(pigeonVar_list: List<Any?>): DetailModelEventData {
-      val event = pigeonVar_list[0] as DetailModelEvent?
+    fun fromList(pigeonVar_list: List<Any?>): DetailsModelEventData {
+      val event = pigeonVar_list[0] as DetailsModelEvent?
       val value = pigeonVar_list[1] as String?
-      val oldHash = pigeonVar_list[2] as Long?
-      val newHash = pigeonVar_list[3] as Long?
-      return DetailModelEventData(event, value, oldHash, newHash)
+      return DetailsModelEventData(event, value)
     }
   }
   fun toList(): List<Any?> {
     return listOf(
       event,
       value,
-      oldHash,
-      newHash,
     )
   }
 }
@@ -478,50 +454,38 @@ data class DetailModelEventData (
 /** Generated class from Pigeon that represents data sent in messages. */
 data class LoginModelStateData (
   val state: ModelState? = null,
-  val isLoading: Boolean? = null,
-  val oldHash: Long? = null,
-  val newHash: Long? = null
+  val isLoading: Boolean? = null
 ) : ModelStateData()
  {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): LoginModelStateData {
       val state = pigeonVar_list[0] as ModelState?
       val isLoading = pigeonVar_list[1] as Boolean?
-      val oldHash = pigeonVar_list[2] as Long?
-      val newHash = pigeonVar_list[3] as Long?
-      return LoginModelStateData(state, isLoading, oldHash, newHash)
+      return LoginModelStateData(state, isLoading)
     }
   }
   fun toList(): List<Any?> {
     return listOf(
       state,
       isLoading,
-      oldHash,
-      newHash,
     )
   }
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
 data class LoginModelEventData (
-  val event: LoginModelEvent? = null,
-  val oldHash: Long? = null,
-  val newHash: Long? = null
+  val event: LoginModelEvent? = null
 ) : ModelEventData()
  {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): LoginModelEventData {
       val event = pigeonVar_list[0] as LoginModelEvent?
-      val oldHash = pigeonVar_list[1] as Long?
-      val newHash = pigeonVar_list[2] as Long?
-      return LoginModelEventData(event, oldHash, newHash)
+      return LoginModelEventData(event)
     }
   }
   fun toList(): List<Any?> {
     return listOf(
       event,
-      oldHash,
-      newHash,
     )
   }
 }
@@ -555,7 +519,7 @@ private open class DataModelPigeonCodec : StandardMessageCodec() {
       }
       134.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          DetailModelEvent.ofRaw(it.toInt())
+          DetailsModelEvent.ofRaw(it.toInt())
         }
       }
       135.toByte() -> {
@@ -605,12 +569,12 @@ private open class DataModelPigeonCodec : StandardMessageCodec() {
       }
       144.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          DetailModelStateData.fromList(it)
+          DetailsModelStateData.fromList(it)
         }
       }
       145.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          DetailModelEventData.fromList(it)
+          DetailsModelEventData.fromList(it)
         }
       }
       146.toByte() -> {
@@ -648,7 +612,7 @@ private open class DataModelPigeonCodec : StandardMessageCodec() {
         stream.write(133)
         writeValue(stream, value.raw)
       }
-      is DetailModelEvent -> {
+      is DetailsModelEvent -> {
         stream.write(134)
         writeValue(stream, value.raw)
       }
@@ -688,11 +652,11 @@ private open class DataModelPigeonCodec : StandardMessageCodec() {
         stream.write(143)
         writeValue(stream, value.toList())
       }
-      is DetailModelStateData -> {
+      is DetailsModelStateData -> {
         stream.write(144)
         writeValue(stream, value.toList())
       }
-      is DetailModelEventData -> {
+      is DetailsModelEventData -> {
         stream.write(145)
         writeValue(stream, value.toList())
       }
@@ -881,9 +845,7 @@ interface ChannelMainModel {
   }
 }
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
-interface ChannelDetailModel {
-  fun getState(): DetailModelStateData
-  fun getEvent(): DetailModelEventData
+interface ChannelDetailsModel {
   fun resetEvent()
   fun load(uuid: String)
   fun like()
@@ -894,46 +856,16 @@ interface ChannelDetailModel {
   fun delete()
 
   companion object {
-    /** The codec used by ChannelDetailModel. */
+    /** The codec used by ChannelDetailsModel. */
     val codec: MessageCodec<Any?> by lazy {
       DataModelPigeonCodec()
     }
-    /** Sets up an instance of `ChannelDetailModel` to handle messages through the `binaryMessenger`. */
+    /** Sets up an instance of `ChannelDetailsModel` to handle messages through the `binaryMessenger`. */
     @JvmOverloads
-    fun setUp(binaryMessenger: BinaryMessenger, api: ChannelDetailModel?, messageChannelSuffix: String = "") {
+    fun setUp(binaryMessenger: BinaryMessenger, api: ChannelDetailsModel?, messageChannelSuffix: String = "") {
       val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_module.ChannelDetailModel.getState$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> = try {
-              listOf(api.getState())
-            } catch (exception: Throwable) {
-              wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_module.ChannelDetailModel.getEvent$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> = try {
-              listOf(api.getEvent())
-            } catch (exception: Throwable) {
-              wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_module.ChannelDetailModel.resetEvent$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_module.ChannelDetailsModel.resetEvent$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
             val wrapped: List<Any?> = try {
@@ -949,7 +881,7 @@ interface ChannelDetailModel {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_module.ChannelDetailModel.load$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_module.ChannelDetailsModel.load$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
@@ -967,7 +899,7 @@ interface ChannelDetailModel {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_module.ChannelDetailModel.like$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_module.ChannelDetailsModel.like$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
             val wrapped: List<Any?> = try {
@@ -983,7 +915,7 @@ interface ChannelDetailModel {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_module.ChannelDetailModel.dislike$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_module.ChannelDetailsModel.dislike$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
             val wrapped: List<Any?> = try {
@@ -999,7 +931,7 @@ interface ChannelDetailModel {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_module.ChannelDetailModel.save$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_module.ChannelDetailsModel.save$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
             val wrapped: List<Any?> = try {
@@ -1015,7 +947,7 @@ interface ChannelDetailModel {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_module.ChannelDetailModel.copyToClipboard$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_module.ChannelDetailsModel.copyToClipboard$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
             val wrapped: List<Any?> = try {
@@ -1031,7 +963,7 @@ interface ChannelDetailModel {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_module.ChannelDetailModel.share$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_module.ChannelDetailsModel.share$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
             val wrapped: List<Any?> = try {
@@ -1047,7 +979,7 @@ interface ChannelDetailModel {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_module.ChannelDetailModel.delete$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_module.ChannelDetailsModel.delete$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
             val wrapped: List<Any?> = try {
@@ -1067,8 +999,6 @@ interface ChannelDetailModel {
 }
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
 interface ChannelLoginModel {
-  fun getState(): LoginModelStateData
-  fun getEvent(): LoginModelEventData
   fun loginOrRegister(email: String, password: String)
   fun checkLoginState()
   fun resetEvent()
@@ -1082,36 +1012,6 @@ interface ChannelLoginModel {
     @JvmOverloads
     fun setUp(binaryMessenger: BinaryMessenger, api: ChannelLoginModel?, messageChannelSuffix: String = "") {
       val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_module.ChannelLoginModel.getState$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> = try {
-              listOf(api.getState())
-            } catch (exception: Throwable) {
-              wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_module.ChannelLoginModel.getEvent$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> = try {
-              listOf(api.getEvent())
-            } catch (exception: Throwable) {
-              wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
       run {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_module.ChannelLoginModel.loginOrRegister$separatedMessageChannelSuffix", codec)
         if (api != null) {

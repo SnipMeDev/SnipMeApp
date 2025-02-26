@@ -25,7 +25,7 @@ class DetailsScreen extends NamedScreen {
   static String name = 'details';
 
   final DetailsNavigator navigator;
-  final ChannelDetailModel model;
+  final ChannelDetailsModel model;
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
@@ -43,7 +43,7 @@ class _DetailsPage extends HookConsumerWidget {
   });
 
   final DetailsNavigator navigator;
-  final ChannelDetailModel model;
+  final ChannelDetailsModel model;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -55,7 +55,7 @@ class _DetailsPage extends HookConsumerWidget {
     final event = eventNotification.event;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (event == DetailModelEvent.saved) {
+      if (event == DetailsModelEvent.saved) {
         final snippetId = eventNotification.value;
         if (snippetId == null) {
           _exit();
@@ -70,7 +70,7 @@ class _DetailsPage extends HookConsumerWidget {
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (event == DetailModelEvent.deleted) {
+      if (event == DetailsModelEvent.deleted) {
         _exit();
       }
     });
@@ -99,7 +99,7 @@ class _DetailsPage extends HookConsumerWidget {
         isLoading:
             state == ModelState.loading || stateNotification.isLoading == true,
         error: stateNotification.error,
-        data: stateNotification.data,
+        data: stateNotification.data as Snippet?,
         builder: (_, snippet) => _DetailPageData(
           model: model,
           snippet: snippet,
@@ -120,7 +120,7 @@ class _DetailPageData extends StatelessWidget {
     required this.snippet,
   });
 
-  final ChannelDetailModel model;
+  final ChannelDetailsModel model;
   final Snippet? snippet;
 
   @override

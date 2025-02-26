@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
 
   final loginModel = ChannelLoginModel();
   final mainModel = ChannelMainModel();
-  final detailModel = ChannelDetailModel();
+  final detailModel = ChannelDetailsModel();
 
   @override
   Widget build(BuildContext context) {
