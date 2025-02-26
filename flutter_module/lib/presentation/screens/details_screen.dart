@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_module/model/main_model.dart';
+import 'package:flutter_module/generated/data_model.g.dart';
 import 'package:flutter_module/presentation/navigation/details/details_navigator.dart';
+import 'package:flutter_module/presentation/providers/details_page_state_provider.dart';
 import 'package:flutter_module/presentation/screens/named_screen.dart';
 import 'package:flutter_module/presentation/styles/color_styles.dart';
 import 'package:flutter_module/presentation/styles/dimens.dart';
@@ -11,10 +12,9 @@ import 'package:flutter_module/presentation/widgets/no_overscroll_single_child_s
 import 'package:flutter_module/presentation/widgets/snippet_action_bar.dart';
 import 'package:flutter_module/presentation/widgets/snippet_details_bar.dart';
 import 'package:flutter_module/presentation/widgets/view_state_wrapper.dart';
-import 'package:flutter_module/utils/extensions/state_extensions.dart';
 import 'package:flutter_module/utils/hooks/use_navigator.dart';
-import 'package:flutter_module/utils/hooks/use_observable_state_hook.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class DetailsScreen extends NamedScreen {
   DetailsScreen({
@@ -34,10 +34,9 @@ class DetailsScreen extends NamedScreen {
       model: model,
     );
   }
-
 }
 
-class _DetailsPage extends HookWidget {
+class _DetailsPage extends HookConsumerWidget {
   const _DetailsPage({
     required this.navigator,
     required this.model,
@@ -47,24 +46,17 @@ class _DetailsPage extends HookWidget {
   final DetailModelBridge model;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     useNavigator([navigator]);
 
-    final state = useObservableState(
-      DetailModelStateData(),
-      () => model.getState(),
-      (current, newState) => (current as DetailModelStateData).equals(newState),
-    ).value;
-
-    final event = useObservableState(
-      DetailModelEventData(),
-      () => model.getEvent(),
-      (current, newState) => (current as DetailModelEventData).equals(newState),
-    ).value;
+    final stateNotification = ref.watch(detailsPageStateProvider);
+    final state = stateNotification.state;
+    final eventNotification = ref.watch(detailsPageEventProvider);
+    final event = eventNotification.event;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (event.event == DetailModelEvent.saved) {
-        final snippetId = event.value;
+      if (event == DetailModelEvent.saved) {
+        final snippetId = eventNotification.value;
         if (snippetId == null) {
           _exit();
           return;
@@ -78,7 +70,7 @@ class _DetailsPage extends HookWidget {
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (event.event == DetailModelEvent.deleted) {
+      if (event == DetailModelEvent.deleted) {
         _exit();
       }
     });
@@ -91,7 +83,7 @@ class _DetailsPage extends HookWidget {
     return Scaffold(
       backgroundColor: ColorStyles.surfacePrimary(),
       appBar: AppBar(
-        title: Text(state.data?.title ?? ''),
+        title: Text(stateNotification.data?.title ?? ''),
         backgroundColor: ColorStyles.surfacePrimary(),
         foregroundColor: Colors.black,
         elevation: 0,
@@ -99,15 +91,15 @@ class _DetailsPage extends HookWidget {
           onPressed: navigator.back,
           color: Colors.black,
         ),
-        actions: state.data?.isPrivate == true
+        actions: stateNotification.data?.isPrivate == true
             ? [const PaddingStyles.regular(Icon(Icons.lock_outlined))]
             : null,
       ),
       body: ViewStateWrapper<Snippet>(
         isLoading:
-            state.state == ModelState.loading || state.isLoading == true,
-        error: state.error,
-        data: state.data,
+            state == ModelState.loading || stateNotification.isLoading == true,
+        error: stateNotification.error,
+        data: stateNotification.data,
         builder: (_, snippet) => _DetailPageData(
           model: model,
           snippet: snippet,

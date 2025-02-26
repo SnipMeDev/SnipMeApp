@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_module/generated/assets.dart';
-import 'package:flutter_module/model/main_model.dart';
+import 'package:flutter_module/generated/data_model.g.dart';
 import 'package:flutter_module/presentation/navigation/details/details_navigator.dart';
 import 'package:flutter_module/presentation/navigation/login/login_navigator.dart';
+import 'package:flutter_module/presentation/providers/main_page_state_provider.dart';
 import 'package:flutter_module/presentation/screens/named_screen.dart';
 import 'package:flutter_module/presentation/styles/color_styles.dart';
 import 'package:flutter_module/presentation/styles/dimens.dart';
@@ -13,10 +14,9 @@ import 'package:flutter_module/presentation/widgets/filter_dropdown.dart';
 import 'package:flutter_module/presentation/widgets/filter_list_view.dart';
 import 'package:flutter_module/presentation/widgets/snippet_list_item.dart';
 import 'package:flutter_module/presentation/widgets/view_state_wrapper.dart';
-import 'package:flutter_module/utils/extensions/state_extensions.dart';
 import 'package:flutter_module/utils/hooks/use_navigator.dart';
-import 'package:flutter_module/utils/hooks/use_observable_state_hook.dart';
 import 'package:go_router_plus/go_router_plus.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class MainScreen extends NamedScreen implements UserScreen {
   MainScreen({
@@ -40,7 +40,7 @@ class MainScreen extends NamedScreen implements UserScreen {
   }
 }
 
-class _MainPage extends HookWidget {
+class _MainPage extends HookConsumerWidget {
   const _MainPage({
     required this.loginNavigator,
     required this.detailsNavigator,
@@ -52,24 +52,15 @@ class _MainPage extends HookWidget {
   final MainModelBridge model;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     useNavigator([loginNavigator, detailsNavigator]);
-
-    final state = useObservableState(
-      MainModelStateData(),
-      () => model.getState(),
-      (current, newState) => (current as MainModelStateData).equals(newState),
-    ).value;
-
-    // Event
-    final event = useObservableState(
-      MainModelEventData(),
-      () => model.getEvent(),
-      (current, newState) => (current as MainModelEventData).equals(newState),
-    ).value;
-
     final expandedState = useState(true);
     final controller = useScrollController();
+
+    final stateNotification = ref.watch(mainPageStateProvider);
+    final state = stateNotification.state;
+    final eventNotification = ref.watch(mainPageEventProvider);
+    final event = eventNotification.event;
 
     useEffect(() {
       model.initState();
@@ -77,7 +68,7 @@ class _MainPage extends HookWidget {
     }, []);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (event.event == MainModelEvent.logout) {
+      if (event == MainModelEvent.logout) {
         model.resetEvent();
         loginNavigator.logout();
       }
@@ -86,15 +77,15 @@ class _MainPage extends HookWidget {
     return Scaffold(
       backgroundColor: ColorStyles.pageBackground(),
       body: ViewStateWrapper<List<Snippet>>(
-        isLoading: state.state == ModelState.loading || state.isLoading == true,
-        error: state.error,
-        data: state.data?.cast(),
+        isLoading: state == ModelState.loading || stateNotification.isLoading == true,
+        error: stateNotification.error,
+        data: stateNotification.data?.cast(),
         builder: (_, snippets) {
           return _MainPageData(
             navigator: detailsNavigator,
             model: model,
             snippets: snippets ?? List.empty(),
-            filter: state.filter ?? SnippetFilter(),
+            filter: stateNotification.filter ?? SnippetFilter(),
             controller: controller,
             expanded: expandedState.value,
             onExpandChange: (expanded) => expandedState.value = expanded,

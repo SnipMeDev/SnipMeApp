@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_module/model/main_model.dart';
+import 'package:flutter_module/generated/data_model.g.dart';
 import 'package:flutter_module/presentation/styles/text_styles.dart';
 import 'package:flutter_module/utils/extensions/collection_extensions.dart';
 import 'package:flutter_module/utils/extensions/text_extensions.dart';
