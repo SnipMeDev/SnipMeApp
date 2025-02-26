@@ -127,15 +127,11 @@ class MainModelStateData extends ModelStateData {
   List<Snippet?>? data;
   SnippetFilter? filter;
   String? error;
-  int? oldHash;
-  int? newHash;
 }
 
 class MainModelEventData extends ModelEventData {
   MainModelEvent? event;
   String? message;
-  int? oldHash;
-  int? newHash;
 }
 
 class DetailModelStateData extends ModelStateData {

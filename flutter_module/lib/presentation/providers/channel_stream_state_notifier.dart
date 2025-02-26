@@ -10,7 +10,7 @@ class ChannelStreamStateNotifier<STATE, MODEL> extends StateNotifier<STATE> {
     _stateSubscription = dataStream.listen(
       (state) => switch (state) {
         STATE() => super.state = state,
-        _ => print('Unknown state: $state'),
+        _ => {},
       },
     );
   }

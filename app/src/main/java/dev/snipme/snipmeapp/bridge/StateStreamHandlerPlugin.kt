@@ -8,57 +8,36 @@ import io.flutter.embedding.engine.plugins.FlutterPlugin.FlutterPluginBinding
 import io.flutter.plugin.common.BinaryMessenger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class FlowChannelStateStreamHandler : ChannelStateStreamHandler() {
     private val scope = CoroutineScope(Dispatchers.Main)
-    private val sinkFlow = MutableSharedFlow<ModelStateData>(
-        replay = 1,
-        extraBufferCapacity = 1,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST
-    )
+    private val sinkFlow = MutableSharedFlow<ModelStateData>()
 
     fun onSetup(messenger: BinaryMessenger) {
-        println("StreamHandlerPlugin onSetup")
         register(messenger, this)
     }
 
     override fun onListen(p0: Any?, sink: PigeonEventSink<ModelStateData>) {
-        scope.launch { sinkFlow
-            .onEach { print("StreamHandlerPlugin onEach $it") }
-            .collect { sink.success(it) } }
+        sinkFlow.onEach { sink.success(it) }.launchIn(scope)
     }
 
-    override fun onCancel(p0: Any?) {
-        println("StreamHandlerPlugin onCancel")
-    }
+    override fun onCancel(p0: Any?) {}
 
     fun zip(flow: Flow<ModelStateData>) {
-        scope.launch {
-            flow.map {
-                println("StreamHandlerPlugin zip map $it")
-                it
-            }.collectLatest {
-                println("StreamHandlerPlugin zip collectLatest $it")
-                sinkFlow.emit(it)
-            }
-        }
+        flow.onEach { sinkFlow.emit(it) }.launchIn(scope)
     }
 }
 
-class StreamHandlerPlugin : FlutterPlugin, KoinComponent {
+class StateStreamHandlerPlugin : FlutterPlugin, KoinComponent {
     private val stateStream by inject<FlowChannelStateStreamHandler>()
 
     override fun onAttachedToEngine(binding: FlutterPluginBinding) {
-        println("StreamHandlerPlugin onAttachedToEngine")
         stateStream.onSetup(binding.binaryMessenger)
     }
 

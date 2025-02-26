@@ -1,5 +1,6 @@
 package dev.snipme.snipmeapp.bridge.main
 
+import dev.snipme.snipmeapp.bridge.FlowChannelEventStreamHandler
 import dev.snipme.snipmeapp.bridge.FlowChannelStateStreamHandler
 import dev.snipme.snipmeapp.bridge.ModelPlugin
 import dev.snipme.snipmeapp.bridge.toModelData
@@ -18,9 +19,7 @@ import dev.snipme.snipmeapp.channel.SnippetFilter as ChannelSnippetFilter
 class MainModelPlugin : ModelPlugin<ChannelMainModel>(), ChannelMainModel {
     private val model: MainModel by inject()
     private val channelStateFlow by inject<FlowChannelStateStreamHandler>()
-    // TODO Think about deleting compare
-    private var oldEvent: MainEvent? = null
-    private var oldState: MainViewState? = null
+    private val channelEventFlow by inject<FlowChannelEventStreamHandler>()
 
     override fun onSetup(
         messenger: BinaryMessenger,
@@ -28,6 +27,7 @@ class MainModelPlugin : ModelPlugin<ChannelMainModel>(), ChannelMainModel {
     ) {
         ChannelMainModel.setUp(messenger, channelModel)
         channelStateFlow.zip(model.state.map { getState(it) })
+        channelEventFlow.zip(model.event.map { getEvent(it) })
     }
 
     override fun resetEvent() {
@@ -51,28 +51,19 @@ class MainModelPlugin : ModelPlugin<ChannelMainModel>(), ChannelMainModel {
     }
 
     private fun getState(viewState: MainViewState): ChannelMainModelStateData {
-        println("StreamHandlerPlugin getState $viewState")
         return ChannelMainModelStateData(
             state = viewState.toModelState(),
             isLoading = viewState is Loading,
             data = (viewState as? Loaded)?.snippets?.toModelData(),
             filter = (viewState as? Loaded)?.filters?.toModelFilter(),
-            oldHash = oldState?.hashCode()?.toLong(),
-            newHash = viewState.hashCode().toLong(),
-        ).also {
-            oldState = viewState
-        }
+        )
     }
 
     private fun getEvent(viewEvent: MainEvent): ChannelMainModelEventData {
         return ChannelMainModelEventData(
             event = viewEvent.toModelEvent(),
             message = (viewEvent as? Alert)?.message,
-            oldHash = oldEvent?.hashCode()?.toLong(),
-            newHash = viewEvent.hashCode().toLong(),
-        ).also {
-            oldEvent = viewEvent
-        }
+        )
     }
 
     private fun MainEvent.toModelEvent() =

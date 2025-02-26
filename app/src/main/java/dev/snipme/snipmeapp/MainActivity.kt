@@ -2,14 +2,15 @@ package dev.snipme.snipmeapp
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import dev.snipme.snipmeapp.bridge.StreamHandlerPlugin
+import dev.snipme.snipmeapp.bridge.EventStreamHandlerPlugin
+import dev.snipme.snipmeapp.bridge.StateStreamHandlerPlugin
+import dev.snipme.snipmeapp.bridge.detail.DetailModelPlugin
+import dev.snipme.snipmeapp.bridge.login.LoginModelPlugin
+import dev.snipme.snipmeapp.bridge.main.MainModelPlugin
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.FlutterEngineCache
 import io.flutter.embedding.engine.dart.DartExecutor
-import dev.snipme.snipmeapp.bridge.detail.DetailModelPlugin
-import dev.snipme.snipmeapp.bridge.login.LoginModelPlugin
-import dev.snipme.snipmeapp.bridge.main.MainModelPlugin
 
 class MainActivity : AppCompatActivity() {
     // TODO Improve flutter enginge management or remove
@@ -26,7 +27,8 @@ class MainActivity : AppCompatActivity() {
 
             plugins.add(
                 setOf(
-                    StreamHandlerPlugin(),
+                    StateStreamHandlerPlugin(),
+                    EventStreamHandlerPlugin(),
                     LoginModelPlugin(),
                     MainModelPlugin(),
                     DetailModelPlugin()
