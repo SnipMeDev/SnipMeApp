@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_module/generated/assets.dart';
-import 'package:flutter_module/model/main_model.dart';
+import 'package:flutter_module/generated/data_model.g.dart';
 import 'package:flutter_module/presentation/navigation/login/login_navigator.dart';
 import 'package:flutter_module/presentation/providers/login_page_state_provider.dart';
 import 'package:flutter_module/presentation/screens/named_screen.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_module/generated/assets.dart';
-import 'package:flutter_module/model/main_model.dart';
+import 'package:flutter_module/generated/data_model.g.dart';
 import 'package:flutter_module/presentation/navigation/details/details_navigator.dart';
 import 'package:flutter_module/presentation/navigation/login/login_navigator.dart';
 import 'package:flutter_module/presentation/providers/main_page_state_provider.dart';
@@ -14,9 +14,7 @@ import 'package:flutter_module/presentation/widgets/filter_dropdown.dart';
 import 'package:flutter_module/presentation/widgets/filter_list_view.dart';
 import 'package:flutter_module/presentation/widgets/snippet_list_item.dart';
 import 'package:flutter_module/presentation/widgets/view_state_wrapper.dart';
-import 'package:flutter_module/utils/extensions/state_extensions.dart';
 import 'package:flutter_module/utils/hooks/use_navigator.dart';
-import 'package:flutter_module/utils/hooks/use_observable_state_hook.dart';
 import 'package:go_router_plus/go_router_plus.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 

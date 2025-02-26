@@ -1,4 +1,4 @@
-import 'package:flutter_module/model/main_model.dart';
+import 'package:flutter_module/generated/data_model.g.dart';
 
 extension MainModelStateDataExtension on MainModelStateData {
   bool equals(Object other) {
