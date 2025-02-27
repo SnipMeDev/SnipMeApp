@@ -2,11 +2,11 @@ package dev.snipme.snipmeapp
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import dev.snipme.snipmeapp.bridge.EventStreamHandlerPlugin
-import dev.snipme.snipmeapp.bridge.StateStreamHandlerPlugin
-import dev.snipme.snipmeapp.bridge.details.DetailsModelPlugin
-import dev.snipme.snipmeapp.bridge.login.LoginModelPlugin
-import dev.snipme.snipmeapp.bridge.main.MainModelPlugin
+import dev.snipme.snipmeapp.channel.EventStreamHandlerPlugin
+import dev.snipme.snipmeapp.channel.StateStreamHandlerPlugin
+import dev.snipme.snipmeapp.channel.details.DetailsModelPlugin
+import dev.snipme.snipmeapp.channel.login.LoginModelPlugin
+import dev.snipme.snipmeapp.channel.main.MainModelPlugin
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.FlutterEngineCache

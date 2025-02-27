@@ -1,4 +1,4 @@
-package dev.snipme.snipmeapp.bridge
+package dev.snipme.snipmeapp.channel
 
 import android.text.Spanned
 import android.text.format.DateUtils

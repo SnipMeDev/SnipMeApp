@@ -1,4 +1,4 @@
-package dev.snipme.snipmeapp.bridge.login
+package dev.snipme.snipmeapp.channel.login
 
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -10,7 +10,7 @@ import dev.snipme.snipmeapp.domain.auth.InitialLoginUseCase
 import dev.snipme.snipmeapp.domain.auth.LoginInteractor
 import dev.snipme.snipmeapp.domain.error.exception.*
 import dev.snipme.snipmeapp.domain.message.ErrorMessages
-import dev.snipme.snipmeapp.bridge.error.ErrorParsable
+import dev.snipme.snipmeapp.channel.error.ErrorParsable
 import dev.snipme.snipmeapp.util.extension.inProgress
 import timber.log.Timber
 import java.util.concurrent.TimeUnit

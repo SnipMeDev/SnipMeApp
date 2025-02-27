@@ -1,11 +1,11 @@
 package dev.snipme.snipmeapp.di
 
-import dev.snipme.snipmeapp.bridge.FlowChannelEventStreamHandler
-import dev.snipme.snipmeapp.bridge.FlowChannelStateStreamHandler
-import dev.snipme.snipmeapp.bridge.details.DetailsModel
-import dev.snipme.snipmeapp.bridge.login.LoginModel
-import dev.snipme.snipmeapp.bridge.main.MainModel
-import dev.snipme.snipmeapp.bridge.session.SessionModel
+import dev.snipme.snipmeapp.channel.FlowChannelEventStreamHandler
+import dev.snipme.snipmeapp.channel.FlowChannelStateStreamHandler
+import dev.snipme.snipmeapp.channel.details.DetailsModel
+import dev.snipme.snipmeapp.channel.login.LoginModel
+import dev.snipme.snipmeapp.channel.main.MainModel
+import dev.snipme.snipmeapp.channel.session.SessionModel
 import org.koin.dsl.module
 
 internal val channelModule = module {

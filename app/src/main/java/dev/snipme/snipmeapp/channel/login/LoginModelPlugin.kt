@@ -1,8 +1,8 @@
-package dev.snipme.snipmeapp.bridge.login
+package dev.snipme.snipmeapp.channel.login
 
-import dev.snipme.snipmeapp.bridge.FlowChannelEventStreamHandler
-import dev.snipme.snipmeapp.bridge.FlowChannelStateStreamHandler
-import dev.snipme.snipmeapp.bridge.ModelPlugin
+import dev.snipme.snipmeapp.channel.FlowChannelEventStreamHandler
+import dev.snipme.snipmeapp.channel.FlowChannelStateStreamHandler
+import dev.snipme.snipmeapp.channel.ModelPlugin
 import dev.snipme.snipmeapp.channel.ChannelLoginModel
 import io.flutter.plugin.common.BinaryMessenger
 import kotlinx.coroutines.flow.map

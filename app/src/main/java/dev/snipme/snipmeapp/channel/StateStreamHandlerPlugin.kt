@@ -1,8 +1,5 @@
-package dev.snipme.snipmeapp.bridge
+package dev.snipme.snipmeapp.channel
 
-import dev.snipme.snipmeapp.channel.ChannelStateStreamHandler
-import dev.snipme.snipmeapp.channel.ModelStateData
-import dev.snipme.snipmeapp.channel.PigeonEventSink
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.FlutterPlugin.FlutterPluginBinding
 import io.flutter.plugin.common.BinaryMessenger

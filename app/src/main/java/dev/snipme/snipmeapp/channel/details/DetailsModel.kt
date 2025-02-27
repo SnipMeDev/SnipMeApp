@@ -1,7 +1,7 @@
-package dev.snipme.snipmeapp.bridge.details
+package dev.snipme.snipmeapp.channel.details
 
-import dev.snipme.snipmeapp.bridge.error.ErrorParsable
-import dev.snipme.snipmeapp.bridge.session.SessionModel
+import dev.snipme.snipmeapp.channel.error.ErrorParsable
+import dev.snipme.snipmeapp.channel.session.SessionModel
 import dev.snipme.snipmeapp.domain.clipboard.AddToClipboardUseCase
 import dev.snipme.snipmeapp.domain.error.exception.ConnectionException
 import dev.snipme.snipmeapp.domain.error.exception.ContentNotFoundException

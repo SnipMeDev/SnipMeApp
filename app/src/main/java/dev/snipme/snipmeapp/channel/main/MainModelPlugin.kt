@@ -1,9 +1,9 @@
-package dev.snipme.snipmeapp.bridge.main
+package dev.snipme.snipmeapp.channel.main
 
-import dev.snipme.snipmeapp.bridge.FlowChannelEventStreamHandler
-import dev.snipme.snipmeapp.bridge.FlowChannelStateStreamHandler
-import dev.snipme.snipmeapp.bridge.ModelPlugin
-import dev.snipme.snipmeapp.bridge.toModelData
+import dev.snipme.snipmeapp.channel.FlowChannelEventStreamHandler
+import dev.snipme.snipmeapp.channel.FlowChannelStateStreamHandler
+import dev.snipme.snipmeapp.channel.ModelPlugin
+import dev.snipme.snipmeapp.channel.toModelData
 import dev.snipme.snipmeapp.channel.ChannelMainModel
 import dev.snipme.snipmeapp.domain.snippets.Snippet
 import dev.snipme.snipmeapp.domain.snippets.SnippetFilters
