@@ -1,9 +1,9 @@
 package dev.snipme.snipmeapp.channel.login
 
+import dev.snipme.snipmeapp.channel.ChannelLoginModel
 import dev.snipme.snipmeapp.channel.FlowChannelEventStreamHandler
 import dev.snipme.snipmeapp.channel.FlowChannelStateStreamHandler
 import dev.snipme.snipmeapp.channel.ModelPlugin
-import dev.snipme.snipmeapp.channel.ChannelLoginModel
 import io.flutter.plugin.common.BinaryMessenger
 import kotlinx.coroutines.flow.map
 import org.koin.core.component.inject
@@ -44,6 +44,7 @@ class LoginModelPlugin : ModelPlugin<ChannelLoginModel>(), ChannelLoginModel {
     private fun getModelState(loginState: LoginState): ChannelLoginModelStateData {
         return ChannelLoginModelStateData(
             state = loginState.toModelLoginState(),
+            isLoading = loginState is Loading
         )
     }
 

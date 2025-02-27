@@ -28,7 +28,10 @@ class FlowChannelStateStreamHandler : ChannelStateStreamHandler() {
     }
 
     fun zip(flow: Flow<ModelStateData>) {
-        flow.onEach { sink?.success(it) }.launchIn(scope)
+        flow.onEach {
+            println("StateStreamHandlerPlugin: zip: $it");
+            sink?.success(it)
+        }.launchIn(scope)
     }
 }
 
