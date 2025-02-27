@@ -1,4 +1,4 @@
-package dev.snipme.snipmeapp.bridge.Details
+package dev.snipme.snipmeapp.bridge.details
 
 import dev.snipme.snipmeapp.bridge.error.ErrorParsable
 import dev.snipme.snipmeapp.bridge.session.SessionModel
@@ -158,13 +158,13 @@ class DetailsModel(
 }
 
 sealed class DetailsViewState
-object Loading : DetailsViewState()
+data object Loading : DetailsViewState()
 data class Loaded(val snippet: Snippet) : DetailsViewState()
 data class Error(val error: String?) : DetailsViewState()
 
 sealed class DetailsEvent
-object Idle : DetailsEvent()
-object Deleted : DetailsEvent()
+data object Idle : DetailsEvent()
+data object Deleted : DetailsEvent()
 data class Alert(val message: String) : DetailsEvent()
 data class Saved(val snippetId: String) : DetailsEvent()
-object Logout : DetailsEvent()
+data object Logout : DetailsEvent()

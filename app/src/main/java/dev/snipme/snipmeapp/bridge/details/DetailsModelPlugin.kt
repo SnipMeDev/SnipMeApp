@@ -1,26 +1,31 @@
-package dev.snipme.snipmeapp.bridge.Details
+package dev.snipme.snipmeapp.bridge.details
 
-import io.flutter.plugin.common.BinaryMessenger
-import org.koin.core.component.inject
+import dev.snipme.snipmeapp.bridge.FlowChannelEventStreamHandler
+import dev.snipme.snipmeapp.bridge.FlowChannelStateStreamHandler
 import dev.snipme.snipmeapp.bridge.ModelPlugin
 import dev.snipme.snipmeapp.bridge.toModelData
 import dev.snipme.snipmeapp.channel.ChannelDetailsModel
-import dev.snipme.snipmeapp.channel.ModelState as ChannelModelState
-import dev.snipme.snipmeapp.channel.DetailsModelStateData as ChannelDetailsModelStateData
+import io.flutter.plugin.common.BinaryMessenger
+import kotlinx.coroutines.flow.map
+import org.koin.core.component.inject
 import dev.snipme.snipmeapp.channel.DetailsModelEvent as ChannelDetailsModelEvent
 import dev.snipme.snipmeapp.channel.DetailsModelEventData as ChannelDetailsModelEventData
+import dev.snipme.snipmeapp.channel.DetailsModelStateData as ChannelDetailsModelStateData
+import dev.snipme.snipmeapp.channel.ModelState as ChannelModelState
 
 class DetailsModelPlugin : ModelPlugin<ChannelDetailsModel>(), ChannelDetailsModel {
     private val model: DetailsModel by inject()
-    private var oldEvent: DetailsEvent? = null
-    private var oldState: DetailsViewState? = null
-
-    override fun resetEvent() {
-        model.event.value = Idle
-    }
+    private val channelStateFlow by inject<FlowChannelStateStreamHandler>()
+    private val channelEventFlow by inject<FlowChannelEventStreamHandler>()
 
     override fun onSetup(messenger: BinaryMessenger, channelModel: ChannelDetailsModel?) {
         ChannelDetailsModel.setUp(messenger, channelModel)
+        channelStateFlow.zip(model.state.map { getModelState(it) })
+        channelEventFlow.zip(model.event.map { getModelEvent(it) })
+    }
+
+    override fun resetEvent() {
+        model.event.value = Idle
     }
 
     override fun load(uuid: String) {
@@ -51,23 +56,19 @@ class DetailsModelPlugin : ModelPlugin<ChannelDetailsModel>(), ChannelDetailsMod
         model.delete()
     }
 
-    private fun getData(viewState: DetailsViewState): ChannelDetailsModelStateData {
+    private fun getModelState(viewState: DetailsViewState): ChannelDetailsModelStateData {
         return ChannelDetailsModelStateData(
             state = viewState.toModelState(),
             isLoading = viewState is Loading,
             data = (viewState as? Loaded)?.snippet?.toModelData(),
-        ).also {
-            oldState = viewState
-        }
+        )
     }
 
-    private fun getEvent(DetailsEvent: DetailsEvent): ChannelDetailsModelEventData {
+    private fun getModelEvent(event: DetailsEvent): ChannelDetailsModelEventData {
         return ChannelDetailsModelEventData(
-            event = DetailsEvent.toModelEvent(),
-            value = (DetailsEvent as? Saved)?.snippetId.toString(),
-        ).also {
-            oldEvent = DetailsEvent
-        }
+            event = event.toModelEvent(),
+            value = (event as? Saved)?.snippetId.toString(),
+        )
     }
 
     private fun DetailsViewState.toModelState() =

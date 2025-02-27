@@ -2,7 +2,7 @@ package dev.snipme.snipmeapp.di
 
 import dev.snipme.snipmeapp.bridge.FlowChannelEventStreamHandler
 import dev.snipme.snipmeapp.bridge.FlowChannelStateStreamHandler
-import dev.snipme.snipmeapp.bridge.Details.DetailsModel
+import dev.snipme.snipmeapp.bridge.details.DetailsModel
 import dev.snipme.snipmeapp.bridge.login.LoginModel
 import dev.snipme.snipmeapp.bridge.main.MainModel
 import dev.snipme.snipmeapp.bridge.session.SessionModel
