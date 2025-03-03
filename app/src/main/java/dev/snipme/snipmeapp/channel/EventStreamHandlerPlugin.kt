@@ -5,7 +5,9 @@ import io.flutter.embedding.engine.plugins.FlutterPlugin.FlutterPluginBinding
 import io.flutter.plugin.common.BinaryMessenger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.BufferOverflow.DROP_OLDEST
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.koin.core.component.KoinComponent
@@ -13,22 +15,25 @@ import org.koin.core.component.inject
 
 class FlowChannelEventStreamHandler : ChannelEventStreamHandler() {
     private val scope = CoroutineScope(Dispatchers.Main)
-    private var sink: PigeonEventSink<ModelEventData>? = null
+    private val sinkFlow = MutableSharedFlow<ModelEventData>(
+        replay = 3,
+        onBufferOverflow = DROP_OLDEST
+    )
 
     fun onSetup(messenger: BinaryMessenger) {
         register(messenger, this)
     }
 
     override fun onListen(p0: Any?, sink: PigeonEventSink<ModelEventData>) {
-        this.sink = sink
+        sinkFlow.onEach { sink.success(it) }.launchIn(scope)
     }
 
     override fun onCancel(p0: Any?) {
-        sink = null
+        sinkFlow.resetReplayCache()
     }
 
     fun zip(flow: Flow<ModelEventData>) {
-        flow.onEach { sink?.success(it) }.launchIn(scope)
+        flow.onEach { sinkFlow.emit(it) }.launchIn(scope)
     }
 }
 

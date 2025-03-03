@@ -19,6 +19,7 @@ import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.flow.MutableStateFlow
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
 class LoginModel(
     private val errorMessages: ErrorMessages,
@@ -50,18 +51,18 @@ class LoginModel(
     }
 
     fun init() {
-        setState(Loading)
-//        initialLogin()
-//            .delay(3, TimeUnit.SECONDS)
-//            .subscribeOn(Schedulers.io())
-//            .subscribeBy(
-//                onComplete = { setEvent(Logged) },
-//                onError = {
-//                    if (it !is NotAuthorizedException) {
-//                        Timber.e("Couldn't get token or user, error = $it")
-//                    }
-//                }
-//            ).also { disposables += it }
+        initialLogin()
+            .delay(3, TimeUnit.SECONDS)
+            .subscribeOn(Schedulers.io())
+            .doOnEvent { setState(Loaded) }
+            .subscribeBy(
+                onComplete = { setEvent(Logged) },
+                onError = {
+                    if (it !is NotAuthorizedException) {
+                        Timber.e("Couldn't get token or user, error = $it")
+                    }
+                }
+            ).also { disposables += it }
     }
 
     fun loginOrRegister(email: String, password: String) {
