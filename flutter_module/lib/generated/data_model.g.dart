@@ -841,8 +841,8 @@ class ChannelDetailsModel {
     }
   }
 
-  Future<void> like() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelDetailsModel.like$pigeonVar_messageChannelSuffix';
+  Future<void> favorite() async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelDetailsModel.favorite$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
@@ -863,37 +863,15 @@ class ChannelDetailsModel {
     }
   }
 
-  Future<void> dislike() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelDetailsModel.dislike$pigeonVar_messageChannelSuffix';
+  Future<void> saveImage(Uint8List image) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelDetailsModel.saveImage$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
     final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(null) as List<Object?>?;
-    if (pigeonVar_replyList == null) {
-      throw _createConnectionError(pigeonVar_channelName);
-    } else if (pigeonVar_replyList.length > 1) {
-      throw PlatformException(
-        code: pigeonVar_replyList[0]! as String,
-        message: pigeonVar_replyList[1] as String?,
-        details: pigeonVar_replyList[2],
-      );
-    } else {
-      return;
-    }
-  }
-
-  Future<void> save() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelDetailsModel.save$pigeonVar_messageChannelSuffix';
-    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(null) as List<Object?>?;
+        await pigeonVar_channel.send(<Object?>[image]) as List<Object?>?;
     if (pigeonVar_replyList == null) {
       throw _createConnectionError(pigeonVar_channelName);
     } else if (pigeonVar_replyList.length > 1) {
@@ -929,15 +907,15 @@ class ChannelDetailsModel {
     }
   }
 
-  Future<void> share() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelDetailsModel.share$pigeonVar_messageChannelSuffix';
+  Future<void> shareImage(Uint8List image) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelDetailsModel.shareImage$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
     final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(null) as List<Object?>?;
+        await pigeonVar_channel.send(<Object?>[image]) as List<Object?>?;
     if (pigeonVar_replyList == null) {
       throw _createConnectionError(pigeonVar_channelName);
     } else if (pigeonVar_replyList.length > 1) {

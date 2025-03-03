@@ -190,15 +190,13 @@ abstract class ChannelDetailsModel {
 
   void load(String uuid);
 
-  void like();
+  void favorite();
 
-  void dislike();
-
-  void save();
+  void saveImage(Uint8List image);
 
   void copyToClipboard();
 
-  void share();
+  void shareImage(Uint8List image);
 
   void delete();
 }

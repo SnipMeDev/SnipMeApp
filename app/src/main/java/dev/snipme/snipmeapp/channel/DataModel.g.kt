@@ -9,8 +9,8 @@ import io.flutter.plugin.common.BasicMessageChannel
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MessageCodec
-import io.flutter.plugin.common.StandardMessageCodec
 import io.flutter.plugin.common.StandardMethodCodec
+import io.flutter.plugin.common.StandardMessageCodec
 import java.io.ByteArrayOutputStream
 import java.nio.ByteBuffer
 
@@ -848,11 +848,10 @@ interface ChannelMainModel {
 interface ChannelDetailsModel {
   fun resetEvent()
   fun load(uuid: String)
-  fun like()
-  fun dislike()
-  fun save()
+  fun favorite()
+  fun saveImage(image: ByteArray)
   fun copyToClipboard()
-  fun share()
+  fun shareImage(image: ByteArray)
   fun delete()
 
   companion object {
@@ -899,11 +898,11 @@ interface ChannelDetailsModel {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_module.ChannelDetailsModel.like$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_module.ChannelDetailsModel.favorite$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
             val wrapped: List<Any?> = try {
-              api.like()
+              api.favorite()
               listOf(null)
             } catch (exception: Throwable) {
               wrapError(exception)
@@ -915,27 +914,13 @@ interface ChannelDetailsModel {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_module.ChannelDetailsModel.dislike$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_module.ChannelDetailsModel.saveImage$separatedMessageChannelSuffix", codec)
         if (api != null) {
-          channel.setMessageHandler { _, reply ->
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val imageArg = args[0] as ByteArray
             val wrapped: List<Any?> = try {
-              api.dislike()
-              listOf(null)
-            } catch (exception: Throwable) {
-              wrapError(exception)
-            }
-            reply.reply(wrapped)
-          }
-        } else {
-          channel.setMessageHandler(null)
-        }
-      }
-      run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_module.ChannelDetailsModel.save$separatedMessageChannelSuffix", codec)
-        if (api != null) {
-          channel.setMessageHandler { _, reply ->
-            val wrapped: List<Any?> = try {
-              api.save()
+              api.saveImage(imageArg)
               listOf(null)
             } catch (exception: Throwable) {
               wrapError(exception)
@@ -963,11 +948,13 @@ interface ChannelDetailsModel {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_module.ChannelDetailsModel.share$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_module.ChannelDetailsModel.shareImage$separatedMessageChannelSuffix", codec)
         if (api != null) {
-          channel.setMessageHandler { _, reply ->
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val imageArg = args[0] as ByteArray
             val wrapped: List<Any?> = try {
-              api.share()
+              api.shareImage(imageArg)
               listOf(null)
             } catch (exception: Throwable) {
               wrapError(exception)

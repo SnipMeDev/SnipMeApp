@@ -15,6 +15,7 @@ import 'package:flutter_module/presentation/widgets/view_state_wrapper.dart';
 import 'package:flutter_module/utils/hooks/use_navigator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:screenshot/screenshot.dart';
 
 class DetailsScreen extends NamedScreen {
   DetailsScreen({
@@ -47,6 +48,7 @@ class _DetailsPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final captureController = ScreenshotController();
     useNavigator([navigator]);
 
     final stateNotification = ref.watch(detailsPageStateProvider);
@@ -74,6 +76,20 @@ class _DetailsPage extends HookConsumerWidget {
         _exit();
       }
     });
+
+    void saveImage() {
+      captureController.capture().then((image) {
+        if (image == null) return;
+        model.saveImage(image);
+      });
+    }
+
+    void shareImage() {
+      captureController.capture().then((image) {
+        if (image == null) return;
+        model.shareImage(image);
+      });
+    }
 
     useEffect(() {
       model.load(navigator.snippetId ?? '');
@@ -103,6 +119,9 @@ class _DetailsPage extends HookConsumerWidget {
         builder: (_, snippet) => _DetailPageData(
           model: model,
           snippet: snippet,
+          captureController: captureController,
+          saveImage: saveImage,
+          shareImage: shareImage,
         ),
       ),
     );
@@ -118,10 +137,16 @@ class _DetailPageData extends StatelessWidget {
   const _DetailPageData({
     required this.model,
     required this.snippet,
+    required this.captureController,
+    required this.saveImage,
+    required this.shareImage,
   });
 
   final ChannelDetailsModel model;
   final Snippet? snippet;
+  final ScreenshotController captureController;
+  final VoidCallback saveImage;
+  final VoidCallback shareImage;
 
   @override
   Widget build(BuildContext context) {
@@ -136,9 +161,12 @@ class _DetailPageData extends StatelessWidget {
             color: ColorStyles.codeBackground(),
             child: NoOverscrollSingleChildScrollView(
               padding: const EdgeInsets.all(Dimens.l),
-              child: CodeTextView(
-                code: snippet!.code!.raw!,
-                tokens: snippet!.code?.tokens,
+              child: Screenshot(
+                controller: captureController,
+                child: CodeTextView(
+                  code: snippet!.code!.raw!,
+                  tokens: snippet!.code?.tokens,
+                ),
               ),
             ),
           ),
@@ -147,11 +175,10 @@ class _DetailPageData extends StatelessWidget {
           Center(
             child: SnippetActionBar(
               snippet: snippet!,
-              onLikeTap: model.like,
-              onDislikeTap: model.dislike,
-              onSaveTap: model.save,
+              onFavoriteTap: model.favorite,
+              onSaveTap: saveImage,
               onCopyTap: model.copyToClipboard,
-              onShareTap: model.share,
+              onShareTap: shareImage,
               onDeleteTap: model.delete,
             ),
           ),

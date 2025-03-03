@@ -3,8 +3,5 @@ class Assets {
   Assets._();
 
   static const String appLogo = 'assets/images/illustrations/app_logo.png';
-  static const String reactionDislike = 'assets/images/icons/reaction_dislike.jpeg';
-  static const String reactionLike = 'assets/images/icons/reaction_like.jpeg';
-  static const String reactionUndefined = 'assets/images/icons/reaction_undefined.jpeg';
 
 }
