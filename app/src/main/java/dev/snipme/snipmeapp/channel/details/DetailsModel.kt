@@ -14,7 +14,7 @@ import dev.snipme.snipmeapp.domain.message.ErrorMessages
 import dev.snipme.snipmeapp.domain.reaction.GetTargetUserReactionUseCase
 import dev.snipme.snipmeapp.domain.reaction.SetUserReactionUseCase
 import dev.snipme.snipmeapp.domain.reaction.UserReaction
-import dev.snipme.snipmeapp.domain.share.ShareSnippetCodeUseCase
+import dev.snipme.snipmeapp.domain.share.ShareSnippetUseCase
 import dev.snipme.snipmeapp.domain.snippet.DeleteSnippetUseCase
 import dev.snipme.snipmeapp.domain.snippet.GetSingleSnippetUseCase
 import dev.snipme.snipmeapp.domain.snippet.SaveSnippetUseCase
@@ -33,7 +33,7 @@ class DetailsModel(
     private val getTargetReaction: GetTargetUserReactionUseCase,
     private val setUserReaction: SetUserReactionUseCase,
     private val saveSnippet: SaveSnippetUseCase,
-    private val shareSnippet: ShareSnippetCodeUseCase,
+    private val shareSnippet: ShareSnippetUseCase,
     private val deleteSnippet: DeleteSnippetUseCase,
     private val session: SessionModel
 ) : ErrorParsable {
@@ -71,12 +71,8 @@ class DetailsModel(
             ).also { disposables += it }
     }
 
-    fun like() {
-        changeReaction(UserReaction.LIKE)
-    }
-
-    fun dislike() {
-        changeReaction(UserReaction.DISLIKE)
+    fun toggleFavorite() {
+        // TODO Implement
     }
 
     fun copyToClipboard() {
@@ -103,9 +99,9 @@ class DetailsModel(
         }
     }
 
-    fun share() {
+    fun share(image: ByteArray) {
         getSnippet()?.let {
-            shareSnippet(it)
+            shareSnippet(it, image)
         }
     }
 

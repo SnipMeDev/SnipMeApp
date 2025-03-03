@@ -190,7 +190,7 @@ abstract class ChannelDetailsModel {
 
   void load(String uuid);
 
-  void favorite();
+  void toggleFavorite();
 
   void saveImage(Uint8List image);
 
