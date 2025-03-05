@@ -42,8 +42,7 @@ class SnippetActionBar extends StatelessWidget {
           const SizedBox(width: Dimens.l),
           StateIcon(
             icon: Icons.save_alt_outlined,
-            active: snippet.isSaved,
-            onTap: getSaveCallback(snippet.isSaved, onSaveTap),
+            onTap: onSaveTap,
           ),
           const SizedBox(width: Dimens.l),
           StateIcon(
@@ -60,14 +59,5 @@ class SnippetActionBar extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  GestureTapCallback? getSaveCallback(
-    bool? isSaved,
-    GestureTapCallback? onSaveTap,
-  ) {
-    if (isSaved == false) return null;
-    if (isSaved == true) return null;
-    return onSaveTap;
   }
 }

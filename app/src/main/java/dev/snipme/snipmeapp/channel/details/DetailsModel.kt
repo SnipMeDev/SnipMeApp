@@ -81,21 +81,19 @@ class DetailsModel(
         }
     }
 
-    fun save() {
-        getSnippet()?.let {
-            setState(Loading)
-            saveSnippet(it)
-                .subscribeOn(Schedulers.io())
-                .subscribeBy(
-                    onSuccess = { saved ->
-                        setState(Loaded(it))
-                        mutableEvent.value = Saved(saved.uuid)
-                    },
-                    onError = { error ->
-                        Timber.e("Couldn't save snippet, error = $error")
-                        parseError(error)
-                    }
-                ).also { disposables += it }
+    fun save(image: ByteArray) {
+        try {
+            getSnippet()?.let {
+                setState(Loading)
+                saveSnippet(image, it)
+            }
+        } catch (e: Exception) {
+            Timber.e("Couldn't save snippet, error = $e")
+            mutableEvent.value = Alert(errorMessages.generic)
+        } finally {
+            getSnippet()?.let {
+                mutableEvent.value = Saved(it.uuid)
+            }
         }
     }
 
