@@ -150,7 +150,7 @@ enum class MainModelEvent(val raw: Int) {
 
 enum class DetailsModelEvent(val raw: Int) {
   NONE(0),
-  SAVED(1),
+  ALERT(1),
   DELETED(2);
 
   companion object {
@@ -848,7 +848,7 @@ interface ChannelMainModel {
 interface ChannelDetailsModel {
   fun resetEvent()
   fun load(uuid: String)
-  fun favorite()
+  fun toggleFavorite()
   fun saveImage(image: ByteArray)
   fun copyToClipboard()
   fun shareImage(image: ByteArray)
@@ -898,11 +898,11 @@ interface ChannelDetailsModel {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_module.ChannelDetailsModel.favorite$separatedMessageChannelSuffix", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_module.ChannelDetailsModel.toggleFavorite$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
             val wrapped: List<Any?> = try {
-              api.favorite()
+              api.toggleFavorite()
               listOf(null)
             } catch (exception: Throwable) {
               wrapError(exception)

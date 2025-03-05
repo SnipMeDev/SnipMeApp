@@ -7,7 +7,7 @@ class ShareSnippetUseCase(
     private val appService: AppService
 ) {
 
-    operator fun invoke(snippet: Snippet, image: ByteArray) {
+    operator fun invoke(image: ByteArray, snippet: Snippet) {
         val name = "${appService.getCurrentDateFormatted()}.png"
         appService.storeFile(image, name, temp = true)
         appService.launchShareIntent(snippet)

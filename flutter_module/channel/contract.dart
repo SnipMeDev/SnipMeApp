@@ -111,7 +111,7 @@ enum ModelState { loading, loaded, error }
 
 enum MainModelEvent { none, alert, logout }
 
-enum DetailsModelEvent { none, saved, deleted }
+enum DetailsModelEvent { none, alert, deleted }
 
 enum LoginModelEvent { none, logged }
 

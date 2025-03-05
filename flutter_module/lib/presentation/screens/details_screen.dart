@@ -57,24 +57,16 @@ class _DetailsPage extends HookConsumerWidget {
     final event = eventNotification.event;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (event == DetailsModelEvent.saved) {
-        final snippetId = eventNotification.value;
-        if (snippetId == null) {
+      switch (event) {
+        case DetailsModelEvent.alert:
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(eventNotification.value ?? "")));
+        case DetailsModelEvent.deleted:
           _exit();
-          return;
-        }
-
-        _exit();
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          navigator.goToDetails(context, snippetId);
-        });
+        default:
+          print('Event $event');
       }
-    });
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (event == DetailsModelEvent.deleted) {
-        _exit();
-      }
+      model.resetEvent();
     });
 
     void saveImage() {
@@ -163,9 +155,15 @@ class _DetailPageData extends StatelessWidget {
               padding: const EdgeInsets.all(Dimens.l),
               child: Screenshot(
                 controller: captureController,
-                child: CodeTextView(
-                  code: snippet!.code!.raw!,
-                  tokens: snippet!.code?.tokens,
+                child: ColoredBox(
+                  color: ColorStyles.codeBackground(),
+                  child: Padding(
+                    padding: const EdgeInsets.all(Dimens.m),
+                    child: CodeTextView(
+                      code: snippet!.code!.raw!,
+                      tokens: snippet!.code?.tokens,
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -175,7 +173,7 @@ class _DetailPageData extends StatelessWidget {
           Center(
             child: SnippetActionBar(
               snippet: snippet!,
-              onFavoriteTap: model.favorite,
+              onFavoriteTap: model.toggleFavorite,
               onSaveTap: saveImage,
               onCopyTap: model.copyToClipboard,
               onShareTap: shareImage,

@@ -89,7 +89,7 @@ enum MainModelEvent {
 
 enum DetailsModelEvent {
   none,
-  saved,
+  alert,
   deleted,
 }
 
@@ -841,8 +841,8 @@ class ChannelDetailsModel {
     }
   }
 
-  Future<void> favorite() async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelDetailsModel.favorite$pigeonVar_messageChannelSuffix';
+  Future<void> toggleFavorite() async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.flutter_module.ChannelDetailsModel.toggleFavorite$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,

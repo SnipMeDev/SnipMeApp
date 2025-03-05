@@ -82,24 +82,28 @@ class DetailsModel(
     }
 
     fun save(image: ByteArray) {
+        Timber.d("Saving snippet image ${image.size}")
         try {
             getSnippet()?.let {
-                setState(Loading)
                 saveSnippet(image, it)
+                Timber.d("Snippet ${it.title} saved")
             }
+            mutableEvent.value = Alert("Snippet saved")
         } catch (e: Exception) {
             Timber.e("Couldn't save snippet, error = $e")
             mutableEvent.value = Alert(errorMessages.generic)
-        } finally {
-            getSnippet()?.let {
-                mutableEvent.value = Saved(it.uuid)
-            }
         }
     }
 
     fun share(image: ByteArray) {
-        getSnippet()?.let {
-            shareSnippet(it, image)
+        try {
+            getSnippet()?.let {
+                shareSnippet(image, it)
+            }
+            mutableEvent.value = Alert("Snippet shared")
+        } catch (e: Exception) {
+            Timber.e("Couldn't share snippet, error = $e")
+            mutableEvent.value = Alert(errorMessages.generic)
         }
     }
 
@@ -160,5 +164,4 @@ sealed class DetailsEvent
 data object Idle : DetailsEvent()
 data object Deleted : DetailsEvent()
 data class Alert(val message: String) : DetailsEvent()
-data class Saved(val snippetId: String) : DetailsEvent()
 data object Logout : DetailsEvent()
