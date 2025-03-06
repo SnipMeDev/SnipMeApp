@@ -1,17 +1,23 @@
-package dev.snipme.snipmeapp.bridge.login
+package dev.snipme.snipmeapp.channel.login
 
+import dev.snipme.snipmeapp.channel.error.ErrorParsable
+import dev.snipme.snipmeapp.domain.auth.InitialLoginUseCase
+import dev.snipme.snipmeapp.domain.auth.LoginInteractor
+import dev.snipme.snipmeapp.domain.error.exception.ConnectionException
+import dev.snipme.snipmeapp.domain.error.exception.ContentNotFoundException
+import dev.snipme.snipmeapp.domain.error.exception.ForbiddenActionException
+import dev.snipme.snipmeapp.domain.error.exception.NetworkNotAvailableException
+import dev.snipme.snipmeapp.domain.error.exception.NotAuthorizedException
+import dev.snipme.snipmeapp.domain.error.exception.RemoteException
+import dev.snipme.snipmeapp.domain.error.exception.SessionExpiredException
+import dev.snipme.snipmeapp.domain.message.ErrorMessages
+import dev.snipme.snipmeapp.util.extension.inProgress
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.flow.MutableStateFlow
-import dev.snipme.snipmeapp.domain.auth.InitialLoginUseCase
-import dev.snipme.snipmeapp.domain.auth.LoginInteractor
-import dev.snipme.snipmeapp.domain.error.exception.*
-import dev.snipme.snipmeapp.domain.message.ErrorMessages
-import dev.snipme.snipmeapp.bridge.error.ErrorParsable
-import dev.snipme.snipmeapp.util.extension.inProgress
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
@@ -61,8 +67,6 @@ class LoginModel(
 
     fun loginOrRegister(email: String, password: String) {
         if (identifyDisposable.inProgress()) return
-
-        setState(Loading)
 
         identifyDisposable = interactor.identify(email)
             .subscribeOn(Schedulers.io())
@@ -124,10 +128,10 @@ class LoginModel(
 
 
 sealed class LoginState
-object Loading : LoginState()
-object Loaded : LoginState()
+data object Loading : LoginState()
+data object Loaded : LoginState()
 
 sealed class LoginEvent
-object Idle : LoginEvent()
-object Logged : LoginEvent()
+data object Idle : LoginEvent()
+data object Logged : LoginEvent()
 data class Error(val message: String?) : LoginEvent()

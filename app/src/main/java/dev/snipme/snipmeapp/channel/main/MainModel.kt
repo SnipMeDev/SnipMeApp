@@ -1,11 +1,11 @@
-package dev.snipme.snipmeapp.bridge.main
+package dev.snipme.snipmeapp.channel.main
 
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.flow.MutableStateFlow
-import dev.snipme.snipmeapp.bridge.session.SessionModel
+import dev.snipme.snipmeapp.channel.session.SessionModel
 import dev.snipme.snipmeapp.domain.error.exception.*
 import dev.snipme.snipmeapp.domain.filter.*
 import dev.snipme.snipmeapp.domain.message.ErrorMessages
@@ -13,7 +13,7 @@ import dev.snipme.snipmeapp.domain.snippet.ObserveSnippetUpdatesUseCase
 import dev.snipme.snipmeapp.domain.snippets.*
 import dev.snipme.snipmeapp.domain.user.GetSingleUserUseCase
 import dev.snipme.snipmeapp.domain.user.User
-import dev.snipme.snipmeapp.bridge.error.ErrorParsable
+import dev.snipme.snipmeapp.channel.error.ErrorParsable
 import timber.log.Timber
 
 private const val ONE_PAGE = 1

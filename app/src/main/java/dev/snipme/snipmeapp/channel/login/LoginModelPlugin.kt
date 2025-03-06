@@ -1,29 +1,30 @@
-package dev.snipme.snipmeapp.bridge.login
+package dev.snipme.snipmeapp.channel.login
 
+import dev.snipme.snipmeapp.channel.ChannelLoginModel
+import dev.snipme.snipmeapp.channel.FlowChannelEventStreamHandler
+import dev.snipme.snipmeapp.channel.FlowChannelStateStreamHandler
+import dev.snipme.snipmeapp.channel.ModelPlugin
 import io.flutter.plugin.common.BinaryMessenger
+import kotlinx.coroutines.flow.map
 import org.koin.core.component.inject
-import dev.snipme.snipmeapp.bridge.ModelPlugin
-import dev.snipme.snipmeapp.channel.LoginModelBridge as ChannelLoginModelBridge
-import dev.snipme.snipmeapp.channel.ModelState as ChannelModelState
-import dev.snipme.snipmeapp.channel.LoginModelStateData as ChannelLoginModelStateData
 import dev.snipme.snipmeapp.channel.LoginModelEvent as ChannelLoginModelEvent
 import dev.snipme.snipmeapp.channel.LoginModelEventData as ChannelLoginModelEventData
+import dev.snipme.snipmeapp.channel.LoginModelStateData as ChannelLoginModelStateData
+import dev.snipme.snipmeapp.channel.ModelState as ChannelModelState
 
-class LoginModelPlugin : ModelPlugin<ChannelLoginModelBridge>(), ChannelLoginModelBridge {
-    private var oldEvent: LoginEvent? = null
-    private var oldState: LoginState? = null
+class LoginModelPlugin : ModelPlugin<ChannelLoginModel>(), ChannelLoginModel {
     private val model: LoginModel by inject()
-
-    override fun getState(): ChannelLoginModelStateData = getModelState(model.state.value)
-
-    override fun getEvent(): ChannelLoginModelEventData = getModelEvent(model.event.value)
+    private val channelStateFlow by inject<FlowChannelStateStreamHandler>()
+    private val channelEventFlow by inject<FlowChannelEventStreamHandler>()
 
     override fun resetEvent() {
         model.event.value = Idle
     }
 
-    override fun onSetup(messenger: BinaryMessenger, bridge: ChannelLoginModelBridge?) {
-        ChannelLoginModelBridge.setUp(messenger, bridge)
+    override fun onSetup(messenger: BinaryMessenger, channelModel: ChannelLoginModel?) {
+        ChannelLoginModel.setUp(messenger, channelModel)
+        channelStateFlow.zip(model.state.map { getModelState(it) })
+        channelEventFlow.zip(model.event.map { getModelEvent(it) })
     }
 
     override fun checkLoginState() {
@@ -36,22 +37,15 @@ class LoginModelPlugin : ModelPlugin<ChannelLoginModelBridge>(), ChannelLoginMod
 
     private fun getModelEvent(loginEvent: LoginEvent): ChannelLoginModelEventData {
         return ChannelLoginModelEventData(
-            event = loginEvent.toModelLoginEvent(),
-            oldHash = oldEvent?.hashCode()?.toLong() ?: 0,
-            newHash = loginEvent.hashCode().toLong(),
-        ).also {
-            oldEvent = loginEvent
-        }
+            event = loginEvent.toModelLoginEvent()
+        )
     }
 
     private fun getModelState(loginState: LoginState): ChannelLoginModelStateData {
         return ChannelLoginModelStateData(
             state = loginState.toModelLoginState(),
-            oldHash = oldState?.hashCode()?.toLong() ?: 0,
-            newHash = loginState.hashCode().toLong(),
-        ).also {
-            oldState = loginState
-        }
+            isLoading = loginState is Loading
+        )
     }
 
     private fun LoginState.toModelLoginState() =

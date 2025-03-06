@@ -1,13 +1,15 @@
-package dev.snipme.snipmeapp.bridge.detail
+package dev.snipme.snipmeapp.channel.details
 
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.plusAssign
-import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.flow.MutableStateFlow
-import dev.snipme.snipmeapp.bridge.session.SessionModel
+import dev.snipme.snipmeapp.channel.error.ErrorParsable
+import dev.snipme.snipmeapp.channel.session.SessionModel
 import dev.snipme.snipmeapp.domain.clipboard.AddToClipboardUseCase
-import dev.snipme.snipmeapp.domain.error.exception.*
+import dev.snipme.snipmeapp.domain.error.exception.ConnectionException
+import dev.snipme.snipmeapp.domain.error.exception.ContentNotFoundException
+import dev.snipme.snipmeapp.domain.error.exception.ForbiddenActionException
+import dev.snipme.snipmeapp.domain.error.exception.NetworkNotAvailableException
+import dev.snipme.snipmeapp.domain.error.exception.NotAuthorizedException
+import dev.snipme.snipmeapp.domain.error.exception.RemoteException
+import dev.snipme.snipmeapp.domain.error.exception.SessionExpiredException
 import dev.snipme.snipmeapp.domain.message.ErrorMessages
 import dev.snipme.snipmeapp.domain.reaction.GetTargetUserReactionUseCase
 import dev.snipme.snipmeapp.domain.reaction.SetUserReactionUseCase
@@ -17,10 +19,14 @@ import dev.snipme.snipmeapp.domain.snippet.DeleteSnippetUseCase
 import dev.snipme.snipmeapp.domain.snippet.GetSingleSnippetUseCase
 import dev.snipme.snipmeapp.domain.snippet.SaveSnippetUseCase
 import dev.snipme.snipmeapp.domain.snippets.Snippet
-import dev.snipme.snipmeapp.bridge.error.ErrorParsable
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.plusAssign
+import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.flow.MutableStateFlow
 import timber.log.Timber
 
-class DetailModel(
+class DetailsModel(
     private val errorMessages: ErrorMessages,
     private val getSnippet: GetSingleSnippetUseCase,
     private val clipboard: AddToClipboardUseCase,
@@ -33,10 +39,10 @@ class DetailModel(
 ) : ErrorParsable {
     private val disposables = CompositeDisposable()
 
-    private val mutableState = MutableStateFlow<DetailViewState>(Loading)
+    private val mutableState = MutableStateFlow<DetailsViewState>(Loading)
     val state = mutableState
 
-    private val mutableEvent = MutableStateFlow<DetailEvent>(Idle)
+    private val mutableEvent = MutableStateFlow<DetailsEvent>(Idle)
     val event = mutableEvent
 
     override fun parseError(throwable: Throwable) {
@@ -146,19 +152,19 @@ class DetailModel(
             null
         }
 
-    private fun setState(newState: DetailViewState?) {
+    private fun setState(newState: DetailsViewState?) {
         newState?.let { mutableState.value = it }
     }
 }
 
-sealed class DetailViewState
-object Loading : DetailViewState()
-data class Loaded(val snippet: Snippet) : DetailViewState()
-data class Error(val error: String?) : DetailViewState()
+sealed class DetailsViewState
+data object Loading : DetailsViewState()
+data class Loaded(val snippet: Snippet) : DetailsViewState()
+data class Error(val error: String?) : DetailsViewState()
 
-sealed class DetailEvent
-object Idle : DetailEvent()
-object Deleted : DetailEvent()
-data class Alert(val message: String) : DetailEvent()
-data class Saved(val snippetId: String) : DetailEvent()
-object Logout : DetailEvent()
+sealed class DetailsEvent
+data object Idle : DetailsEvent()
+data object Deleted : DetailsEvent()
+data class Alert(val message: String) : DetailsEvent()
+data class Saved(val snippetId: String) : DetailsEvent()
+data object Logout : DetailsEvent()

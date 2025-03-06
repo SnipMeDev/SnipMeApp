@@ -1,34 +1,34 @@
-package dev.snipme.snipmeapp.bridge.main
+package dev.snipme.snipmeapp.channel.main
 
-import io.flutter.plugin.common.BinaryMessenger
-import org.koin.core.component.inject
-import dev.snipme.snipmeapp.bridge.ModelPlugin
-import dev.snipme.snipmeapp.bridge.toModelData
+import dev.snipme.snipmeapp.channel.FlowChannelEventStreamHandler
+import dev.snipme.snipmeapp.channel.FlowChannelStateStreamHandler
+import dev.snipme.snipmeapp.channel.ModelPlugin
+import dev.snipme.snipmeapp.channel.toModelData
+import dev.snipme.snipmeapp.channel.ChannelMainModel
 import dev.snipme.snipmeapp.domain.snippets.Snippet
 import dev.snipme.snipmeapp.domain.snippets.SnippetFilters
-import dev.snipme.snipmeapp.channel.MainModelBridge as ChannelMainModelBridge
-import dev.snipme.snipmeapp.channel.MainModelStateData as ChannelMainModelStateData
-import dev.snipme.snipmeapp.channel.MainModelEventData as ChannelMainModelEventData
+import io.flutter.plugin.common.BinaryMessenger
+import kotlinx.coroutines.flow.map
+import org.koin.core.component.inject
 import dev.snipme.snipmeapp.channel.MainModelEvent as ChannelMainModelEvent
+import dev.snipme.snipmeapp.channel.MainModelEventData as ChannelMainModelEventData
+import dev.snipme.snipmeapp.channel.MainModelStateData as ChannelMainModelStateData
 import dev.snipme.snipmeapp.channel.ModelState as ChannelModelState
 import dev.snipme.snipmeapp.channel.SnippetFilter as ChannelSnippetFilter
 
-
-class MainModelPlugin : ModelPlugin<ChannelMainModelBridge>(), ChannelMainModelBridge {
+class MainModelPlugin : ModelPlugin<ChannelMainModel>(), ChannelMainModel {
     private val model: MainModel by inject()
-    private var oldEvent: MainEvent? = null
-    private var oldState: MainViewState? = null
+    private val channelStateFlow by inject<FlowChannelStateStreamHandler>()
+    private val channelEventFlow by inject<FlowChannelEventStreamHandler>()
 
     override fun onSetup(
         messenger: BinaryMessenger,
-        bridge: ChannelMainModelBridge?
+        channelModel: ChannelMainModel?
     ) {
-        ChannelMainModelBridge.setUp(messenger, bridge)
+        ChannelMainModel.setUp(messenger, channelModel)
+        channelStateFlow.zip(model.state.map { getState(it) })
+        channelEventFlow.zip(model.event.map { getEvent(it) })
     }
-
-    override fun getState(): ChannelMainModelStateData = getState(model.state.value)
-
-    override fun getEvent(): ChannelMainModelEventData = getEvent(model.event.value)
 
     override fun resetEvent() {
         model.event.value = Startup
@@ -56,22 +56,14 @@ class MainModelPlugin : ModelPlugin<ChannelMainModelBridge>(), ChannelMainModelB
             isLoading = viewState is Loading,
             data = (viewState as? Loaded)?.snippets?.toModelData(),
             filter = (viewState as? Loaded)?.filters?.toModelFilter(),
-            oldHash = oldState?.hashCode()?.toLong(),
-            newHash = viewState.hashCode().toLong(),
-        ).also {
-            oldState = viewState
-        }
+        )
     }
 
     private fun getEvent(viewEvent: MainEvent): ChannelMainModelEventData {
         return ChannelMainModelEventData(
             event = viewEvent.toModelEvent(),
             message = (viewEvent as? Alert)?.message,
-            oldHash = oldEvent?.hashCode()?.toLong(),
-            newHash = viewEvent.hashCode().toLong(),
-        ).also {
-            oldEvent = viewEvent
-        }
+        )
     }
 
     private fun MainEvent.toModelEvent() =

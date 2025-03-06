@@ -9,7 +9,7 @@ import 'package:pigeon/pigeon.dart';
     kotlinOptions: KotlinOptions(package: 'dev.snipme.snipmeapp.channel'),
   ),
 )
-// General
+
 class Snippet {
   String? uuid;
   String? title;
@@ -107,70 +107,61 @@ class SnippetFilter {
 
 enum UserReaction { none, like, dislike }
 
-// State
-
 enum ModelState { loading, loaded, error }
 
 enum MainModelEvent { none, alert, logout }
 
-enum DetailModelEvent { none, saved, deleted }
+enum DetailsModelEvent { none, saved, deleted }
 
 enum LoginModelEvent { none, logged }
 
-class MainModelStateData {
+sealed class ModelStateData {}
+
+sealed class ModelEventData {}
+
+class MainModelStateData extends ModelStateData {
   ModelState? state;
   bool? isLoading;
   List<Snippet?>? data;
   SnippetFilter? filter;
   String? error;
-  int? oldHash;
-  int? newHash;
 }
 
-class MainModelEventData {
+class MainModelEventData extends ModelEventData {
   MainModelEvent? event;
   String? message;
-  int? oldHash;
-  int? newHash;
 }
 
-class DetailModelStateData {
+class DetailsModelStateData extends ModelStateData {
   ModelState? state;
   bool? isLoading;
   Snippet? data;
   String? error;
-  int? oldHash;
-  int? newHash;
 }
 
-class DetailModelEventData {
-  DetailModelEvent? event;
+class DetailsModelEventData extends ModelEventData {
+  DetailsModelEvent? event;
   String? value;
-  int? oldHash;
-  int? newHash;
 }
 
-class LoginModelStateData {
+class LoginModelStateData extends ModelStateData {
   ModelState? state;
   bool? isLoading;
-  int? oldHash;
-  int? newHash;
 }
 
-class LoginModelEventData {
+class LoginModelEventData extends ModelEventData {
   LoginModelEvent? event;
-  int? oldHash;
-  int? newHash;
 }
 
-// Api
+@EventChannelApi()
+abstract class ChannelModelEventApi {
+  ModelStateData channelState();
+
+  ModelEventData channelEvent();
+}
 
 @HostApi()
-abstract class MainModelBridge {
-  MainModelStateData getState();
-
-  MainModelEventData getEvent();
-
+abstract class ChannelMainModel {
   void resetEvent();
 
   @TaskQueue(type: TaskQueueType.serialBackgroundThread)
@@ -187,11 +178,7 @@ abstract class MainModelBridge {
 }
 
 @HostApi()
-abstract class DetailModelBridge {
-  DetailModelStateData getState();
-
-  DetailModelEventData getEvent();
-
+abstract class ChannelDetailsModel {
   void resetEvent();
 
   void load(String uuid);
@@ -210,11 +197,7 @@ abstract class DetailModelBridge {
 }
 
 @HostApi()
-abstract class LoginModelBridge {
-  LoginModelStateData getState();
-
-  LoginModelEventData getEvent();
-
+abstract class ChannelLoginModel {
   void loginOrRegister(String email, String password);
 
   void checkLoginState();

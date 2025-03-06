@@ -1,4 +1,4 @@
-package dev.snipme.snipmeapp.bridge.session
+package dev.snipme.snipmeapp.channel.session
 
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
