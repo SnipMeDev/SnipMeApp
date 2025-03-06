@@ -48,8 +48,8 @@ class _DetailsPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final captureController = ScreenshotController();
     useNavigator([navigator]);
+    final captureController = useRef(ScreenshotController());
 
     final stateNotification = ref.watch(detailsPageStateProvider);
     final state = stateNotification.state;
@@ -69,18 +69,24 @@ class _DetailsPage extends HookConsumerWidget {
       model.resetEvent();
     });
 
-    void saveImage() {
-      captureController.capture().then((image) {
+    Future<void> saveImage() async {
+      try {
+        final image = await captureController.value.capture();
         if (image == null) return;
         model.saveImage(image);
-      });
+      } catch (e, s) {
+        print('Could not invoke save image, error: $e, stack: $s');
+      }
     }
 
-    void shareImage() {
-      captureController.capture().then((image) {
+    Future<void> shareImage() async {
+      try {
+        final image = await captureController.value.capture();
         if (image == null) return;
         model.shareImage(image);
-      });
+      } catch (e, s) {
+        print('Could not invoke share image, error: $e, stack: $s');
+      }
     }
 
     useEffect(() {
@@ -111,7 +117,7 @@ class _DetailsPage extends HookConsumerWidget {
         builder: (_, snippet) => _DetailPageData(
           model: model,
           snippet: snippet,
-          captureController: captureController,
+          captureController: captureController.value,
           saveImage: saveImage,
           shareImage: shareImage,
         ),
