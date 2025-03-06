@@ -15,6 +15,7 @@ import 'package:flutter_module/presentation/widgets/view_state_wrapper.dart';
 import 'package:flutter_module/utils/hooks/use_navigator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:screenshot/screenshot.dart';
 
 class DetailsScreen extends NamedScreen {
   DetailsScreen({
@@ -48,6 +49,7 @@ class _DetailsPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     useNavigator([navigator]);
+    final captureController = useRef(ScreenshotController());
 
     final stateNotification = ref.watch(detailsPageStateProvider);
     final state = stateNotification.state;
@@ -55,25 +57,37 @@ class _DetailsPage extends HookConsumerWidget {
     final event = eventNotification.event;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (event == DetailsModelEvent.saved) {
-        final snippetId = eventNotification.value;
-        if (snippetId == null) {
+      switch (event) {
+        case DetailsModelEvent.alert:
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(eventNotification.value ?? "")));
+        case DetailsModelEvent.deleted:
           _exit();
-          return;
-        }
-
-        _exit();
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          navigator.goToDetails(context, snippetId);
-        });
+        default:
+          print('Event $event');
       }
+      model.resetEvent();
     });
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (event == DetailsModelEvent.deleted) {
-        _exit();
+    Future<void> saveImage() async {
+      try {
+        final image = await captureController.value.capture();
+        if (image == null) return;
+        model.saveImage(image);
+      } catch (e, s) {
+        print('Could not invoke save image, error: $e, stack: $s');
       }
-    });
+    }
+
+    Future<void> shareImage() async {
+      try {
+        final image = await captureController.value.capture();
+        if (image == null) return;
+        model.shareImage(image);
+      } catch (e, s) {
+        print('Could not invoke share image, error: $e, stack: $s');
+      }
+    }
 
     useEffect(() {
       model.load(navigator.snippetId ?? '');
@@ -103,6 +117,9 @@ class _DetailsPage extends HookConsumerWidget {
         builder: (_, snippet) => _DetailPageData(
           model: model,
           snippet: snippet,
+          captureController: captureController.value,
+          saveImage: saveImage,
+          shareImage: shareImage,
         ),
       ),
     );
@@ -118,10 +135,16 @@ class _DetailPageData extends StatelessWidget {
   const _DetailPageData({
     required this.model,
     required this.snippet,
+    required this.captureController,
+    required this.saveImage,
+    required this.shareImage,
   });
 
   final ChannelDetailsModel model;
   final Snippet? snippet;
+  final ScreenshotController captureController;
+  final VoidCallback saveImage;
+  final VoidCallback shareImage;
 
   @override
   Widget build(BuildContext context) {
@@ -136,9 +159,18 @@ class _DetailPageData extends StatelessWidget {
             color: ColorStyles.codeBackground(),
             child: NoOverscrollSingleChildScrollView(
               padding: const EdgeInsets.all(Dimens.l),
-              child: CodeTextView(
-                code: snippet!.code!.raw!,
-                tokens: snippet!.code?.tokens,
+              child: Screenshot(
+                controller: captureController,
+                child: ColoredBox(
+                  color: ColorStyles.codeBackground(),
+                  child: Padding(
+                    padding: const EdgeInsets.all(Dimens.m),
+                    child: CodeTextView(
+                      code: snippet!.code!.raw!,
+                      tokens: snippet!.code?.tokens,
+                    ),
+                  ),
+                ),
               ),
             ),
           ),
@@ -147,11 +179,10 @@ class _DetailPageData extends StatelessWidget {
           Center(
             child: SnippetActionBar(
               snippet: snippet!,
-              onLikeTap: model.like,
-              onDislikeTap: model.dislike,
-              onSaveTap: model.save,
+              onFavoriteTap: model.toggleFavorite,
+              onSaveTap: saveImage,
               onCopyTap: model.copyToClipboard,
-              onShareTap: model.share,
+              onShareTap: shareImage,
               onDeleteTap: model.delete,
             ),
           ),

@@ -1,20 +1,15 @@
 package dev.snipme.snipmeapp.domain.snippet
 
-import io.reactivex.Single
+import dev.snipme.snipmeapp.AppService
 import dev.snipme.snipmeapp.domain.snippets.Snippet
-import dev.snipme.snipmeapp.domain.snippets.SnippetVisibility
-import java.util.concurrent.TimeUnit
 
 class SaveSnippetUseCase(
-    private val createSnippet: CreateSnippetUseCase
+    private val appService: AppService
 ) {
-    operator fun invoke(snippet: Snippet): Single<Snippet> {
-        if (snippet.isOwner) return Single.just(snippet)
-        return createSnippet(
-            snippet.title,
-            snippet.code.raw,
-            snippet.language.raw,
-            visibility = SnippetVisibility.PRIVATE,
-        )
+    operator fun invoke(image: ByteArray, snippet: Snippet): String {
+        val name = "${snippet.title.replace(" ", "_")}.png"
+        appService.storeFile(image, name, temp = false)
+        appService.storeMediaFile(image, name)
+        return name
     }
 }

@@ -111,7 +111,7 @@ enum ModelState { loading, loaded, error }
 
 enum MainModelEvent { none, alert, logout }
 
-enum DetailsModelEvent { none, saved, deleted }
+enum DetailsModelEvent { none, alert, deleted }
 
 enum LoginModelEvent { none, logged }
 
@@ -183,15 +183,13 @@ abstract class ChannelDetailsModel {
 
   void load(String uuid);
 
-  void like();
+  void toggleFavorite();
 
-  void dislike();
-
-  void save();
+  void saveImage(Uint8List image);
 
   void copyToClipboard();
 
-  void share();
+  void shareImage(Uint8List image);
 
   void delete();
 }

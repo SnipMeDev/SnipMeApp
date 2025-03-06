@@ -1,10 +1,10 @@
 package dev.snipme.snipmeapp.channel.details
 
+import dev.snipme.snipmeapp.channel.ChannelDetailsModel
 import dev.snipme.snipmeapp.channel.FlowChannelEventStreamHandler
 import dev.snipme.snipmeapp.channel.FlowChannelStateStreamHandler
 import dev.snipme.snipmeapp.channel.ModelPlugin
 import dev.snipme.snipmeapp.channel.toModelData
-import dev.snipme.snipmeapp.channel.ChannelDetailsModel
 import io.flutter.plugin.common.BinaryMessenger
 import kotlinx.coroutines.flow.map
 import org.koin.core.component.inject
@@ -32,24 +32,20 @@ class DetailsModelPlugin : ModelPlugin<ChannelDetailsModel>(), ChannelDetailsMod
         model.load(uuid)
     }
 
-    override fun like() {
-        model.like()
+    override fun toggleFavorite() {
+        model.toggleFavorite()
     }
 
-    override fun dislike() {
-        model.dislike()
-    }
-
-    override fun save() {
-        model.save()
+    override fun saveImage(image: ByteArray) {
+        model.save(image)
     }
 
     override fun copyToClipboard() {
         model.copyToClipboard()
     }
 
-    override fun share() {
-        model.share()
+    override fun shareImage(image: ByteArray) {
+        model.share(image)
     }
 
     override fun delete() {
@@ -67,7 +63,7 @@ class DetailsModelPlugin : ModelPlugin<ChannelDetailsModel>(), ChannelDetailsMod
     private fun getModelEvent(event: DetailsEvent): ChannelDetailsModelEventData {
         return ChannelDetailsModelEventData(
             event = event.toModelEvent(),
-            value = (event as? Saved)?.snippetId.toString(),
+            value = (event as? Alert)?.message.orEmpty()
         )
     }
 
@@ -80,8 +76,8 @@ class DetailsModelPlugin : ModelPlugin<ChannelDetailsModel>(), ChannelDetailsMod
 
     private fun DetailsEvent.toModelEvent() =
         when (this) {
-            is Saved -> ChannelDetailsModelEvent.SAVED
             is Deleted -> ChannelDetailsModelEvent.DELETED
+            is Alert -> ChannelDetailsModelEvent.ALERT
             else -> ChannelDetailsModelEvent.NONE
         }
 }

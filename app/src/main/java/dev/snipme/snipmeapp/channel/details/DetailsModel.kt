@@ -14,7 +14,7 @@ import dev.snipme.snipmeapp.domain.message.ErrorMessages
 import dev.snipme.snipmeapp.domain.reaction.GetTargetUserReactionUseCase
 import dev.snipme.snipmeapp.domain.reaction.SetUserReactionUseCase
 import dev.snipme.snipmeapp.domain.reaction.UserReaction
-import dev.snipme.snipmeapp.domain.share.ShareSnippetCodeUseCase
+import dev.snipme.snipmeapp.domain.share.ShareSnippetUseCase
 import dev.snipme.snipmeapp.domain.snippet.DeleteSnippetUseCase
 import dev.snipme.snipmeapp.domain.snippet.GetSingleSnippetUseCase
 import dev.snipme.snipmeapp.domain.snippet.SaveSnippetUseCase
@@ -33,7 +33,7 @@ class DetailsModel(
     private val getTargetReaction: GetTargetUserReactionUseCase,
     private val setUserReaction: SetUserReactionUseCase,
     private val saveSnippet: SaveSnippetUseCase,
-    private val shareSnippet: ShareSnippetCodeUseCase,
+    private val shareSnippet: ShareSnippetUseCase,
     private val deleteSnippet: DeleteSnippetUseCase,
     private val session: SessionModel
 ) : ErrorParsable {
@@ -71,12 +71,8 @@ class DetailsModel(
             ).also { disposables += it }
     }
 
-    fun like() {
-        changeReaction(UserReaction.LIKE)
-    }
-
-    fun dislike() {
-        changeReaction(UserReaction.DISLIKE)
+    fun toggleFavorite() {
+        // TODO Implement
     }
 
     fun copyToClipboard() {
@@ -85,27 +81,29 @@ class DetailsModel(
         }
     }
 
-    fun save() {
-        getSnippet()?.let {
-            setState(Loading)
-            saveSnippet(it)
-                .subscribeOn(Schedulers.io())
-                .subscribeBy(
-                    onSuccess = { saved ->
-                        setState(Loaded(it))
-                        mutableEvent.value = Saved(saved.uuid)
-                    },
-                    onError = { error ->
-                        Timber.e("Couldn't save snippet, error = $error")
-                        parseError(error)
-                    }
-                ).also { disposables += it }
+    fun save(image: ByteArray) {
+        Timber.d("Saving snippet image ${image.size}")
+        try {
+            getSnippet()?.let {
+                saveSnippet(image, it)
+                Timber.d("Snippet ${it.title} saved")
+            }
+            mutableEvent.value = Alert("Snippet saved")
+        } catch (e: Exception) {
+            Timber.e("Couldn't save snippet, error = $e")
+            mutableEvent.value = Alert(errorMessages.generic)
         }
     }
 
-    fun share() {
-        getSnippet()?.let {
-            shareSnippet(it)
+    fun share(image: ByteArray) {
+        try {
+            getSnippet()?.let {
+                shareSnippet(image, it)
+            }
+            mutableEvent.value = Alert("Snippet shared")
+        } catch (e: Exception) {
+            Timber.e("Couldn't share snippet, error = $e")
+            mutableEvent.value = Alert(errorMessages.generic)
         }
     }
 
@@ -166,5 +164,4 @@ sealed class DetailsEvent
 data object Idle : DetailsEvent()
 data object Deleted : DetailsEvent()
 data class Alert(val message: String) : DetailsEvent()
-data class Saved(val snippetId: String) : DetailsEvent()
 data object Logout : DetailsEvent()

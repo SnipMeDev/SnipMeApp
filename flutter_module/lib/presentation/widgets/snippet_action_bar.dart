@@ -6,19 +6,18 @@ import 'package:flutter_module/presentation/widgets/state_icon.dart';
 
 class SnippetActionBar extends StatelessWidget {
   const SnippetActionBar({
-    super.key,
     required this.snippet,
-    this.onLikeTap,
-    this.onDislikeTap,
+    this.onFavoriteTap,
     this.onSaveTap,
     this.onCopyTap,
     this.onShareTap,
+    // TODO Add archive action
     this.onDeleteTap,
+    super.key,
   });
 
   final Snippet snippet;
-  final GestureTapCallback? onLikeTap;
-  final GestureTapCallback? onDislikeTap;
+  final GestureTapCallback? onFavoriteTap;
   final GestureTapCallback? onSaveTap;
   final GestureTapCallback? onCopyTap;
   final GestureTapCallback? onShareTap;
@@ -31,31 +30,24 @@ class SnippetActionBar extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           StateIcon(
-            icon: Icons.thumb_up_alt_outlined,
+            icon: Icons.favorite,
             active: snippet.isLiked,
-            onTap: snippet.isLiked == false ? null : onLikeTap,
-          ),
-          const SizedBox(width: Dimens.l),
-          StateIcon(
-            icon: Icons.thumb_down_alt_outlined,
-            active: snippet.isDisliked,
-            onTap: snippet.isDisliked == false ? null : onDislikeTap,
-          ),
-          const SizedBox(width: Dimens.l),
-          StateIcon(
-            icon: Icons.save_alt_outlined,
-            active: snippet.isSaved,
-            onTap: getSaveCallback(snippet.isSaved, onSaveTap),
-          ),
-          const SizedBox(width: Dimens.l),
-          StateIcon(
-            icon: Icons.copy_all_outlined,
-            onTap: onCopyTap,
+            onTap: onFavoriteTap,
           ),
           const SizedBox(width: Dimens.l),
           StateIcon(
             icon: Icons.share,
             onTap: onShareTap,
+          ),
+          const SizedBox(width: Dimens.l),
+          StateIcon(
+            icon: Icons.save_alt_outlined,
+            onTap: onSaveTap,
+          ),
+          const SizedBox(width: Dimens.l),
+          StateIcon(
+            icon: Icons.copy_all_outlined,
+            onTap: onCopyTap,
           ),
           const SizedBox(width: Dimens.l),
           StateIcon(
@@ -67,14 +59,5 @@ class SnippetActionBar extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  GestureTapCallback? getSaveCallback(
-    bool? isSaved,
-    GestureTapCallback? onSaveTap,
-  ) {
-    if (isSaved == false) return null;
-    if (isSaved == true) return null;
-    return onSaveTap;
   }
 }

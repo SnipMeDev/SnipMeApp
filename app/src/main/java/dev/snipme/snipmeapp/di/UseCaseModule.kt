@@ -8,7 +8,7 @@ import dev.snipme.snipmeapp.domain.language.GetLanguagesUseCase
 import dev.snipme.snipmeapp.domain.network.CheckNetworkAvailableUseCase
 import dev.snipme.snipmeapp.domain.reaction.GetTargetUserReactionUseCase
 import dev.snipme.snipmeapp.domain.reaction.SetUserReactionUseCase
-import dev.snipme.snipmeapp.domain.share.ShareSnippetCodeUseCase
+import dev.snipme.snipmeapp.domain.share.ShareSnippetUseCase
 import dev.snipme.snipmeapp.domain.snippet.*
 import dev.snipme.snipmeapp.domain.filter.FilterSnippetsByLanguageUseCase
 import dev.snipme.snipmeapp.domain.filter.FilterSnippetsByScopeUseCase
@@ -44,7 +44,7 @@ internal val useCaseModule = module {
     // Language
     factory { GetLanguagesUseCase(get(), get(), get()) }
     // Share
-    factory { ShareSnippetCodeUseCase(get()) }
+    factory { ShareSnippetUseCase(get()) }
     // Clipboard
     single { AddToClipboardUseCase(get()) }
     factory { GetFromClipboardUseCase(get()) }

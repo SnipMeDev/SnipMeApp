@@ -43,6 +43,7 @@ class SnippetDetailsBar extends StatelessWidget {
     );
   }
 
+  // TODO Remove
   String _getVoteCountText(int? voteResult) {
     const defaultValue = '+0';
     if (voteResult == null) return defaultValue;
@@ -62,20 +63,7 @@ class _UserReactionIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (reaction == UserReaction.like) {
-      return Image.asset(
-        Assets.reactionLike,
-        scale: _scale,
-      );
-    }
-
-    if (reaction == UserReaction.dislike) {
-      return Image.asset(
-        Assets.reactionDislike,
-        scale: _scale,
-      );
-    }
-
-    return Image.asset(Assets.reactionUndefined, scale: _scale);
+    // TODO Implement favorite
+    return SizedBox.shrink();
   }
 }
