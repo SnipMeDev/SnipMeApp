@@ -160,13 +160,6 @@ abstract class ChannelModelEventApi {
   ModelEventData channelEvent();
 }
 
-@EventChannelApi()
-abstract class ChannelModelEventApi {
-  ModelStateData channelState();
-
-  ModelEventData channelEvent();
-}
-
 @HostApi()
 abstract class ChannelMainModel {
   void resetEvent();

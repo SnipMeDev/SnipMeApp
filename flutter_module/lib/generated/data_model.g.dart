@@ -647,7 +647,7 @@ Stream<ModelStateData> channelState( {String instanceName = ''}) {
     return event as ModelStateData;
   });
 }
-
+    
 Stream<ModelEventData> channelEvent( {String instanceName = ''}) {
   if (instanceName.isNotEmpty) {
     instanceName = '.$instanceName';
@@ -658,7 +658,7 @@ Stream<ModelEventData> channelEvent( {String instanceName = ''}) {
     return event as ModelEventData;
   });
 }
-
+    
 
 class ChannelMainModel {
   /// Constructor for [ChannelMainModel].  The [binaryMessenger] named argument is
