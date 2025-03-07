@@ -1,9 +1,7 @@
 package dev.snipme.snipmeapp.infrastructure.local
 
-import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-
 
 @Entity(tableName = "snippets")
 data class SnippetEntry(
@@ -14,15 +12,7 @@ data class SnippetEntry(
     val modifiedAt: String,
     val visibility: String,
     val ownerId: Int,
-    val language: String,
-)
-
-
-data class SnippetExtended(
-    @Embedded val snippet: SnippetEntry,
     val ownerName: String,
-    val isOwner: Boolean,
-    val userReaction: String,
-    val numberOfLikes: Int,
-    val numberOfDislikes: Int,
+    val language: String,
+    val favorite: Boolean,
 )

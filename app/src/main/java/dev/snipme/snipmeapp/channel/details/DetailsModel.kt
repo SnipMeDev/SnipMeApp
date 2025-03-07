@@ -10,10 +10,8 @@ import dev.snipme.snipmeapp.domain.error.exception.NetworkNotAvailableException
 import dev.snipme.snipmeapp.domain.error.exception.NotAuthorizedException
 import dev.snipme.snipmeapp.domain.error.exception.RemoteException
 import dev.snipme.snipmeapp.domain.error.exception.SessionExpiredException
+import dev.snipme.snipmeapp.domain.favorite.SetFavoriteSnippet
 import dev.snipme.snipmeapp.domain.message.ErrorMessages
-import dev.snipme.snipmeapp.domain.reaction.GetTargetUserReactionUseCase
-import dev.snipme.snipmeapp.domain.reaction.SetUserReactionUseCase
-import dev.snipme.snipmeapp.domain.reaction.UserReaction
 import dev.snipme.snipmeapp.domain.share.ShareSnippetUseCase
 import dev.snipme.snipmeapp.domain.snippet.DeleteSnippetUseCase
 import dev.snipme.snipmeapp.domain.snippet.GetSingleSnippetUseCase
@@ -24,14 +22,14 @@ import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import timber.log.Timber
 
 class DetailsModel(
     private val errorMessages: ErrorMessages,
     private val getSnippet: GetSingleSnippetUseCase,
     private val clipboard: AddToClipboardUseCase,
-    private val getTargetReaction: GetTargetUserReactionUseCase,
-    private val setUserReaction: SetUserReactionUseCase,
+    private val setFavorite: SetFavoriteSnippet,
     private val saveSnippet: SaveSnippetUseCase,
     private val shareSnippet: ShareSnippetUseCase,
     private val deleteSnippet: DeleteSnippetUseCase,
@@ -72,7 +70,21 @@ class DetailsModel(
     }
 
     fun toggleFavorite() {
-        // TODO Implement
+        getSnippet()?.let {
+            // Show immediate change in UI
+            val snippetWithUpdate = (state.value as Loaded).snippet.copy(favorite = !it.favorite)
+            mutableState.value = (state.value as Loaded).copy(snippet = snippetWithUpdate)
+            // Update field value in the background
+            setFavorite(it, !it.favorite)
+                .subscribeOn(Schedulers.io())
+                .subscribeBy(
+                    onSuccess = { setState(Loaded(it)) },
+                    onError = {
+                        Timber.e("Couldn't toggle favorite, error = $it")
+                        parseError(it)
+                    }
+                ).also { disposables += it }
+        }
     }
 
     fun copyToClipboard() {
@@ -82,7 +94,6 @@ class DetailsModel(
     }
 
     fun save(image: ByteArray) {
-        Timber.d("Saving snippet image ${image.size}")
         try {
             getSnippet()?.let {
                 saveSnippet(image, it)
@@ -97,10 +108,7 @@ class DetailsModel(
 
     fun share(image: ByteArray) {
         try {
-            getSnippet()?.let {
-                shareSnippet(image, it)
-            }
-            mutableEvent.value = Alert("Snippet shared")
+            getSnippet()?.let { shareSnippet(image, it) }
         } catch (e: Exception) {
             Timber.e("Couldn't share snippet, error = $e")
             mutableEvent.value = Alert(errorMessages.generic)
@@ -120,25 +128,6 @@ class DetailsModel(
                     }
                 ).also { disposables += it }
         }
-    }
-
-    private fun changeReaction(newReaction: UserReaction) {
-        // Immediately show change to user
-        val previousState = getLoaded() ?: return
-        val targetReaction = getTargetReaction(previousState.snippet, newReaction)
-        setState(previousState.run { copy(snippet = snippet.copy(userReaction = targetReaction)) })
-
-        setUserReaction(previousState.snippet, newReaction)
-            .subscribeOn(Schedulers.io())
-            .subscribeBy(
-                onSuccess = { snippet -> mutableState.value = Loaded(snippet) },
-                onError = {
-                    // Revert changes
-                    Timber.e("Couldn't change user reaction, error = $it")
-                    mutableEvent.value = Alert(errorMessages.generic)
-                    setState(previousState)
-                }
-            ).also { disposables += it }
     }
 
     private fun getSnippet(): Snippet? = getLoaded()?.snippet

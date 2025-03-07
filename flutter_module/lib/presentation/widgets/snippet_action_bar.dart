@@ -31,7 +31,7 @@ class SnippetActionBar extends StatelessWidget {
         children: [
           StateIcon(
             icon: Icons.favorite,
-            active: snippet.isLiked,
+            active: snippet.isFavorite,
             onTap: onFavoriteTap,
           ),
           const SizedBox(width: Dimens.l),

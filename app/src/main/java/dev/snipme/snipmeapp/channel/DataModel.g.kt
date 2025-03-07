@@ -112,18 +112,6 @@ enum class SnippetFilterType(val raw: Int) {
   }
 }
 
-enum class UserReaction(val raw: Int) {
-  NONE(0),
-  LIKE(1),
-  DISLIKE(2);
-
-  companion object {
-    fun ofRaw(raw: Int): UserReaction? {
-      return values().firstOrNull { it.raw == raw }
-    }
-  }
-}
-
 enum class ModelState(val raw: Int) {
   LOADING(0),
   LOADED(1),
@@ -181,10 +169,8 @@ data class Snippet (
   val isOwner: Boolean? = null,
   val timeAgo: String? = null,
   val voteResult: Long? = null,
-  val userReaction: UserReaction? = null,
   val isPrivate: Boolean? = null,
-  val isLiked: Boolean? = null,
-  val isDisliked: Boolean? = null,
+  val isFavorite: Boolean? = null,
   val isSaved: Boolean? = null,
   val isToDelete: Boolean? = null
 )
@@ -199,13 +185,11 @@ data class Snippet (
       val isOwner = pigeonVar_list[5] as Boolean?
       val timeAgo = pigeonVar_list[6] as String?
       val voteResult = pigeonVar_list[7] as Long?
-      val userReaction = pigeonVar_list[8] as UserReaction?
-      val isPrivate = pigeonVar_list[9] as Boolean?
-      val isLiked = pigeonVar_list[10] as Boolean?
-      val isDisliked = pigeonVar_list[11] as Boolean?
-      val isSaved = pigeonVar_list[12] as Boolean?
-      val isToDelete = pigeonVar_list[13] as Boolean?
-      return Snippet(uuid, title, code, language, owner, isOwner, timeAgo, voteResult, userReaction, isPrivate, isLiked, isDisliked, isSaved, isToDelete)
+      val isPrivate = pigeonVar_list[8] as Boolean?
+      val isFavorite = pigeonVar_list[9] as Boolean?
+      val isSaved = pigeonVar_list[10] as Boolean?
+      val isToDelete = pigeonVar_list[11] as Boolean?
+      return Snippet(uuid, title, code, language, owner, isOwner, timeAgo, voteResult, isPrivate, isFavorite, isSaved, isToDelete)
     }
   }
   fun toList(): List<Any?> {
@@ -218,10 +202,8 @@ data class Snippet (
       isOwner,
       timeAgo,
       voteResult,
-      userReaction,
       isPrivate,
-      isLiked,
-      isDisliked,
+      isFavorite,
       isSaved,
       isToDelete,
     )
@@ -504,85 +486,80 @@ private open class DataModelPigeonCodec : StandardMessageCodec() {
       }
       131.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          UserReaction.ofRaw(it.toInt())
+          ModelState.ofRaw(it.toInt())
         }
       }
       132.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          ModelState.ofRaw(it.toInt())
+          MainModelEvent.ofRaw(it.toInt())
         }
       }
       133.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          MainModelEvent.ofRaw(it.toInt())
+          DetailsModelEvent.ofRaw(it.toInt())
         }
       }
       134.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          DetailsModelEvent.ofRaw(it.toInt())
-        }
-      }
-      135.toByte() -> {
-        return (readValue(buffer) as Long?)?.let {
           LoginModelEvent.ofRaw(it.toInt())
         }
       }
-      136.toByte() -> {
+      135.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           Snippet.fromList(it)
         }
       }
-      137.toByte() -> {
+      136.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           SnippetCode.fromList(it)
         }
       }
-      138.toByte() -> {
+      137.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           SyntaxToken.fromList(it)
         }
       }
-      139.toByte() -> {
+      138.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           SnippetLanguage.fromList(it)
         }
       }
-      140.toByte() -> {
+      139.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           Owner.fromList(it)
         }
       }
-      141.toByte() -> {
+      140.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           SnippetFilter.fromList(it)
         }
       }
-      142.toByte() -> {
+      141.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           MainModelStateData.fromList(it)
         }
       }
-      143.toByte() -> {
+      142.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           MainModelEventData.fromList(it)
         }
       }
-      144.toByte() -> {
+      143.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           DetailsModelStateData.fromList(it)
         }
       }
-      145.toByte() -> {
+      144.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           DetailsModelEventData.fromList(it)
         }
       }
-      146.toByte() -> {
+      145.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           LoginModelStateData.fromList(it)
         }
       }
-      147.toByte() -> {
+      146.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           LoginModelEventData.fromList(it)
         }
@@ -600,72 +577,68 @@ private open class DataModelPigeonCodec : StandardMessageCodec() {
         stream.write(130)
         writeValue(stream, value.raw)
       }
-      is UserReaction -> {
+      is ModelState -> {
         stream.write(131)
         writeValue(stream, value.raw)
       }
-      is ModelState -> {
+      is MainModelEvent -> {
         stream.write(132)
         writeValue(stream, value.raw)
       }
-      is MainModelEvent -> {
+      is DetailsModelEvent -> {
         stream.write(133)
         writeValue(stream, value.raw)
       }
-      is DetailsModelEvent -> {
+      is LoginModelEvent -> {
         stream.write(134)
         writeValue(stream, value.raw)
       }
-      is LoginModelEvent -> {
-        stream.write(135)
-        writeValue(stream, value.raw)
-      }
       is Snippet -> {
-        stream.write(136)
+        stream.write(135)
         writeValue(stream, value.toList())
       }
       is SnippetCode -> {
-        stream.write(137)
+        stream.write(136)
         writeValue(stream, value.toList())
       }
       is SyntaxToken -> {
-        stream.write(138)
+        stream.write(137)
         writeValue(stream, value.toList())
       }
       is SnippetLanguage -> {
-        stream.write(139)
+        stream.write(138)
         writeValue(stream, value.toList())
       }
       is Owner -> {
-        stream.write(140)
+        stream.write(139)
         writeValue(stream, value.toList())
       }
       is SnippetFilter -> {
-        stream.write(141)
+        stream.write(140)
         writeValue(stream, value.toList())
       }
       is MainModelStateData -> {
-        stream.write(142)
+        stream.write(141)
         writeValue(stream, value.toList())
       }
       is MainModelEventData -> {
-        stream.write(143)
+        stream.write(142)
         writeValue(stream, value.toList())
       }
       is DetailsModelStateData -> {
-        stream.write(144)
+        stream.write(143)
         writeValue(stream, value.toList())
       }
       is DetailsModelEventData -> {
-        stream.write(145)
+        stream.write(144)
         writeValue(stream, value.toList())
       }
       is LoginModelStateData -> {
-        stream.write(146)
+        stream.write(145)
         writeValue(stream, value.toList())
       }
       is LoginModelEventData -> {
-        stream.write(147)
+        stream.write(146)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)

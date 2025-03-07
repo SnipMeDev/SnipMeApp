@@ -4,19 +4,17 @@ import android.text.Spanned
 import android.text.format.DateUtils
 import android.text.style.ForegroundColorSpan
 import androidx.core.text.getSpans
+import dev.snipme.snipmeapp.domain.snippets.*
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.BinaryMessenger
 import org.koin.core.component.KoinComponent
-import dev.snipme.snipmeapp.domain.reaction.UserReaction
-import dev.snipme.snipmeapp.domain.snippets.*
-import java.util.*
+import java.util.Date
+import dev.snipme.snipmeapp.channel.Owner as ChannelOwner
 import dev.snipme.snipmeapp.channel.Snippet as ChannelSnippet
 import dev.snipme.snipmeapp.channel.SnippetCode as ChannelSnippetCode
 import dev.snipme.snipmeapp.channel.SnippetLanguage as ChannelSnippetLanguage
 import dev.snipme.snipmeapp.channel.SnippetLanguageType as ChannelSnippetLanguageType
-import dev.snipme.snipmeapp.channel.UserReaction as ChannelUserReaction
 import dev.snipme.snipmeapp.channel.SyntaxToken as ChannelSyntaxToken
-import dev.snipme.snipmeapp.channel.Owner as ChannelOwner
 
 abstract class ModelPlugin<T> : FlutterPlugin, KoinComponent {
 
@@ -39,10 +37,7 @@ fun Snippet.toModelData(): ChannelSnippet =
         language = language.toModelSnippetLanguage(),
         owner = owner.toModelOwner(),
         isOwner = isOwner,
-        voteResult = (numberOfLikes - numberOfDislikes).toLong(),
-        userReaction = userReaction.toModelUserReaction(),
-        isLiked = userReaction.toModelReactionState(UserReaction.LIKE),
-        isDisliked = userReaction.toModelReactionState(UserReaction.DISLIKE),
+        isFavorite = favorite,
         isPrivate = visibility == SnippetVisibility.PRIVATE,
         isSaved = calculateSavedState(isOwner, visibility),
         isToDelete = isOwner,
@@ -68,16 +63,6 @@ private fun SnippetLanguage.toModelSnippetLanguage() =
         raw = raw,
         type = ChannelSnippetLanguageType.valueOf(type.name),
     )
-
-private fun UserReaction.toModelUserReaction(): ChannelUserReaction =
-    when (this) {
-        UserReaction.LIKE -> ChannelUserReaction.LIKE
-        UserReaction.DISLIKE -> ChannelUserReaction.DISLIKE
-        else -> ChannelUserReaction.NONE
-    }
-
-private fun UserReaction.toModelReactionState(reaction: UserReaction) =
-    if (this == UserReaction.NONE) null else this == reaction
 
 private fun calculateSavedState(
     isOwner: Boolean,

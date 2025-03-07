@@ -32,38 +32,16 @@ class SnippetDetailsBar extends StatelessWidget {
             ],
           ),
         ),
-        _UserReactionIndicator(reaction: snippet.userReaction),
-        const SizedBox(width: Dimens.l),
         SurfaceStyles.rateBox(
           TextStyles.title(
-            _getVoteCountText(snippet.voteResult),
+            TextSpan(
+              children: [
+                WidgetSpan(child: Icon(Icons.visibility)),
+              ]
+            ).text!
           ),
         )
       ],
     );
-  }
-
-  // TODO Remove
-  String _getVoteCountText(int? voteResult) {
-    const defaultValue = '+0';
-    if (voteResult == null) return defaultValue;
-    if (voteResult == 0) return defaultValue;
-    if (voteResult > 0) return '+$voteResult';
-    return '-$voteResult';
-  }
-}
-
-class _UserReactionIndicator extends StatelessWidget {
-  const _UserReactionIndicator({
-    this.reaction,
-  });
-
-  final UserReaction? reaction;
-  final _scale = 2.0;
-
-  @override
-  Widget build(BuildContext context) {
-    // TODO Implement favorite
-    return SizedBox.shrink();
   }
 }

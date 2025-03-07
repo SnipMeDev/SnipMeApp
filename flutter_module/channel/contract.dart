@@ -19,10 +19,8 @@ class Snippet {
   bool? isOwner;
   String? timeAgo;
   int? voteResult;
-  UserReaction? userReaction;
   bool? isPrivate;
-  bool? isLiked;
-  bool? isDisliked;
+  bool? isFavorite;
   bool? isSaved;
   bool? isToDelete;
 }
@@ -104,8 +102,6 @@ class SnippetFilter {
   List<String?>? scopes;
   String? selectedScope;
 }
-
-enum UserReaction { none, like, dislike }
 
 enum ModelState { loading, loaded, error }
 

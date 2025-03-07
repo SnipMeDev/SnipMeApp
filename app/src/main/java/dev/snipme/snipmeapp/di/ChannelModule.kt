@@ -14,5 +14,5 @@ internal val channelModule = module {
     single { SessionModel(get()) }
     single { LoginModel(get(), get(), get()) }
     single { MainModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
-    single { DetailsModel(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+    single { DetailsModel(get(), get(), get(), get(), get(), get(), get(), get()) }
 }

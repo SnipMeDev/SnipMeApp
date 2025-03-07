@@ -12,31 +12,23 @@ interface SnippetDao {
     @Query(
         """
     SELECT s.*, u.login as ownerName,
-    CASE WHEN s.ownerId = :userId THEN 1 ELSE 0 END as isOwner,
-    CASE WHEN r.reaction = 0 THEN 'DISLIKE' ELSE CASE WHEN r.reaction = 2 THEN 'LIKE' ELSE 'NONE' END END as userReaction,
-    (Select Count(*) FROM reactions as r where r.snippetId = :uuid and reaction = 2) as numberOfLikes,
-    (Select Count(*) FROM reactions as r where r.snippetId = :uuid and reaction = 0) as numberOfDislikes
+    CASE WHEN s.ownerId = :userId THEN 1 ELSE 0 END as isOwner
     FROM snippets as s 
     INNER JOIN users as u ON s.ownerId = u.id 
-    LEFT JOIN reactions as r ON r.userId = :userId and r.snippetId = :uuid
     WHERE s.id = :uuid
     """
     )
-    fun snippet(uuid: Int, userId: Int): Single<SnippetExtended>
+    fun snippet(uuid: Int, userId: Int): Single<SnippetEntry>
 
     @Query(
         """ 
             SELECT s.*, u.login as ownerName,
-            CASE WHEN s.ownerId = :userId THEN 1 ELSE 0 END as isOwner,
-            CASE WHEN r.reaction = 0 THEN "DISLIKE" ELSE CASE WHEN r.reaction = 2 THEN "LIKE" ELSE "NONE" END END as userReaction,
-            (Select Count(*) FROM reactions as r where r.snippetId = s.id and reaction = 2) as numberOfLikes,
-            (Select Count(*) FROM reactions as r where r.snippetId = s.id and reaction = 0) as numberOfDislikes
+            CASE WHEN s.ownerId = :userId THEN 1 ELSE 0 END as isOwner
             FROM snippets as s
             INNER JOIN users as u ON s.ownerId = u.id
-            LEFT JOIN reactions as r ON r.userId = :userId and r.snippetId = s.id
         """
     )
-    fun snippets(userId: Int): Single<List<SnippetExtended>>
+    fun snippets(userId: Int): Single<List<SnippetEntry>>
 
     @Query("SELECT COUNT(*) FROM snippets")
     fun count(): Single<Int>
@@ -51,7 +43,8 @@ interface SnippetDao {
             code = :code,
             modifiedAt = current_timestamp,
             visibility = :visibility,
-            language = :language
+            language = :language,
+            favorite = :favorite
         WHERE id = :uuid
     """
     )
@@ -61,12 +54,9 @@ interface SnippetDao {
         code: String,
         visibility: String,
         language: String,
+        favorite: Boolean
     ): Completable
 
     @Query("DELETE FROM snippets WHERE id = :uuid")
     fun delete(uuid: Int): Completable
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun reaction(reaction: ReactionEntry): Completable
-
 }

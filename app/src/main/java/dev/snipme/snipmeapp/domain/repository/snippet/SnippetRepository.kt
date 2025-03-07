@@ -1,12 +1,10 @@
 package dev.snipme.snipmeapp.domain.repository.snippet
 
+import dev.snipme.snipmeapp.domain.snippets.Snippet
+import dev.snipme.snipmeapp.domain.snippets.SnippetVisibility
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
-import dev.snipme.snipmeapp.domain.reaction.UserReaction
-import dev.snipme.snipmeapp.domain.snippets.Snippet
-import dev.snipme.snipmeapp.domain.snippets.SnippetScope
-import dev.snipme.snipmeapp.domain.snippets.SnippetVisibility
 
 interface SnippetRepository {
 
@@ -21,7 +19,8 @@ interface SnippetRepository {
         code: String,
         language: String,
         visibility: SnippetVisibility,
-        userId: Int
+        userId: Int,
+        favorite: Boolean
     ): Single<Snippet>
 
     fun update(
@@ -30,12 +29,11 @@ interface SnippetRepository {
         code: String,
         language: String,
         visibility: SnippetVisibility,
-        userId: Int
+        userId: Int,
+        favorite: Boolean
     ): Single<Snippet>
 
     fun count(): Single<Int>
-
-    fun reaction(uuid: String, userId: Int, reaction: UserReaction): Completable
 
     fun delete(uuid: String): Completable
 }

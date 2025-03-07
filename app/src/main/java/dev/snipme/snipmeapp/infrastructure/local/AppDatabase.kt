@@ -1,10 +1,11 @@
 package dev.snipme.snipmeapp.infrastructure.local
+
+import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import android.content.Context
 
-@Database(entities = [UserEntry::class, SnippetEntry::class, ReactionEntry::class], version = 1)
+@Database(entities = [UserEntry::class, SnippetEntry::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun snippetDao(): SnippetDao

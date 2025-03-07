@@ -1,17 +1,15 @@
 package dev.snipme.snipmeapp.domain.snippet
 
-import io.reactivex.Single
-import dev.snipme.snipmeapp.domain.clipboard.GetFromClipboardUseCase
 import dev.snipme.snipmeapp.domain.language.GetLanguagesUseCase
 import dev.snipme.snipmeapp.domain.snippets.Snippet
 import dev.snipme.snipmeapp.domain.snippets.SnippetVisibility
+import io.reactivex.Single
 
 class EditInteractor(
     private val getLanguages: GetLanguagesUseCase,
     private val getSnippet: GetSingleSnippetUseCase,
     private val createSnippet: CreateSnippetUseCase,
     private val updateSnippet: UpdateSnippetUseCase,
-    private val fromClipboard: GetFromClipboardUseCase
 ) {
     fun languages() = getLanguages()
 
@@ -26,7 +24,6 @@ class EditInteractor(
         code: String,
         language: String,
         visibility: SnippetVisibility,
-    ): Single<Snippet> = updateSnippet(uuid, title, code, language, visibility)
-
-    fun getFromClipboard(): String? = fromClipboard()
+        favorite: Boolean
+    ): Single<Snippet> = updateSnippet(uuid, title, code, language, visibility, favorite)
 }

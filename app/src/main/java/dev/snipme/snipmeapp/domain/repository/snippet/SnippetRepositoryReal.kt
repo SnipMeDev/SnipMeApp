@@ -1,11 +1,9 @@
 package dev.snipme.snipmeapp.domain.repository.snippet
 
 import dev.snipme.snipmeapp.domain.error.ErrorHandler
-import dev.snipme.snipmeapp.domain.reaction.UserReaction
 import dev.snipme.snipmeapp.domain.snippets.Snippet
 import dev.snipme.snipmeapp.domain.snippets.SnippetResponseMapper
 import dev.snipme.snipmeapp.domain.snippets.SnippetVisibility
-import dev.snipme.snipmeapp.infrastructure.local.ReactionEntry
 import dev.snipme.snipmeapp.infrastructure.local.SnippetDao
 import dev.snipme.snipmeapp.infrastructure.local.SnippetEntry
 import dev.snipme.snipmeapp.util.extension.mapError
@@ -15,9 +13,7 @@ import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
 import java.util.Date
 
-const val PAGE_START = 0
 const val SNIPPET_PAGE_SIZE = 10
-const val ONE_SNIPPET = 1
 
 class SnippetRepositoryReal(
     private val errorHandler: ErrorHandler,
@@ -40,7 +36,8 @@ class SnippetRepositoryReal(
         code: String,
         language: String,
         visibility: SnippetVisibility,
-        userId: Int
+        userId: Int,
+        favorite: Boolean
     ): Single<Snippet> {
         return service.create(
             SnippetEntry(
@@ -50,7 +47,9 @@ class SnippetRepositoryReal(
                 modifiedAt = Date().toString(),
                 visibility = visibility.name,
                 ownerId = userId,
+
                 language = language,
+                favorite = favorite
             )
         )
             .mapError { errorHandler.handle(it) }
@@ -67,9 +66,10 @@ class SnippetRepositoryReal(
         code: String,
         language: String,
         visibility: SnippetVisibility,
-        userId: Int
+        userId: Int,
+        favorite: Boolean
     ): Single<Snippet> =
-        service.update(uuid.toInt(), title, code, language, visibility.name)
+        service.update(uuid.toInt(), title, code, language, visibility.name, favorite)
             .mapError { errorHandler.handle(it) }
             .andThen(
                 service.snippet(uuid.toInt(), userId)
@@ -84,8 +84,4 @@ class SnippetRepositoryReal(
         service.count()
             .mapError { errorHandler.handle(it) }
             .map { it }
-
-    override fun reaction(uuid: String, userId: Int, reaction: UserReaction): Completable =
-        service.reaction(ReactionEntry(snippetId = uuid.toInt(), userId = userId, reaction = reaction.ordinal.toShort()))
-            .mapError { errorHandler.handle(it) }
 }
