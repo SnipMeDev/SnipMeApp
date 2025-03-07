@@ -11,24 +11,15 @@ import io.reactivex.Single
 interface SnippetDao {
     @Query(
         """
-    SELECT s.*, u.login as ownerName,
-    CASE WHEN s.ownerId = :userId THEN 1 ELSE 0 END as isOwner
-    FROM snippets as s 
-    INNER JOIN users as u ON s.ownerId = u.id 
-    WHERE s.id = :uuid
-    """
-    )
-    fun snippet(uuid: Int, userId: Int): Single<SnippetEntry>
-
-    @Query(
-        """ 
-            SELECT s.*, u.login as ownerName,
-            CASE WHEN s.ownerId = :userId THEN 1 ELSE 0 END as isOwner
-            FROM snippets as s
-            INNER JOIN users as u ON s.ownerId = u.id
+        SELECT s.*
+        FROM snippets as s 
+        WHERE s.id = :uuid
         """
     )
-    fun snippets(userId: Int): Single<List<SnippetEntry>>
+    fun snippet(uuid: Int): Single<SnippetEntry>
+
+    @Query("""SELECT s.* FROM snippets as s""")
+    fun snippets(): Single<List<SnippetEntry>>
 
     @Query("SELECT COUNT(*) FROM snippets")
     fun count(): Single<Int>

@@ -19,8 +19,6 @@ class SnippetResponseMapper {
             code = getCode(code),
             language = getLanguage(language),
             visibility = getVisibility(visibility),
-            isOwner = true,
-            owner = Owner(ownerId , response.ownerName),
             modifiedAt = modifiedAt.toDate(),
             favorite = favorite,
         )

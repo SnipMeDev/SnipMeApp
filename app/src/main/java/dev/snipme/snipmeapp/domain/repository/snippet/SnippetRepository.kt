@@ -10,9 +10,9 @@ interface SnippetRepository {
 
     val updateListener: BehaviorSubject<Snippet>
 
-    fun snippets(userId: Int): Single<List<Snippet>>
+    fun snippets(): Single<List<Snippet>>
 
-    fun snippet(uuid: String, userId: Int): Single<Snippet>
+    fun snippet(uuid: String): Single<Snippet>
 
     fun create(
         title: String,
@@ -29,7 +29,6 @@ interface SnippetRepository {
         code: String,
         language: String,
         visibility: SnippetVisibility,
-        userId: Int,
         favorite: Boolean
     ): Single<Snippet>
 

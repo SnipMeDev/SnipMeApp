@@ -1,10 +1,9 @@
 package dev.snipme.snipmeapp.domain.snippets
 
-import io.reactivex.Single
 import dev.snipme.snipmeapp.domain.auth.AuthorizationUseCase
-import dev.snipme.snipmeapp.domain.network.CheckNetworkAvailableUseCase
 import dev.snipme.snipmeapp.domain.repository.snippet.SnippetRepository
 import dev.snipme.snipmeapp.domain.user.GetSingleUserUseCase
+import io.reactivex.Single
 
 class GetSnippetsUseCase(
     private val auth: AuthorizationUseCase,
@@ -14,9 +13,8 @@ class GetSnippetsUseCase(
     operator fun invoke(scope: SnippetScope, page: Int): Single<List<Snippet>> =
         auth()
             .andThen(getSingleUser())
-            .flatMap {
-                user ->
-                repository.snippets(user.id)
+            .flatMap { user ->
+                repository.snippets()
                     .map { list -> list.sortedByDescending { it.modifiedAt.time } }
             }
 }

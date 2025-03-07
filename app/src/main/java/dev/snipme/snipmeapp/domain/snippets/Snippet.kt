@@ -9,8 +9,6 @@ data class Snippet(
     val code: SnippetCode,
     val language: SnippetLanguage,
     val visibility: SnippetVisibility,
-    val isOwner: Boolean,
-    val owner: Owner,
     val modifiedAt: Date,
     val favorite: Boolean,
 ) {
@@ -21,8 +19,6 @@ data class Snippet(
             code = SnippetCode("", SpannableString("")),
             language = SnippetLanguage("", SnippetLanguageType.UNKNOWN),
             visibility = SnippetVisibility.PRIVATE,
-            isOwner = false,
-            owner = Owner(0, ""),
             modifiedAt = Date(),
             favorite = false
         )

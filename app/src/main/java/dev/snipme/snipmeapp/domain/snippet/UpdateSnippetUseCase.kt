@@ -20,7 +20,7 @@ class UpdateSnippetUseCase(
         favorite: Boolean
     ) = auth()
         .andThen(getSingleUser())
-        .flatMap{repository.update(uuid, title, code, language, visibility, it.id, favorite)}
+        .flatMap { repository.update(uuid, title, code, language, visibility, favorite) }
         .doOnSuccess() {
             repository.updateListener.onNext(it)
             Single.just(it)

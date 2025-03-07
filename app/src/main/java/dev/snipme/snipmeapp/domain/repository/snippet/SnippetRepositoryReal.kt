@@ -22,13 +22,13 @@ class SnippetRepositoryReal(
 ) : SnippetRepository {
     override val updateListener = BehaviorSubject.create<Snippet>()
 
-    override fun snippets(userId: Int): Single<List<Snippet>> =
-        service.snippets(userId)
+    override fun snippets(): Single<List<Snippet>> =
+        service.snippets()
             .mapError { errorHandler.handle(it) }
             .mapItems { mapper(it) }
 
-    override fun snippet(uuid: String, userId: Int): Single<Snippet> =
-        service.snippet(uuid.toInt(), userId).map { mapper(it) }
+    override fun snippet(uuid: String): Single<Snippet> =
+        service.snippet(uuid.toInt()).map { mapper(it) }
             .mapError { errorHandler.handle(it) }
 
     override fun create(
@@ -46,15 +46,13 @@ class SnippetRepositoryReal(
                 createdAt = Date().toString(),
                 modifiedAt = Date().toString(),
                 visibility = visibility.name,
-                ownerId = userId,
-
                 language = language,
                 favorite = favorite
             )
         )
             .mapError { errorHandler.handle(it) }
             .flatMap { newId ->
-                service.snippet(newId.toInt(), userId)
+                service.snippet(newId.toInt())
                     .mapError { errorHandler.handle(it) }
                     .map { mapper(it) }
             }
@@ -66,13 +64,12 @@ class SnippetRepositoryReal(
         code: String,
         language: String,
         visibility: SnippetVisibility,
-        userId: Int,
         favorite: Boolean
     ): Single<Snippet> =
         service.update(uuid.toInt(), title, code, language, visibility.name, favorite)
             .mapError { errorHandler.handle(it) }
             .andThen(
-                service.snippet(uuid.toInt(), userId)
+                service.snippet(uuid.toInt())
                     .mapError { errorHandler.handle(it) }
                     .map { mapper(it) }
             )

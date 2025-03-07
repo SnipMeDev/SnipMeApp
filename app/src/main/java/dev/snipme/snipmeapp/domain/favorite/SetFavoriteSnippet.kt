@@ -14,7 +14,6 @@ class SetFavoriteSnippet(
             code = snippet.code.raw,
             language = snippet.language.raw,
             visibility = snippet.visibility,
-            userId = snippet.owner.id,
             favorite = favorite,
         )
 }

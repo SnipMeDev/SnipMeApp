@@ -11,8 +11,6 @@ data class SnippetEntry(
     val createdAt: String,
     val modifiedAt: String,
     val visibility: String,
-    val ownerId: Int,
-    val ownerName: String,
     val language: String,
     val favorite: Boolean,
 )

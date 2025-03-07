@@ -35,12 +35,8 @@ fun Snippet.toModelData(): ChannelSnippet =
         title = title,
         code = code.toModelSnippetCode(),
         language = language.toModelSnippetLanguage(),
-        owner = owner.toModelOwner(),
-        isOwner = isOwner,
         isFavorite = favorite,
         isPrivate = visibility == SnippetVisibility.PRIVATE,
-        isSaved = calculateSavedState(isOwner, visibility),
-        isToDelete = isOwner,
         timeAgo = DateUtils.getRelativeTimeSpanString(
             modifiedAt.time,
             Date().time,
@@ -63,14 +59,6 @@ private fun SnippetLanguage.toModelSnippetLanguage() =
         raw = raw,
         type = ChannelSnippetLanguageType.valueOf(type.name),
     )
-
-private fun calculateSavedState(
-    isOwner: Boolean,
-    visibility: SnippetVisibility
-): Boolean? {
-    if (isOwner.not()) return null
-    return visibility == SnippetVisibility.PRIVATE
-}
 
 private fun ForegroundColorSpan.toSyntaxToken(spannable: Spanned) =
     ChannelSyntaxToken(
