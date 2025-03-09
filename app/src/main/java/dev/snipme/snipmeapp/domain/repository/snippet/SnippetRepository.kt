@@ -10,6 +10,8 @@ interface SnippetRepository {
 
     val updateListener: BehaviorSubject<Snippet>
 
+    fun getDemoSetupStatus(): Boolean
+
     fun snippets(): Single<List<Snippet>>
 
     fun snippet(uuid: String): Single<Snippet>

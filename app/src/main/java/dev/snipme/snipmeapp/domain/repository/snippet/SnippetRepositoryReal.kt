@@ -6,6 +6,7 @@ import dev.snipme.snipmeapp.domain.snippets.SnippetResponseMapper
 import dev.snipme.snipmeapp.domain.snippets.SnippetVisibility
 import dev.snipme.snipmeapp.infrastructure.local.SnippetDao
 import dev.snipme.snipmeapp.infrastructure.local.SnippetEntry
+import dev.snipme.snipmeapp.util.PreferencesUtil
 import dev.snipme.snipmeapp.util.extension.mapError
 import dev.snipme.snipmeapp.util.extension.mapItems
 import io.reactivex.Completable
@@ -13,14 +14,19 @@ import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
 import java.util.Date
 
+const val KEY_DEMO_SETUP_STATUS = "KEY_INITIALIZATION_STATUS"
 const val SNIPPET_PAGE_SIZE = 10
 
 class SnippetRepositoryReal(
     private val errorHandler: ErrorHandler,
     private val service: SnippetDao,
+    private val preferencesUtil: PreferencesUtil,
     private val mapper: SnippetResponseMapper
 ) : SnippetRepository {
     override val updateListener = BehaviorSubject.create<Snippet>()
+
+    override fun getDemoSetupStatus(): Boolean =
+        preferencesUtil.get<Boolean>(KEY_DEMO_SETUP_STATUS) ?: false
 
     override fun snippets(): Single<List<Snippet>> =
         service.snippets()

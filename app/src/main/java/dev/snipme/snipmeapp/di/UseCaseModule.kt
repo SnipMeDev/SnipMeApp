@@ -25,8 +25,10 @@ import dev.snipme.snipmeapp.domain.snippet.ObserveSnippetUpdatesUseCase
 import dev.snipme.snipmeapp.domain.snippet.ObserveUpdatedSnippetPageUseCase
 import dev.snipme.snipmeapp.domain.snippet.SaveSnippetUseCase
 import dev.snipme.snipmeapp.domain.snippet.UpdateSnippetUseCase
+import dev.snipme.snipmeapp.domain.snippets.GetDemoSnippetsSetupStatusUseCase
 import dev.snipme.snipmeapp.domain.snippets.GetSnippetsUseCase
 import dev.snipme.snipmeapp.domain.snippets.HasMoreSnippetPagesUseCase
+import dev.snipme.snipmeapp.domain.snippets.SetupDemoSnippetsUseCase
 import dev.snipme.snipmeapp.domain.user.GetSingleUserUseCase
 import org.koin.dsl.module
 
@@ -52,6 +54,8 @@ internal val useCaseModule = module {
     factory { ObserveSnippetUpdatesUseCase(get()) }
     factory { SetFavoriteSnippet(get()) }
     factory { DeleteSnippetUseCase(get()) }
+    factory { GetDemoSnippetsSetupStatusUseCase(get()) }
+    factory { SetupDemoSnippetsUseCase(get()) }
     // Language
     factory { GetLanguagesUseCase(get(), get(), get()) }
     // Share

@@ -1,25 +1,43 @@
 package dev.snipme.snipmeapp.channel.main
 
+import dev.snipme.snipmeapp.channel.error.ErrorParsable
+import dev.snipme.snipmeapp.channel.session.SessionModel
+import dev.snipme.snipmeapp.domain.error.exception.ConnectionException
+import dev.snipme.snipmeapp.domain.error.exception.ContentNotFoundException
+import dev.snipme.snipmeapp.domain.error.exception.ForbiddenActionException
+import dev.snipme.snipmeapp.domain.error.exception.NetworkNotAvailableException
+import dev.snipme.snipmeapp.domain.error.exception.NotAuthorizedException
+import dev.snipme.snipmeapp.domain.error.exception.RemoteException
+import dev.snipme.snipmeapp.domain.error.exception.SessionExpiredException
+import dev.snipme.snipmeapp.domain.filter.FilterSnippetsByLanguageUseCase
+import dev.snipme.snipmeapp.domain.filter.FilterSnippetsByScopeUseCase
+import dev.snipme.snipmeapp.domain.filter.GetLanguageFiltersUseCase
+import dev.snipme.snipmeapp.domain.filter.SNIPPET_FILTER_ALL
+import dev.snipme.snipmeapp.domain.filter.UpdateSnippetFiltersLanguageUseCase
+import dev.snipme.snipmeapp.domain.message.ErrorMessages
+import dev.snipme.snipmeapp.domain.snippet.ObserveSnippetUpdatesUseCase
+import dev.snipme.snipmeapp.domain.snippets.GetDemoSnippetsSetupStatusUseCase
+import dev.snipme.snipmeapp.domain.snippets.GetSnippetsUseCase
+import dev.snipme.snipmeapp.domain.snippets.HasMoreSnippetPagesUseCase
+import dev.snipme.snipmeapp.domain.snippets.SetupDemoSnippetsUseCase
+import dev.snipme.snipmeapp.domain.snippets.Snippet
+import dev.snipme.snipmeapp.domain.snippets.SnippetFilters
+import dev.snipme.snipmeapp.domain.snippets.SnippetScope
+import dev.snipme.snipmeapp.domain.user.GetSingleUserUseCase
+import dev.snipme.snipmeapp.domain.user.User
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.flow.MutableStateFlow
-import dev.snipme.snipmeapp.channel.session.SessionModel
-import dev.snipme.snipmeapp.domain.error.exception.*
-import dev.snipme.snipmeapp.domain.filter.*
-import dev.snipme.snipmeapp.domain.message.ErrorMessages
-import dev.snipme.snipmeapp.domain.snippet.ObserveSnippetUpdatesUseCase
-import dev.snipme.snipmeapp.domain.snippets.*
-import dev.snipme.snipmeapp.domain.user.GetSingleUserUseCase
-import dev.snipme.snipmeapp.domain.user.User
-import dev.snipme.snipmeapp.channel.error.ErrorParsable
 import timber.log.Timber
 
 private const val ONE_PAGE = 1
 
 class MainModel(
     private val errorMessages: ErrorMessages,
+    private val getDemoSetupStatus: GetDemoSnippetsSetupStatusUseCase,
+    private val setupDemoSnippets: SetupDemoSnippetsUseCase,
     private val getUser: GetSingleUserUseCase,
     private val getSnippets: GetSnippetsUseCase,
     private val observeUpdates: ObserveSnippetUpdatesUseCase,
@@ -47,10 +65,13 @@ class MainModel(
             is ConnectionException -> mutableState.value = Error(errorMessages.parse(throwable))
             is ContentNotFoundException -> mutableState.value =
                 Error(errorMessages.parse(throwable))
+
             is ForbiddenActionException -> mutableState.value =
                 Error(errorMessages.parse(throwable))
+
             is NetworkNotAvailableException -> mutableState.value =
                 Error(errorMessages.parse(throwable))
+
             is NotAuthorizedException -> session.logOut { mutableEvent.value = Logout }
             is RemoteException -> mutableState.value = Error(errorMessages.parse(throwable))
             is SessionExpiredException -> session.logOut { mutableEvent.value = Logout }
@@ -75,6 +96,18 @@ class MainModel(
             scopes = listOf("All", "Private", "Public"),
             selectedScope = "All"
         )
+
+        // TODO Get demo status
+
+        setupDemoSnippets()
+            .subscribeOn(Schedulers.io())
+            .subscribeBy(
+                onSuccess = { println("Setup demo data") },
+                onError = {
+                    Timber.e("Couldn't setup demo snippets, error = $it")
+                    parseError(it)
+                }
+            ).also { disposables += it }
 
         getUser()
             .subscribeOn(Schedulers.io())
