@@ -15,8 +15,6 @@ class Snippet {
   String? title;
   SnippetCode? code;
   SnippetLanguage? language;
-  Owner? owner;
-  bool? isOwner;
   String? timeAgo;
   int? voteResult;
   bool? isPrivate;
@@ -39,11 +37,6 @@ class SyntaxToken {
 class SnippetLanguage {
   String? raw;
   SnippetLanguageType? type;
-}
-
-class Owner {
-  int? id;
-  String? login;
 }
 
 enum SnippetLanguageType {

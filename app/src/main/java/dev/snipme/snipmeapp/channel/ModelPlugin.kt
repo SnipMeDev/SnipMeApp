@@ -9,7 +9,6 @@ import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.BinaryMessenger
 import org.koin.core.component.KoinComponent
 import java.util.Date
-import dev.snipme.snipmeapp.channel.Owner as ChannelOwner
 import dev.snipme.snipmeapp.channel.Snippet as ChannelSnippet
 import dev.snipme.snipmeapp.channel.SnippetCode as ChannelSnippetCode
 import dev.snipme.snipmeapp.channel.SnippetLanguage as ChannelSnippetLanguage
@@ -43,8 +42,6 @@ fun Snippet.toModelData(): ChannelSnippet =
             DateUtils.SECOND_IN_MILLIS
         ).toString()
     )
-
-private fun Owner.toModelOwner() = ChannelOwner(id = id.toLong(), login = login)
 
 private fun SnippetCode.toModelSnippetCode() =
     ChannelSnippetCode(

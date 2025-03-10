@@ -2,49 +2,44 @@ package dev.snipme.snipmeapp.domain.snippets
 
 import dev.snipme.snipmeapp.domain.repository.snippet.SnippetRepository
 import dev.snipme.snipmeapp.util.extension.titleCase
+import io.reactivex.Completable
+import io.reactivex.Single
 
 class SetupDemoSnippetsUseCase(
     private val snippetRepository: SnippetRepository
 ) {
 
-    operator fun invoke() =
-        snippetRepository.create(
-            title = "Your first snippet",
-            code = KOTLIN_SAMPLE,
-            language = SnippetLanguageType.KOTLIN.name.titleCase(),
-            visibility = SnippetVisibility.PUBLIC,
-            userId = 1,
-            favorite = false
-        )
+    operator fun invoke(): Completable {
+        val demoSetup = snippetRepository.getDemoSetupStatus()
 
-//        snippetRepository.create(
-//            title = "Hello World",
-//            code = "console.log('Hello, World!')",
-//            language = "JavaScript",
-//            visibility = SnippetVisibility.PUBLIC,
-//            userId = 1,
-//            favorite = false
-//        )
-
-//        snippetRepository.create(
-//            title = "Hello World",
-//            code = "print('Hello, World!')",
-//            language = "Python",
-//            visibility = SnippetVisibility.PUBLIC,
-//            userId = 1,
-//            favorite = false
-//        )
-
-//        snippetRepository.create(
-//            title = "Hello World",
-//            code = "System.out.println(\"Hello, World!\");",
-//            language = "Java",
-//            visibility = SnippetVisibility.PUBLIC,
-//            userId = 1,
-//            favorite = false
-//        )
+        return if (!demoSetup) {
+            setupDemoSnippets()
+        } else {
+            Completable.complete()
+        }
     }
-//}
+
+    private fun setupDemoSnippets() = Completable.fromPublisher(
+        Single.merge(
+            snippetRepository.create(
+                title = "Your first snippet",
+                code = KOTLIN_SAMPLE,
+                language = SnippetLanguageType.KOTLIN.name.titleCase(),
+                visibility = SnippetVisibility.PUBLIC,
+                userId = 1,
+                favorite = false
+            ),
+            snippetRepository.create(
+                title = "Hello World",
+                code = "console.log('Hello, World!')",
+                language = SnippetLanguageType.JAVASCRIPT.name.titleCase(),
+                visibility = SnippetVisibility.PUBLIC,
+                userId = 1,
+                favorite = false
+            ),
+        ),
+    )
+}
 
 const val KOTLIN_SAMPLE = """
 // Data class

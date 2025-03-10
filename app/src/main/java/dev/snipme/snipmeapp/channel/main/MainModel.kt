@@ -16,14 +16,12 @@ import dev.snipme.snipmeapp.domain.filter.SNIPPET_FILTER_ALL
 import dev.snipme.snipmeapp.domain.filter.UpdateSnippetFiltersLanguageUseCase
 import dev.snipme.snipmeapp.domain.message.ErrorMessages
 import dev.snipme.snipmeapp.domain.snippet.ObserveSnippetUpdatesUseCase
-import dev.snipme.snipmeapp.domain.snippets.GetDemoSnippetsSetupStatusUseCase
 import dev.snipme.snipmeapp.domain.snippets.GetSnippetsUseCase
 import dev.snipme.snipmeapp.domain.snippets.HasMoreSnippetPagesUseCase
 import dev.snipme.snipmeapp.domain.snippets.SetupDemoSnippetsUseCase
 import dev.snipme.snipmeapp.domain.snippets.Snippet
 import dev.snipme.snipmeapp.domain.snippets.SnippetFilters
 import dev.snipme.snipmeapp.domain.snippets.SnippetScope
-import dev.snipme.snipmeapp.domain.user.GetSingleUserUseCase
 import dev.snipme.snipmeapp.domain.user.User
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
@@ -36,9 +34,7 @@ private const val ONE_PAGE = 1
 
 class MainModel(
     private val errorMessages: ErrorMessages,
-    private val getDemoSetupStatus: GetDemoSnippetsSetupStatusUseCase,
     private val setupDemoSnippets: SetupDemoSnippetsUseCase,
-    private val getUser: GetSingleUserUseCase,
     private val getSnippets: GetSnippetsUseCase,
     private val observeUpdates: ObserveSnippetUpdatesUseCase,
     private val hasMore: HasMoreSnippetPagesUseCase,
@@ -97,12 +93,10 @@ class MainModel(
             selectedScope = "All"
         )
 
-        // TODO Get demo status
-
         setupDemoSnippets()
             .subscribeOn(Schedulers.io())
             .subscribeBy(
-                onSuccess = { loadSnippets() },
+                onComplete = { loadSnippets() },
                 onError = {
                     Timber.e("Couldn't setup demo snippets, error = $it")
                     parseError(it)

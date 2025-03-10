@@ -14,7 +14,7 @@ import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
 import java.util.Date
 
-const val KEY_DEMO_SETUP_STATUS = "KEY_INITIALIZATION_STATUS"
+const val KEY_DEMO_SETUP_STATUS = "KEY_DEMO_SETUP_STATUS"
 const val SNIPPET_PAGE_SIZE = 10
 
 class SnippetRepositoryReal(

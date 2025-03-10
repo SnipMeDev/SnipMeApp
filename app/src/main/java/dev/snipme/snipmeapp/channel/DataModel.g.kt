@@ -165,8 +165,6 @@ data class Snippet (
   val title: String? = null,
   val code: SnippetCode? = null,
   val language: SnippetLanguage? = null,
-  val owner: Owner? = null,
-  val isOwner: Boolean? = null,
   val timeAgo: String? = null,
   val voteResult: Long? = null,
   val isPrivate: Boolean? = null,
@@ -181,15 +179,13 @@ data class Snippet (
       val title = pigeonVar_list[1] as String?
       val code = pigeonVar_list[2] as SnippetCode?
       val language = pigeonVar_list[3] as SnippetLanguage?
-      val owner = pigeonVar_list[4] as Owner?
-      val isOwner = pigeonVar_list[5] as Boolean?
-      val timeAgo = pigeonVar_list[6] as String?
-      val voteResult = pigeonVar_list[7] as Long?
-      val isPrivate = pigeonVar_list[8] as Boolean?
-      val isFavorite = pigeonVar_list[9] as Boolean?
-      val isSaved = pigeonVar_list[10] as Boolean?
-      val isToDelete = pigeonVar_list[11] as Boolean?
-      return Snippet(uuid, title, code, language, owner, isOwner, timeAgo, voteResult, isPrivate, isFavorite, isSaved, isToDelete)
+      val timeAgo = pigeonVar_list[4] as String?
+      val voteResult = pigeonVar_list[5] as Long?
+      val isPrivate = pigeonVar_list[6] as Boolean?
+      val isFavorite = pigeonVar_list[7] as Boolean?
+      val isSaved = pigeonVar_list[8] as Boolean?
+      val isToDelete = pigeonVar_list[9] as Boolean?
+      return Snippet(uuid, title, code, language, timeAgo, voteResult, isPrivate, isFavorite, isSaved, isToDelete)
     }
   }
   fun toList(): List<Any?> {
@@ -198,8 +194,6 @@ data class Snippet (
       title,
       code,
       language,
-      owner,
-      isOwner,
       timeAgo,
       voteResult,
       isPrivate,
@@ -272,27 +266,6 @@ data class SnippetLanguage (
     return listOf(
       raw,
       type,
-    )
-  }
-}
-
-/** Generated class from Pigeon that represents data sent in messages. */
-data class Owner (
-  val id: Long? = null,
-  val login: String? = null
-)
- {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): Owner {
-      val id = pigeonVar_list[0] as Long?
-      val login = pigeonVar_list[1] as String?
-      return Owner(id, login)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      id,
-      login,
     )
   }
 }
@@ -526,40 +499,35 @@ private open class DataModelPigeonCodec : StandardMessageCodec() {
       }
       139.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          Owner.fromList(it)
+          SnippetFilter.fromList(it)
         }
       }
       140.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          SnippetFilter.fromList(it)
+          MainModelStateData.fromList(it)
         }
       }
       141.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MainModelStateData.fromList(it)
+          MainModelEventData.fromList(it)
         }
       }
       142.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MainModelEventData.fromList(it)
+          DetailsModelStateData.fromList(it)
         }
       }
       143.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          DetailsModelStateData.fromList(it)
+          DetailsModelEventData.fromList(it)
         }
       }
       144.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          DetailsModelEventData.fromList(it)
-        }
-      }
-      145.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
           LoginModelStateData.fromList(it)
         }
       }
-      146.toByte() -> {
+      145.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           LoginModelEventData.fromList(it)
         }
@@ -609,36 +577,32 @@ private open class DataModelPigeonCodec : StandardMessageCodec() {
         stream.write(138)
         writeValue(stream, value.toList())
       }
-      is Owner -> {
+      is SnippetFilter -> {
         stream.write(139)
         writeValue(stream, value.toList())
       }
-      is SnippetFilter -> {
+      is MainModelStateData -> {
         stream.write(140)
         writeValue(stream, value.toList())
       }
-      is MainModelStateData -> {
+      is MainModelEventData -> {
         stream.write(141)
         writeValue(stream, value.toList())
       }
-      is MainModelEventData -> {
+      is DetailsModelStateData -> {
         stream.write(142)
         writeValue(stream, value.toList())
       }
-      is DetailsModelStateData -> {
+      is DetailsModelEventData -> {
         stream.write(143)
         writeValue(stream, value.toList())
       }
-      is DetailsModelEventData -> {
+      is LoginModelStateData -> {
         stream.write(144)
         writeValue(stream, value.toList())
       }
-      is LoginModelStateData -> {
-        stream.write(145)
-        writeValue(stream, value.toList())
-      }
       is LoginModelEventData -> {
-        stream.write(146)
+        stream.write(145)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)

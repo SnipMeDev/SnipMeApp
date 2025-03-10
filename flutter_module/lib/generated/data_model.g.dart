@@ -98,8 +98,6 @@ class Snippet {
     this.title,
     this.code,
     this.language,
-    this.owner,
-    this.isOwner,
     this.timeAgo,
     this.voteResult,
     this.isPrivate,
@@ -115,10 +113,6 @@ class Snippet {
   SnippetCode? code;
 
   SnippetLanguage? language;
-
-  Owner? owner;
-
-  bool? isOwner;
 
   String? timeAgo;
 
@@ -138,8 +132,6 @@ class Snippet {
       title,
       code,
       language,
-      owner,
-      isOwner,
       timeAgo,
       voteResult,
       isPrivate,
@@ -156,14 +148,12 @@ class Snippet {
       title: result[1] as String?,
       code: result[2] as SnippetCode?,
       language: result[3] as SnippetLanguage?,
-      owner: result[4] as Owner?,
-      isOwner: result[5] as bool?,
-      timeAgo: result[6] as String?,
-      voteResult: result[7] as int?,
-      isPrivate: result[8] as bool?,
-      isFavorite: result[9] as bool?,
-      isSaved: result[10] as bool?,
-      isToDelete: result[11] as bool?,
+      timeAgo: result[4] as String?,
+      voteResult: result[5] as int?,
+      isPrivate: result[6] as bool?,
+      isFavorite: result[7] as bool?,
+      isSaved: result[8] as bool?,
+      isToDelete: result[9] as bool?,
     );
   }
 }
@@ -247,32 +237,6 @@ class SnippetLanguage {
     return SnippetLanguage(
       raw: result[0] as String?,
       type: result[1] as SnippetLanguageType?,
-    );
-  }
-}
-
-class Owner {
-  Owner({
-    this.id,
-    this.login,
-  });
-
-  int? id;
-
-  String? login;
-
-  Object encode() {
-    return <Object?>[
-      id,
-      login,
-    ];
-  }
-
-  static Owner decode(Object result) {
-    result as List<Object?>;
-    return Owner(
-      id: result[0] as int?,
-      login: result[1] as String?,
     );
   }
 }
@@ -533,29 +497,26 @@ class _PigeonCodec extends StandardMessageCodec {
     }    else if (value is SnippetLanguage) {
       buffer.putUint8(138);
       writeValue(buffer, value.encode());
-    }    else if (value is Owner) {
+    }    else if (value is SnippetFilter) {
       buffer.putUint8(139);
       writeValue(buffer, value.encode());
-    }    else if (value is SnippetFilter) {
+    }    else if (value is MainModelStateData) {
       buffer.putUint8(140);
       writeValue(buffer, value.encode());
-    }    else if (value is MainModelStateData) {
+    }    else if (value is MainModelEventData) {
       buffer.putUint8(141);
       writeValue(buffer, value.encode());
-    }    else if (value is MainModelEventData) {
+    }    else if (value is DetailsModelStateData) {
       buffer.putUint8(142);
       writeValue(buffer, value.encode());
-    }    else if (value is DetailsModelStateData) {
+    }    else if (value is DetailsModelEventData) {
       buffer.putUint8(143);
       writeValue(buffer, value.encode());
-    }    else if (value is DetailsModelEventData) {
+    }    else if (value is LoginModelStateData) {
       buffer.putUint8(144);
       writeValue(buffer, value.encode());
-    }    else if (value is LoginModelStateData) {
-      buffer.putUint8(145);
-      writeValue(buffer, value.encode());
     }    else if (value is LoginModelEventData) {
-      buffer.putUint8(146);
+      buffer.putUint8(145);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -592,20 +553,18 @@ class _PigeonCodec extends StandardMessageCodec {
       case 138: 
         return SnippetLanguage.decode(readValue(buffer)!);
       case 139: 
-        return Owner.decode(readValue(buffer)!);
-      case 140: 
         return SnippetFilter.decode(readValue(buffer)!);
-      case 141: 
+      case 140: 
         return MainModelStateData.decode(readValue(buffer)!);
-      case 142: 
+      case 141: 
         return MainModelEventData.decode(readValue(buffer)!);
-      case 143: 
+      case 142: 
         return DetailsModelStateData.decode(readValue(buffer)!);
-      case 144: 
+      case 143: 
         return DetailsModelEventData.decode(readValue(buffer)!);
-      case 145: 
+      case 144: 
         return LoginModelStateData.decode(readValue(buffer)!);
-      case 146: 
+      case 145: 
         return LoginModelEventData.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);

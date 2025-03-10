@@ -5,7 +5,6 @@ class Mocks {
   static final snippet = Snippet(
     uuid: '',
     title: 'New snippet',
-    owner: Owner(id: 0, login: 'Snippet owner'),
     timeAgo: '2 days ago',
     voteResult: 32,
     isFavorite: false,
