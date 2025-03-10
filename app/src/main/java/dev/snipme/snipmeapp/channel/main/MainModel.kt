@@ -102,19 +102,9 @@ class MainModel(
         setupDemoSnippets()
             .subscribeOn(Schedulers.io())
             .subscribeBy(
-                onSuccess = { println("Setup demo data") },
+                onSuccess = { loadSnippets() },
                 onError = {
                     Timber.e("Couldn't setup demo snippets, error = $it")
-                    parseError(it)
-                }
-            ).also { disposables += it }
-
-        getUser()
-            .subscribeOn(Schedulers.io())
-            .subscribeBy(
-                onSuccess = { user -> loadSnippets(user) },
-                onError = {
-                    Timber.e("Couldn't load user, error = $it")
                     parseError(it)
                 }
             ).also { disposables += it }
@@ -153,7 +143,7 @@ class MainModel(
                 .subscribeBy(
                     onSuccess = { hasMore ->
                         if (hasMore) {
-                            loadSnippets(state.user, pages = state.pages + ONE_PAGE)
+                            loadSnippets(pages = state.pages + ONE_PAGE)
                         }
                     },
                     onError = {
@@ -165,7 +155,6 @@ class MainModel(
     }
 
     private fun loadSnippets(
-        user: User,
         pages: Int = 1,
         scope: SnippetScope = SnippetScope.ALL
     ) {
@@ -178,7 +167,7 @@ class MainModel(
                     val updatedFilters = getLanguageFilters(cachedSnippets)
                     filterState = filterState.copy(languages = updatedFilters)
                     mutableState.value = Loaded(
-                        user,
+                        User(0, "login", "email", ""), // TODO Remove
                         it,
                         pages,
                         filterState

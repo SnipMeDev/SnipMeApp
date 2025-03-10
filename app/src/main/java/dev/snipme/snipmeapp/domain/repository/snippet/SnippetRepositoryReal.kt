@@ -49,8 +49,8 @@ class SnippetRepositoryReal(
             SnippetEntry(
                 title = title,
                 code = code,
-                createdAt = Date().toString(),
-                modifiedAt = Date().toString(),
+                createdAt = Date(),
+                modifiedAt = Date(),
                 visibility = visibility.name,
                 language = language,
                 favorite = favorite

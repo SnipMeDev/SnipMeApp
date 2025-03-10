@@ -5,7 +5,6 @@ import dev.snipme.snipmeapp.infrastructure.local.SnippetEntry
 import dev.snipme.snipmeapp.util.SyntaxHighlighter.getHighlighted
 import dev.snipme.snipmeapp.util.extension.lines
 import dev.snipme.snipmeapp.util.extension.newLineChar
-import dev.snipme.snipmeapp.util.extension.toDate
 import dev.snipme.snipmeapp.util.extension.toSnippetLanguage
 
 const val PREVIEW_COUNT = 5
@@ -19,7 +18,7 @@ class SnippetResponseMapper {
             code = getCode(code),
             language = getLanguage(language),
             visibility = getVisibility(visibility),
-            modifiedAt = modifiedAt.toDate(),
+            modifiedAt = modifiedAt,
             favorite = favorite,
         )
     }

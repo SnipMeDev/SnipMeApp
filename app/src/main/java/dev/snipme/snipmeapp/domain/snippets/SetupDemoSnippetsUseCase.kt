@@ -1,6 +1,7 @@
 package dev.snipme.snipmeapp.domain.snippets
 
 import dev.snipme.snipmeapp.domain.repository.snippet.SnippetRepository
+import dev.snipme.snipmeapp.util.extension.titleCase
 
 class SetupDemoSnippetsUseCase(
     private val snippetRepository: SnippetRepository
@@ -10,7 +11,7 @@ class SetupDemoSnippetsUseCase(
         snippetRepository.create(
             title = "Your first snippet",
             code = KOTLIN_SAMPLE,
-            language = SnippetLanguageType.KOTLIN.name,
+            language = SnippetLanguageType.KOTLIN.name.titleCase(),
             visibility = SnippetVisibility.PUBLIC,
             userId = 1,
             favorite = false
@@ -45,7 +46,7 @@ class SetupDemoSnippetsUseCase(
     }
 //}
 
-val KOTLIN_SAMPLE = """
+const val KOTLIN_SAMPLE = """
 // Data class
 data class User(val id: Int, val name: String, val email: String)
 
