@@ -99,11 +99,8 @@ class Snippet {
     this.code,
     this.language,
     this.timeAgo,
-    this.voteResult,
-    this.isPrivate,
+    this.isHidden,
     this.isFavorite,
-    this.isSaved,
-    this.isToDelete,
   });
 
   String? uuid;
@@ -116,15 +113,9 @@ class Snippet {
 
   String? timeAgo;
 
-  int? voteResult;
-
-  bool? isPrivate;
+  bool? isHidden;
 
   bool? isFavorite;
-
-  bool? isSaved;
-
-  bool? isToDelete;
 
   Object encode() {
     return <Object?>[
@@ -133,11 +124,8 @@ class Snippet {
       code,
       language,
       timeAgo,
-      voteResult,
-      isPrivate,
+      isHidden,
       isFavorite,
-      isSaved,
-      isToDelete,
     ];
   }
 
@@ -149,11 +137,8 @@ class Snippet {
       code: result[2] as SnippetCode?,
       language: result[3] as SnippetLanguage?,
       timeAgo: result[4] as String?,
-      voteResult: result[5] as int?,
-      isPrivate: result[6] as bool?,
-      isFavorite: result[7] as bool?,
-      isSaved: result[8] as bool?,
-      isToDelete: result[9] as bool?,
+      isHidden: result[5] as bool?,
+      isFavorite: result[6] as bool?,
     );
   }
 }

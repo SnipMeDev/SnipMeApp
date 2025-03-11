@@ -16,11 +16,8 @@ class Snippet {
   SnippetCode? code;
   SnippetLanguage? language;
   String? timeAgo;
-  int? voteResult;
-  bool? isPrivate;
+  bool? isHidden;
   bool? isFavorite;
-  bool? isSaved;
-  bool? isToDelete;
 }
 
 class SnippetCode {

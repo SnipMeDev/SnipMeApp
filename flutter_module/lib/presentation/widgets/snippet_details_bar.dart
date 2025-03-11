@@ -14,32 +14,29 @@ class SnippetDetailsBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              TextStyles.regular(snippet.language?.raw ?? "Unknown language"),
-              const SizedBox(height: Dimens.m),
-              // TODO FIX
-              const TextStyles.secondary("!!!Show archive status!!!"),
-              const SizedBox(height: Dimens.s),
-              TextStyles.helper(snippet.timeAgo ?? "")
-            ],
-          ),
+    final visibilityIcon = snippet.isHidden == true
+        ? Icons.visibility_off_outlined
+        : Icons.visibility_outlined;
+
+    final visibilityText = snippet.isHidden == true ? "Hidden" : "Visible";
+
+    return Row(children: [
+      Expanded(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            TextStyles.regular(snippet.language?.raw ?? "Unknown language"),
+            const SizedBox(height: Dimens.m),
+            TextStyles.secondary(visibilityText),
+            const SizedBox(height: Dimens.s),
+            TextStyles.helper(snippet.timeAgo ?? "")
+          ],
         ),
-        SurfaceStyles.rateBox(
-          TextStyles.title(
-            TextSpan(
-              children: [
-                WidgetSpan(child: Icon(Icons.visibility)),
-              ]
-            ).text!
-          ),
-        )
-      ],
-    );
+      ),
+      SurfaceStyles.rateBox(TextStyles.title(
+        TextSpan(children: [WidgetSpan(child: Icon(visibilityIcon))]).text!,
+      )),
+    ]);
   }
 }

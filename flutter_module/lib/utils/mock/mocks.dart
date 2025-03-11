@@ -6,9 +6,8 @@ class Mocks {
     uuid: '',
     title: 'New snippet',
     timeAgo: '2 days ago',
-    voteResult: 32,
     isFavorite: false,
-    isPrivate: true,
+    isHidden: true,
     language: SnippetLanguage(
       raw: 'Python',
       type: SnippetLanguageType.python,

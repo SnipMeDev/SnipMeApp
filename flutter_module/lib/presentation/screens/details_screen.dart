@@ -105,8 +105,8 @@ class _DetailsPage extends HookConsumerWidget {
           onPressed: navigator.back,
           color: Colors.black,
         ),
-        actions: stateNotification.data?.isPrivate == true
-            ? [const PaddingStyles.regular(Icon(Icons.lock_outlined))]
+        actions: stateNotification.data?.isHidden == true
+            ? [const PaddingStyles.regular(Icon(Icons.visibility_off_outlined))]
             : null,
       ),
       body: ViewStateWrapper<Snippet>(

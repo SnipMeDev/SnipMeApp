@@ -166,11 +166,8 @@ data class Snippet (
   val code: SnippetCode? = null,
   val language: SnippetLanguage? = null,
   val timeAgo: String? = null,
-  val voteResult: Long? = null,
-  val isPrivate: Boolean? = null,
-  val isFavorite: Boolean? = null,
-  val isSaved: Boolean? = null,
-  val isToDelete: Boolean? = null
+  val isHidden: Boolean? = null,
+  val isFavorite: Boolean? = null
 )
  {
   companion object {
@@ -180,12 +177,9 @@ data class Snippet (
       val code = pigeonVar_list[2] as SnippetCode?
       val language = pigeonVar_list[3] as SnippetLanguage?
       val timeAgo = pigeonVar_list[4] as String?
-      val voteResult = pigeonVar_list[5] as Long?
-      val isPrivate = pigeonVar_list[6] as Boolean?
-      val isFavorite = pigeonVar_list[7] as Boolean?
-      val isSaved = pigeonVar_list[8] as Boolean?
-      val isToDelete = pigeonVar_list[9] as Boolean?
-      return Snippet(uuid, title, code, language, timeAgo, voteResult, isPrivate, isFavorite, isSaved, isToDelete)
+      val isHidden = pigeonVar_list[5] as Boolean?
+      val isFavorite = pigeonVar_list[6] as Boolean?
+      return Snippet(uuid, title, code, language, timeAgo, isHidden, isFavorite)
     }
   }
   fun toList(): List<Any?> {
@@ -195,11 +189,8 @@ data class Snippet (
       code,
       language,
       timeAgo,
-      voteResult,
-      isPrivate,
+      isHidden,
       isFavorite,
-      isSaved,
-      isToDelete,
     )
   }
 }
