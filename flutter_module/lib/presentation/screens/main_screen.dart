@@ -77,7 +77,8 @@ class _MainPage extends HookConsumerWidget {
     return Scaffold(
       backgroundColor: ColorStyles.pageBackground(),
       body: ViewStateWrapper<List<Snippet>>(
-        isLoading: state == ModelState.loading || stateNotification.isLoading == true,
+        isLoading:
+            state == ModelState.loading || stateNotification.isLoading == true,
         error: stateNotification.error,
         data: stateNotification.data?.cast(),
         builder: (_, snippets) {
@@ -114,14 +115,15 @@ class _MainPage extends HookConsumerWidget {
 typedef ExpandChangeListener = Function(bool);
 
 class _MainPageData extends HookWidget {
-  const _MainPageData(
-      {required this.navigator,
-      required this.model,
-      required this.snippets,
-      required this.filter,
-      required this.controller,
-      required this.expanded,
-      required this.onExpandChange});
+  const _MainPageData({
+    required this.navigator,
+    required this.model,
+    required this.snippets,
+    required this.filter,
+    required this.controller,
+    required this.expanded,
+    required this.onExpandChange,
+  });
 
   final DetailsNavigator navigator;
   final ChannelMainModel model;
@@ -165,65 +167,71 @@ class _MainPageData extends HookWidget {
             ],
           ),
           SliverAppBar(
-              floating: true,
-              forceElevated: true,
-              expandedHeight: Dimens.extendedAppBarHeight,
-              elevation: Dimens.s / 2,
-              backgroundColor: ColorStyles.surfacePrimary(),
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(Dimens.l),
-                  bottomRight: Radius.circular(Dimens.l),
-                ),
+            floating: true,
+            forceElevated: true,
+            expandedHeight: Dimens.extendedAppBarHeight,
+            elevation: Dimens.s / 2,
+            backgroundColor: ColorStyles.surfacePrimary(),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(Dimens.l),
+                bottomRight: Radius.circular(Dimens.l),
               ),
-              flexibleSpace: FlexibleSpaceBar(
-                collapseMode: CollapseMode.parallax,
-                background: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: Dimens.m),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      PaddingStyles.small(
-                        Row(children: [TextStyles.bold("Scope")]),
-                      ),
-                      PaddingStyles.small(
-                        Row(
-                          children: [
-                            Expanded(
-                              child: SizedBox(
-                                height: Dimens.filterDropdownHeight,
-                                child: FilterDropdown(
-                                  filters: filter.scopes ?? List.empty(),
-                                  selected: filter.selectedScope ?? '',
-                                  onSelected: (scope) {
-                                    model.filterScope(scope);
-                                  },
-                                ),
+            ),
+            flexibleSpace: FlexibleSpaceBar(
+              collapseMode: CollapseMode.parallax,
+              background: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: Dimens.m),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    PaddingStyles.small(
+                      Row(children: [TextStyles.bold("Scope")]),
+                    ),
+                    PaddingStyles.small(
+                      Row(
+                        children: [
+                          Expanded(
+                            child: SizedBox(
+                              height: Dimens.filterDropdownHeight,
+                              child: FilterDropdown(
+                                filters: filter.scopes ?? List.empty(),
+                                selected: filter.selectedScope ?? '',
+                                onSelected: (scope) {
+                                  model.filterScope(scope);
+                                },
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                          const SizedBox(width: Dimens.xl),
+                          const Icon(
+                            Icons.favorite_border,
+                            color: Colors.black,
+                          ),
+                        ],
                       ),
-                      PaddingStyles.small(
-                        Row(children: [TextStyles.bold("Language")]),
+                    ),
+                    PaddingStyles.small(
+                      Row(children: [TextStyles.bold("Language")]),
+                    ),
+                    SizedBox(
+                      height: Dimens.filterListHeight,
+                      child: FilterListView(
+                        filters: filter.languages ?? List.empty(),
+                        selected: filter.selectedLanguages ?? List.empty(),
+                        onSelected: (language, isSelected) {
+                          model.filterLanguage(language, isSelected);
+                        },
                       ),
-                      SizedBox(
-                        height: Dimens.filterListHeight,
-                        child: FilterListView(
-                          filters: filter.languages ?? List.empty(),
-                          selected: filter.selectedLanguages ?? List.empty(),
-                          onSelected: (language, isSelected) {
-                            model.filterLanguage(language, isSelected);
-                          },
-                        ),
-                      ),
-                      const SizedBox(
-                        height: Dimens.m,
-                      )
-                    ],
-                  ),
+                    ),
+                    const SizedBox(
+                      height: Dimens.m,
+                    )
+                  ],
                 ),
-              ))
+              ),
+            ),
+          )
         ];
       },
       body: CustomScrollView(

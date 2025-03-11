@@ -34,7 +34,18 @@ class SnippetListTile extends HookWidget {
               right: Dimens.l,
               bottom: Dimens.m,
             ),
-            child: TextStyles.title(snippet.title ?? ""),
+            child: Row(
+              children: [
+                Expanded(child: TextStyles.title(snippet.title ?? "")),
+                const SizedBox(width: Dimens.s),
+                Icon(
+                  snippet.isFavorite == true
+                      ? Icons.favorite
+                      : Icons.favorite_border,
+                  size: Dimens.l,
+                ),
+              ],
+            ),
           ),
           Ink(
             color: ColorStyles.codeBackground(),
