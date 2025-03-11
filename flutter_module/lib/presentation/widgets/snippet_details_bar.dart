@@ -34,8 +34,8 @@ class SnippetDetailsBar extends StatelessWidget {
           ],
         ),
       ),
-      SurfaceStyles.rateBox(TextStyles.title(
-        TextSpan(children: [WidgetSpan(child: Icon(visibilityIcon))]).text!,
+      SurfaceStyles.rateBox(Text.rich(
+        TextSpan(children: [WidgetSpan(child: Icon(visibilityIcon))]),
       )),
     ]);
   }

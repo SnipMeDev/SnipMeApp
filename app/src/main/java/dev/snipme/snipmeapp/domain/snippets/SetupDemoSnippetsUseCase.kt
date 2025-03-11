@@ -25,7 +25,7 @@ class SetupDemoSnippetsUseCase(
                 title = "Your first snippet",
                 code = KOTLIN_SAMPLE,
                 language = SnippetLanguageType.KOTLIN.name.titleCase(),
-                visibility = SnippetVisibility.PUBLIC,
+                visibility = SnippetVisibility.VISIBLE,
                 userId = 1,
                 favorite = false
             ),
@@ -33,7 +33,7 @@ class SetupDemoSnippetsUseCase(
                 title = "Hello World",
                 code = "console.log('Hello, World!')",
                 language = SnippetLanguageType.JAVASCRIPT.name.titleCase(),
-                visibility = SnippetVisibility.PUBLIC,
+                visibility = SnippetVisibility.VISIBLE,
                 userId = 1,
                 favorite = false
             ),

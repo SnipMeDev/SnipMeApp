@@ -89,8 +89,8 @@ class MainModel(
         filterState = SnippetFilters(
             languages = listOf(SNIPPET_FILTER_ALL),
             selectedLanguages = listOf(SNIPPET_FILTER_ALL),
-            scopes = listOf("All", "Private", "Public"),
-            selectedScope = "All"
+            scopes = listOf("All", "Visible", "Hidden"),
+            selectedScope = "Visible"
         )
 
         setupDemoSnippets()

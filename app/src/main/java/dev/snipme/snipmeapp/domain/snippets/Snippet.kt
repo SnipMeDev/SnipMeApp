@@ -18,7 +18,7 @@ data class Snippet(
             title = "",
             code = SnippetCode("", SpannableString("")),
             language = SnippetLanguage("", SnippetLanguageType.UNKNOWN),
-            visibility = SnippetVisibility.PRIVATE,
+            visibility = SnippetVisibility.HIDDEN,
             modifiedAt = Date(),
             favorite = false
         )

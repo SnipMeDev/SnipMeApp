@@ -35,7 +35,7 @@ fun Snippet.toModelData(): ChannelSnippet =
         code = code.toModelSnippetCode(),
         language = language.toModelSnippetLanguage(),
         isFavorite = favorite,
-        isPrivate = visibility == SnippetVisibility.PRIVATE,
+        isHidden = visibility == SnippetVisibility.HIDDEN,
         timeAgo = DateUtils.getRelativeTimeSpanString(
             modifiedAt.time,
             Date().time,

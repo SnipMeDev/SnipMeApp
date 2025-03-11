@@ -16,7 +16,7 @@ class CreateSnippetUseCase(
         title: String,
         code: String,
         language: String,
-        visibility: SnippetVisibility = SnippetVisibility.PUBLIC,
+        visibility: SnippetVisibility = SnippetVisibility.VISIBLE,
         favorite: Boolean = false,
     ): Single<Snippet> = auth()
         .andThen(getSingleUser())
