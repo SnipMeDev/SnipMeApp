@@ -44,7 +44,7 @@ internal val useCaseModule = module {
     // User
     factory { GetSingleUserUseCase(get(), get(), get(), get()) }
     // Snippet
-    factory { GetSnippetsUseCase(get(), get(), get()) }
+    factory { GetSnippetsUseCase(get()) }
     factory { GetSingleSnippetUseCase(get(), get(), get()) }
     factory { HasMoreSnippetPagesUseCase(get(), get(), get()) }
     factory { CreateSnippetUseCase(get(), get(), get()) }

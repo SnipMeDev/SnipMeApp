@@ -89,8 +89,8 @@ class MainModel(
         filterState = SnippetFilters(
             languages = listOf(SNIPPET_FILTER_ALL),
             selectedLanguages = listOf(SNIPPET_FILTER_ALL),
-            scopes = listOf("All", "Visible", "Hidden"),
-            selectedScope = "Visible"
+            scopes = SnippetScope.entries.map { it.visibleName },
+            selectedScope = SnippetScope.ALL.visibleName
         )
 
         setupDemoSnippets()
@@ -152,7 +152,7 @@ class MainModel(
         pages: Int = 1,
         scope: SnippetScope = SnippetScope.ALL
     ) {
-        getSnippets(scope, pages)
+        getSnippets(scope)
             .subscribeOn(Schedulers.io())
             .subscribeBy(
                 onSuccess = {
