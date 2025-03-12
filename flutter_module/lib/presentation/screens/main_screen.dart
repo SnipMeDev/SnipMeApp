@@ -203,11 +203,6 @@ class _MainPageData extends HookWidget {
                               ),
                             ),
                           ),
-                          const SizedBox(width: Dimens.xl),
-                          const Icon(
-                            Icons.favorite_border,
-                            color: Colors.black,
-                          ),
                         ],
                       ),
                     ),

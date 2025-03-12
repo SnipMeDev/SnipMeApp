@@ -12,6 +12,8 @@ interface SnippetRepository {
 
     fun getDemoSetupStatus(): Boolean
 
+    fun setDemoSetupStatus(status: Boolean): Completable
+
     fun snippets(): Single<List<Snippet>>
 
     fun snippet(uuid: String): Single<Snippet>
@@ -21,7 +23,6 @@ interface SnippetRepository {
         code: String,
         language: String,
         visibility: SnippetVisibility,
-        userId: Int,
         favorite: Boolean
     ): Single<Snippet>
 

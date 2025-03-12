@@ -28,6 +28,9 @@ class SnippetRepositoryReal(
     override fun getDemoSetupStatus(): Boolean =
         preferencesUtil.get<Boolean>(KEY_DEMO_SETUP_STATUS) ?: false
 
+    override fun setDemoSetupStatus(status: Boolean): Completable =
+        Completable.fromAction { preferencesUtil.save(KEY_DEMO_SETUP_STATUS, status) }
+
     override fun snippets(): Single<List<Snippet>> =
         service.snippets()
             .mapError { errorHandler.handle(it) }
@@ -42,7 +45,6 @@ class SnippetRepositoryReal(
         code: String,
         language: String,
         visibility: SnippetVisibility,
-        userId: Int,
         favorite: Boolean
     ): Single<Snippet> {
         return service.create(

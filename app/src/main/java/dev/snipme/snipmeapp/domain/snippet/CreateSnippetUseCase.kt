@@ -26,7 +26,6 @@ class CreateSnippetUseCase(
                 code = code,
                 language = language,
                 visibility = visibility,
-                userId = user.id,
                 favorite = favorite
             )
         }
