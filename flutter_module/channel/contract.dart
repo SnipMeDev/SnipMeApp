@@ -177,6 +177,8 @@ abstract class ChannelDetailsModel {
 
   void shareImage(Uint8List image);
 
+  void changeVisibility(bool isHidden);
+
   void delete();
 }
 

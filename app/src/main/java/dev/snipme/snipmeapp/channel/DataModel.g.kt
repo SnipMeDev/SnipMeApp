@@ -780,6 +780,7 @@ interface ChannelDetailsModel {
   fun saveImage(image: ByteArray)
   fun copyToClipboard()
   fun shareImage(image: ByteArray)
+  fun changeVisibility(isHidden: Boolean)
   fun delete()
 
   companion object {
@@ -883,6 +884,24 @@ interface ChannelDetailsModel {
             val imageArg = args[0] as ByteArray
             val wrapped: List<Any?> = try {
               api.shareImage(imageArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.flutter_module.ChannelDetailsModel.changeVisibility$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val isHiddenArg = args[0] as Boolean
+            val wrapped: List<Any?> = try {
+              api.changeVisibility(isHiddenArg)
               listOf(null)
             } catch (exception: Throwable) {
               wrapError(exception)

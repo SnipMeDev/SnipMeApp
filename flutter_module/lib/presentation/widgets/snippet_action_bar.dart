@@ -58,7 +58,6 @@ class SnippetActionBar extends StatelessWidget {
           const SizedBox(width: Dimens.l),
           StateIcon(
             onTap: onDeleteTap,
-            active: true,
             activeColor: Colors.redAccent,
             icon: Icons.delete_outline_outlined,
           ),

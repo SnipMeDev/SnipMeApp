@@ -16,7 +16,9 @@ import dev.snipme.snipmeapp.domain.share.ShareSnippetUseCase
 import dev.snipme.snipmeapp.domain.snippet.DeleteSnippetUseCase
 import dev.snipme.snipmeapp.domain.snippet.GetSingleSnippetUseCase
 import dev.snipme.snipmeapp.domain.snippet.SaveSnippetUseCase
+import dev.snipme.snipmeapp.domain.snippet.UpdateSnippetUseCase
 import dev.snipme.snipmeapp.domain.snippets.Snippet
+import dev.snipme.snipmeapp.domain.snippets.SnippetVisibility
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
@@ -32,6 +34,7 @@ class DetailsModel(
     private val saveSnippet: SaveSnippetUseCase,
     private val shareSnippet: ShareSnippetUseCase,
     private val deleteSnippet: DeleteSnippetUseCase,
+    private val updateSnippet: UpdateSnippetUseCase,
     private val session: SessionModel
 ) : ErrorParsable {
     private val disposables = CompositeDisposable()
@@ -111,6 +114,30 @@ class DetailsModel(
         } catch (e: Exception) {
             Timber.e("Couldn't share snippet, error = $e")
             mutableEvent.value = Alert(errorMessages.generic)
+        }
+    }
+
+    fun changeVisibility(isHidden: Boolean) {
+        getSnippet()?.let {
+            val visibility = if (isHidden) SnippetVisibility.HIDDEN else SnippetVisibility.VISIBLE
+            val snippetWithUpdate = it.copy(visibility = visibility)
+            mutableState.value = (state.value as Loaded).copy(snippet = snippetWithUpdate)
+            updateSnippet(
+                snippetWithUpdate.uuid,
+                snippetWithUpdate.title,
+                snippetWithUpdate.code.raw,
+                snippetWithUpdate.language.raw,
+                snippetWithUpdate.visibility,
+                snippetWithUpdate.favorite
+            )
+                .subscribeOn(Schedulers.io())
+                .subscribeBy(
+                    onSuccess = { setState(Loaded(it)) },
+                    onError = {
+                        Timber.e("Couldn't change visibility, error = $it")
+                        parseError(it)
+                    }
+                ).also { disposables += it }
         }
     }
 

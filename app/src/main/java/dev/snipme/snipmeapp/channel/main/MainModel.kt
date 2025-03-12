@@ -22,7 +22,6 @@ import dev.snipme.snipmeapp.domain.snippets.SetupDemoSnippetsUseCase
 import dev.snipme.snipmeapp.domain.snippets.Snippet
 import dev.snipme.snipmeapp.domain.snippets.SnippetFilters
 import dev.snipme.snipmeapp.domain.snippets.SnippetScope
-import dev.snipme.snipmeapp.domain.user.User
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
@@ -160,12 +159,7 @@ class MainModel(
                     scopedSnippets = cachedSnippets
                     val updatedFilters = getLanguageFilters(cachedSnippets)
                     filterState = filterState.copy(languages = updatedFilters)
-                    mutableState.value = Loaded(
-                        User(0, "login", "email", ""), // TODO Remove
-                        it,
-                        pages,
-                        filterState
-                    )
+                    mutableState.value = Loaded(it, pages, filterState)
                     loadNextPage()
                 },
                 onError = {
@@ -181,7 +175,6 @@ class MainModel(
 sealed class MainViewState
 data object Loading : MainViewState()
 data class Loaded(
-    val user: User,
     val snippets: List<Snippet>,
     val pages: Int,
     val filters: SnippetFilters

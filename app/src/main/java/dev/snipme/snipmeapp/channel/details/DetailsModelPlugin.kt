@@ -48,6 +48,10 @@ class DetailsModelPlugin : ModelPlugin<ChannelDetailsModel>(), ChannelDetailsMod
         model.share(image)
     }
 
+    override fun changeVisibility(isHidden: Boolean) {
+        model.changeVisibility(isHidden)
+    }
+
     override fun delete() {
         model.delete()
     }

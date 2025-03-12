@@ -183,6 +183,8 @@ class _DetailPageData extends StatelessWidget {
               onSaveTap: saveImage,
               onCopyTap: model.copyToClipboard,
               onShareTap: shareImage,
+              onHideTap: () =>
+                  model.changeVisibility(!(snippet?.isHidden ?? false)),
               onDeleteTap: model.delete,
             ),
           ),
