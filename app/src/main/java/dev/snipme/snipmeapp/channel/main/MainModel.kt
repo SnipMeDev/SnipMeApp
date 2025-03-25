@@ -1,26 +1,39 @@
 package dev.snipme.snipmeapp.channel.main
 
+import dev.snipme.snipmeapp.channel.error.ErrorParsable
+import dev.snipme.snipmeapp.channel.session.SessionModel
+import dev.snipme.snipmeapp.domain.error.exception.ConnectionException
+import dev.snipme.snipmeapp.domain.error.exception.ContentNotFoundException
+import dev.snipme.snipmeapp.domain.error.exception.ForbiddenActionException
+import dev.snipme.snipmeapp.domain.error.exception.NetworkNotAvailableException
+import dev.snipme.snipmeapp.domain.error.exception.NotAuthorizedException
+import dev.snipme.snipmeapp.domain.error.exception.RemoteException
+import dev.snipme.snipmeapp.domain.error.exception.SessionExpiredException
+import dev.snipme.snipmeapp.domain.filter.FilterSnippetsByLanguageUseCase
+import dev.snipme.snipmeapp.domain.filter.FilterSnippetsByScopeUseCase
+import dev.snipme.snipmeapp.domain.filter.GetLanguageFiltersUseCase
+import dev.snipme.snipmeapp.domain.filter.SNIPPET_FILTER_ALL
+import dev.snipme.snipmeapp.domain.filter.UpdateSnippetFiltersLanguageUseCase
+import dev.snipme.snipmeapp.domain.message.ErrorMessages
+import dev.snipme.snipmeapp.domain.snippet.ObserveSnippetUpdatesUseCase
+import dev.snipme.snipmeapp.domain.snippets.GetSnippetsUseCase
+import dev.snipme.snipmeapp.domain.snippets.HasMoreSnippetPagesUseCase
+import dev.snipme.snipmeapp.domain.snippets.SetupDemoSnippetsUseCase
+import dev.snipme.snipmeapp.domain.snippets.Snippet
+import dev.snipme.snipmeapp.domain.snippets.SnippetFilters
+import dev.snipme.snipmeapp.domain.snippets.SnippetScope
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.flow.MutableStateFlow
-import dev.snipme.snipmeapp.channel.session.SessionModel
-import dev.snipme.snipmeapp.domain.error.exception.*
-import dev.snipme.snipmeapp.domain.filter.*
-import dev.snipme.snipmeapp.domain.message.ErrorMessages
-import dev.snipme.snipmeapp.domain.snippet.ObserveSnippetUpdatesUseCase
-import dev.snipme.snipmeapp.domain.snippets.*
-import dev.snipme.snipmeapp.domain.user.GetSingleUserUseCase
-import dev.snipme.snipmeapp.domain.user.User
-import dev.snipme.snipmeapp.channel.error.ErrorParsable
 import timber.log.Timber
 
 private const val ONE_PAGE = 1
 
 class MainModel(
     private val errorMessages: ErrorMessages,
-    private val getUser: GetSingleUserUseCase,
+    private val setupDemoSnippets: SetupDemoSnippetsUseCase,
     private val getSnippets: GetSnippetsUseCase,
     private val observeUpdates: ObserveSnippetUpdatesUseCase,
     private val hasMore: HasMoreSnippetPagesUseCase,
@@ -47,10 +60,13 @@ class MainModel(
             is ConnectionException -> mutableState.value = Error(errorMessages.parse(throwable))
             is ContentNotFoundException -> mutableState.value =
                 Error(errorMessages.parse(throwable))
+
             is ForbiddenActionException -> mutableState.value =
                 Error(errorMessages.parse(throwable))
+
             is NetworkNotAvailableException -> mutableState.value =
                 Error(errorMessages.parse(throwable))
+
             is NotAuthorizedException -> session.logOut { mutableEvent.value = Logout }
             is RemoteException -> mutableState.value = Error(errorMessages.parse(throwable))
             is SessionExpiredException -> session.logOut { mutableEvent.value = Logout }
@@ -72,16 +88,16 @@ class MainModel(
         filterState = SnippetFilters(
             languages = listOf(SNIPPET_FILTER_ALL),
             selectedLanguages = listOf(SNIPPET_FILTER_ALL),
-            scopes = listOf("All", "Private", "Public"),
-            selectedScope = "All"
+            scopes = SnippetScope.entries.map { it.visibleName },
+            selectedScope = SnippetScope.ALL.visibleName
         )
 
-        getUser()
+        setupDemoSnippets()
             .subscribeOn(Schedulers.io())
             .subscribeBy(
-                onSuccess = { user -> loadSnippets(user) },
+                onComplete = { loadSnippets() },
                 onError = {
-                    Timber.e("Couldn't load user, error = $it")
+                    Timber.e("Couldn't setup demo snippets, error = $it")
                     parseError(it)
                 }
             ).also { disposables += it }
@@ -120,7 +136,7 @@ class MainModel(
                 .subscribeBy(
                     onSuccess = { hasMore ->
                         if (hasMore) {
-                            loadSnippets(state.user, pages = state.pages + ONE_PAGE)
+                            loadSnippets(pages = state.pages + ONE_PAGE)
                         }
                     },
                     onError = {
@@ -132,11 +148,10 @@ class MainModel(
     }
 
     private fun loadSnippets(
-        user: User,
         pages: Int = 1,
         scope: SnippetScope = SnippetScope.ALL
     ) {
-        getSnippets(scope, pages)
+        getSnippets(scope)
             .subscribeOn(Schedulers.io())
             .subscribeBy(
                 onSuccess = {
@@ -144,12 +159,7 @@ class MainModel(
                     scopedSnippets = cachedSnippets
                     val updatedFilters = getLanguageFilters(cachedSnippets)
                     filterState = filterState.copy(languages = updatedFilters)
-                    mutableState.value = Loaded(
-                        user,
-                        it,
-                        pages,
-                        filterState
-                    )
+                    mutableState.value = Loaded(it, pages, filterState)
                     loadNextPage()
                 },
                 onError = {
@@ -165,7 +175,6 @@ class MainModel(
 sealed class MainViewState
 data object Loading : MainViewState()
 data class Loaded(
-    val user: User,
     val snippets: List<Snippet>,
     val pages: Int,
     val filters: SnippetFilters

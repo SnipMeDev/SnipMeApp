@@ -5,13 +5,9 @@ class Mocks {
   static final snippet = Snippet(
     uuid: '',
     title: 'New snippet',
-    owner: Owner(id: 0, login: 'Snippet owner'),
     timeAgo: '2 days ago',
-    voteResult: 32,
-    userReaction: UserReaction.like,
-    isLiked: true,
-    isDisliked: false,
-    isPrivate: true,
+    isFavorite: false,
+    isHidden: true,
     language: SnippetLanguage(
       raw: 'Python',
       type: SnippetLanguageType.python,

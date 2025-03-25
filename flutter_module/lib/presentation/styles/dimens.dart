@@ -8,7 +8,7 @@ class Dimens {
   static const inputBorderWidth = 1.0;
   static const filterDropdownHeight = 24.0;
   static const filterListHeight = 48.0;
-  static const extendedAppBarHeight = 144.0;
+  static const extendedAppBarHeight = 120.0;
 
   static const logoSignetSize = 18.0;
 }

@@ -1,8 +1,7 @@
 package dev.snipme.snipmeapp.domain.snippets
 
 import android.text.SpannableString
-import dev.snipme.snipmeapp.domain.reaction.UserReaction
-import java.util.*
+import java.util.Date
 
 data class Snippet(
     val uuid: String,
@@ -10,12 +9,8 @@ data class Snippet(
     val code: SnippetCode,
     val language: SnippetLanguage,
     val visibility: SnippetVisibility,
-    val isOwner: Boolean,
-    val owner: Owner,
     val modifiedAt: Date,
-    val numberOfLikes: Int,
-    val numberOfDislikes: Int,
-    val userReaction: UserReaction
+    val favorite: Boolean,
 ) {
     companion object {
         val EMPTY = Snippet(
@@ -23,13 +18,9 @@ data class Snippet(
             title = "",
             code = SnippetCode("", SpannableString("")),
             language = SnippetLanguage("", SnippetLanguageType.UNKNOWN),
-            visibility = SnippetVisibility.PRIVATE,
-            isOwner = false,
-            owner = Owner(0, ""),
+            visibility = SnippetVisibility.HIDDEN,
             modifiedAt = Date(),
-            numberOfLikes = 0,
-            numberOfDislikes = 0,
-            userReaction = UserReaction.NONE
+            favorite = false
         )
     }
 }

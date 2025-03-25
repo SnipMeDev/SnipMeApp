@@ -11,7 +11,7 @@ class SnippetActionBar extends StatelessWidget {
     this.onSaveTap,
     this.onCopyTap,
     this.onShareTap,
-    // TODO Add archive action
+    this.onHideTap,
     this.onDeleteTap,
     super.key,
   });
@@ -21,6 +21,7 @@ class SnippetActionBar extends StatelessWidget {
   final GestureTapCallback? onSaveTap;
   final GestureTapCallback? onCopyTap;
   final GestureTapCallback? onShareTap;
+  final GestureTapCallback? onHideTap;
   final GestureTapCallback? onDeleteTap;
 
   @override
@@ -31,7 +32,7 @@ class SnippetActionBar extends StatelessWidget {
         children: [
           StateIcon(
             icon: Icons.favorite,
-            active: snippet.isLiked,
+            active: snippet.isFavorite,
             onTap: onFavoriteTap,
           ),
           const SizedBox(width: Dimens.l),
@@ -51,8 +52,12 @@ class SnippetActionBar extends StatelessWidget {
           ),
           const SizedBox(width: Dimens.l),
           StateIcon(
-            onTap: snippet.isToDelete == true ? onDeleteTap : null,
-            active: snippet.isToDelete == true ? null : false,
+            icon: Icons.visibility_off_outlined,
+            onTap: onHideTap,
+          ),
+          const SizedBox(width: Dimens.l),
+          StateIcon(
+            onTap: onDeleteTap,
             activeColor: Colors.redAccent,
             icon: Icons.delete_outline_outlined,
           ),

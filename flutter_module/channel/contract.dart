@@ -15,16 +15,9 @@ class Snippet {
   String? title;
   SnippetCode? code;
   SnippetLanguage? language;
-  Owner? owner;
-  bool? isOwner;
   String? timeAgo;
-  int? voteResult;
-  UserReaction? userReaction;
-  bool? isPrivate;
-  bool? isLiked;
-  bool? isDisliked;
-  bool? isSaved;
-  bool? isToDelete;
+  bool? isHidden;
+  bool? isFavorite;
 }
 
 class SnippetCode {
@@ -41,11 +34,6 @@ class SyntaxToken {
 class SnippetLanguage {
   String? raw;
   SnippetLanguageType? type;
-}
-
-class Owner {
-  int? id;
-  String? login;
 }
 
 enum SnippetLanguageType {
@@ -104,8 +92,6 @@ class SnippetFilter {
   List<String?>? scopes;
   String? selectedScope;
 }
-
-enum UserReaction { none, like, dislike }
 
 enum ModelState { loading, loaded, error }
 
@@ -190,6 +176,8 @@ abstract class ChannelDetailsModel {
   void copyToClipboard();
 
   void shareImage(Uint8List image);
+
+  void changeVisibility(bool isHidden);
 
   void delete();
 }

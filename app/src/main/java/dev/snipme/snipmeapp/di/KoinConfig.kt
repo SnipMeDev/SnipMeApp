@@ -2,7 +2,7 @@ package dev.snipme.snipmeapp.di
 
 val koinModules = listOf(
     mapperFilterModule,
-    preferenceModule,
+    storageModule,
     networkModule,
     serviceModule,
     repositoryModule,

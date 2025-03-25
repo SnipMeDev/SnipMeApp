@@ -1,22 +1,35 @@
 package dev.snipme.snipmeapp.di
 
-import org.koin.dsl.module
-import dev.snipme.snipmeapp.domain.auth.*
+import dev.snipme.snipmeapp.domain.auth.AuthorizationUseCase
+import dev.snipme.snipmeapp.domain.auth.IdentifyUserUseCase
+import dev.snipme.snipmeapp.domain.auth.InitialLoginUseCase
+import dev.snipme.snipmeapp.domain.auth.LoginInteractor
+import dev.snipme.snipmeapp.domain.auth.LoginUseCase
+import dev.snipme.snipmeapp.domain.auth.LogoutUserUseCase
+import dev.snipme.snipmeapp.domain.auth.RegisterUseCase
 import dev.snipme.snipmeapp.domain.clipboard.AddToClipboardUseCase
 import dev.snipme.snipmeapp.domain.clipboard.GetFromClipboardUseCase
-import dev.snipme.snipmeapp.domain.language.GetLanguagesUseCase
-import dev.snipme.snipmeapp.domain.network.CheckNetworkAvailableUseCase
-import dev.snipme.snipmeapp.domain.reaction.GetTargetUserReactionUseCase
-import dev.snipme.snipmeapp.domain.reaction.SetUserReactionUseCase
-import dev.snipme.snipmeapp.domain.share.ShareSnippetUseCase
-import dev.snipme.snipmeapp.domain.snippet.*
+import dev.snipme.snipmeapp.domain.favorite.SetFavoriteSnippet
 import dev.snipme.snipmeapp.domain.filter.FilterSnippetsByLanguageUseCase
 import dev.snipme.snipmeapp.domain.filter.FilterSnippetsByScopeUseCase
 import dev.snipme.snipmeapp.domain.filter.GetLanguageFiltersUseCase
 import dev.snipme.snipmeapp.domain.filter.UpdateSnippetFiltersLanguageUseCase
+import dev.snipme.snipmeapp.domain.language.GetLanguagesUseCase
+import dev.snipme.snipmeapp.domain.network.CheckNetworkAvailableUseCase
+import dev.snipme.snipmeapp.domain.share.ShareSnippetUseCase
+import dev.snipme.snipmeapp.domain.snippet.CreateSnippetUseCase
+import dev.snipme.snipmeapp.domain.snippet.DeleteSnippetUseCase
+import dev.snipme.snipmeapp.domain.snippet.EditInteractor
+import dev.snipme.snipmeapp.domain.snippet.GetSingleSnippetUseCase
+import dev.snipme.snipmeapp.domain.snippet.ObserveSnippetUpdatesUseCase
+import dev.snipme.snipmeapp.domain.snippet.ObserveUpdatedSnippetPageUseCase
+import dev.snipme.snipmeapp.domain.snippet.SaveSnippetUseCase
+import dev.snipme.snipmeapp.domain.snippet.UpdateSnippetUseCase
 import dev.snipme.snipmeapp.domain.snippets.GetSnippetsUseCase
 import dev.snipme.snipmeapp.domain.snippets.HasMoreSnippetPagesUseCase
+import dev.snipme.snipmeapp.domain.snippets.SetupDemoSnippetsUseCase
 import dev.snipme.snipmeapp.domain.user.GetSingleUserUseCase
+import org.koin.dsl.module
 
 internal val useCaseModule = module {
     // Base
@@ -31,16 +44,16 @@ internal val useCaseModule = module {
     // User
     factory { GetSingleUserUseCase(get(), get(), get(), get()) }
     // Snippet
-    factory { GetSnippetsUseCase(get(), get(), get()) }
+    factory { GetSnippetsUseCase(get()) }
     factory { GetSingleSnippetUseCase(get(), get(), get()) }
     factory { HasMoreSnippetPagesUseCase(get(), get(), get()) }
     factory { CreateSnippetUseCase(get(), get(), get()) }
     factory { UpdateSnippetUseCase(get(), get(), get()) }
     factory { ObserveUpdatedSnippetPageUseCase(get()) }
     factory { ObserveSnippetUpdatesUseCase(get()) }
-    factory { GetTargetUserReactionUseCase() }
-    factory { SetUserReactionUseCase(get(), get(), get(), get()) }
+    factory { SetFavoriteSnippet(get()) }
     factory { DeleteSnippetUseCase(get()) }
+    factory { SetupDemoSnippetsUseCase(get()) }
     // Language
     factory { GetLanguagesUseCase(get(), get(), get()) }
     // Share
@@ -59,5 +72,5 @@ internal val useCaseModule = module {
 
 internal val interactorModule = module {
     factory { LoginInteractor(get(), get(), get()) }
-    factory { EditInteractor(get(), get(), get(), get(), get()) }
+    factory { EditInteractor(get(), get(), get(), get()) }
 }
